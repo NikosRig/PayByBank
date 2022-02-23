@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+
+  pay_by_bank:
+    build:
+      context: ./.dockerfiles
+      args:
+        GID: ${GID}
+        UID: ${UID}
+        APPLICATION_NAME: ${APPLICATION_NAME}
+    container_name: ${APPLICATION_NAME}
+    ports:
+      - "80:80"
+    networks:
+      - pay_by_bank_network
+    volumes:
+      - ./:/var/www/html
+
+networks:
+  pay_by_bank_network:
+    driver: "bridge"

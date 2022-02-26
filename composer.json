@@ -4,7 +4,8 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "PayByBank\\": "src/"
+            "PayByBank\\": "src/",
+            "Tests\\": "Tests/"
         }
     },
     "authors": [
@@ -13,14 +14,14 @@
             "email": "nikosrigas95@gmail.com"
         }
     ],
-    "repositories": [
-        {
-            "url": "https://github.com/Larium/framework.git",
-            "type": "git"
-        }
-    ],
     "require-dev": {
         "phpunit/phpunit": "^9",
         "friendsofphp/php-cs-fixer": "^3.6"
+    },
+    "require": {
+        "psr/http-client": "^1.0",
+        "guzzlehttp/guzzle": "^7.0",
+        "ext-curl": "*",
+        "ext-openssl": "*"
     }
 }

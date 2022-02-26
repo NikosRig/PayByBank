@@ -12,7 +12,7 @@ use PayByBank\Infrastructure\Http\Gateway\Credential\IngCredentials;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 
-class IngOAuth2Gateway
+class IngAuthGateway
 {
     private ClientInterface $client;
 
@@ -72,6 +72,8 @@ class IngOAuth2Gateway
     public function authorizationUrl()
     {
         $accessToken = $this->createAccessToken();
+
+
     }
 
     private function makeClientAuthHeader(IngCredentials $credentials, string $date, string $digest): string

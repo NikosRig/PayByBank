@@ -6,20 +6,20 @@ namespace Tests\Unit\PayByBank\Infrastructure\Http\Gateway;
 
 use GuzzleHttp\Psr7\Response;
 use PayByBank\Infrastructure\Http\Gateway\Credential\IngCredentials;
-use PayByBank\Infrastructure\Http\Gateway\IngOAuth2Gateway;
+use PayByBank\Infrastructure\Http\Gateway\IngAuthGateway;
 use PayByBank\Infrastructure\Http\Helpers\HttpSignHelper;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 
-class TestIngOauth2Gateway extends TestCase
+class TestIngAuthGateway extends TestCase
 {
     public function setUp(): void
     {
         $this->client = $this->createMock(ClientInterface::class);
         $credential = $this->mockCredentials();
         $signHelper = new HttpSignHelper();
-        $this->gateway = new IngOAuth2Gateway($this->client, $credential, $signHelper);
+        $this->gateway = new IngAuthGateway($this->client, $credential, $signHelper);
     }
 
     /**

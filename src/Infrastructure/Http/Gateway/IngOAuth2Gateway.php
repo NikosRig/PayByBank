@@ -66,6 +66,14 @@ class IngOAuth2Gateway
         );
     }
 
+    /**
+     * @throws ClientExceptionInterface
+     */
+    public function authorizationUrl()
+    {
+        $accessToken = $this->createAccessToken();
+    }
+
     private function makeClientAuthHeader(IngCredentials $credentials, string $date, string $digest): string
     {
         $signString = "(request-target): post /oauth2/token\ndate: {$date}\ndigest: {$digest}";

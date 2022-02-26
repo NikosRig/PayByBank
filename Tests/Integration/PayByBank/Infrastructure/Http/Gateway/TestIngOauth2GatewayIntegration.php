@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Integration\Http\Gateway;
+namespace Tests\Integration\PayByBank\Infrastructure\Http\Gateway;
 
 use GuzzleHttp\Client;
 use PayByBank\Infrastructure\Http\Gateway\Credential\IngCredentials;

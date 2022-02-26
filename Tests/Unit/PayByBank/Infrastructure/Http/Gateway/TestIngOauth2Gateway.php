@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Http\Gateway;
+namespace Tests\Unit\PayByBank\Infrastructure\Http\Gateway;
 
 use GuzzleHttp\Psr7\Response;
 use PayByBank\Infrastructure\Http\Gateway\Credential\IngCredentials;

@@ -14,15 +14,27 @@ class IngCredentials
 
     private string $signKeyPath;
 
+    private string $redirectUrl;
+
     public function __construct(
         string $signKeyPath,
         string $tppCert,
-        string $keyId
+        string $keyId,
+        string $redirectUrl
     )
     {
         $this->signKeyPath = $signKeyPath;
         $this->tppCert = $tppCert;
         $this->keyId = $keyId;
+        $this->redirectUrl = $redirectUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRedirectUrl(): string
+    {
+        return $this->redirectUrl;
     }
 
     /**

@@ -20,13 +20,9 @@ class TestIngAuthGatewayIntegration extends TestCase
             'ssl_key' => '/var/www/html/var/certs/ING/sandbox/tls.key'
         ];
         $this->client = new Client($clientOptions);
-
         $signKeyPath = '/var/www/html/var/certs/ING/sandbox/client_signing.key';
         $tppCert = file_get_contents('/var/www/html/var/certs/ING/sandbox/tpp.cer');
-        $keyId = 'SN=5E4299BE';
-
-        $credential = new IngCredentials($signKeyPath, $tppCert, $keyId);
-
+        $credential = new IngCredentials($signKeyPath, $tppCert, 'SN=5E4299BE', 'https://www.example.com');
         $this->gateway = new IngAuthGateway($this->client, $credential, new HttpSignHelper());
     }
 

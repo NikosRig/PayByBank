@@ -50,11 +50,7 @@ class IngAuthGateway
             'Date' => $date,
             'Digest' => $digest,
             'TPP-Signature-Certificate' => $this->credentials->getTppCert(),
-            'Authorization' => sprintf(
-                'Signature keyId="%s",algorithm="rsa-sha256",headers="(request-target) date digest",signature="%s"',
-                $this->credentials->getKeyId(),
-                $signature
-            )],
+            'Authorization' => 'Signature ' . $this->makeSignatureHeader($this->credentials->getKeyId(), $signature)],
             $requestBody
         );
 
@@ -83,7 +79,7 @@ class IngAuthGateway
         $accessToken = $this->createAccessToken();
         $reqPath = sprintf("/oauth2/authorization-server-url?scope=%s&redirect_uri=%s&country_code=%s",
             urlencode($accessToken->getScope()),
-            'https://www.example.com',
+            $this->credentials->getRedirectUrl(),
             'NL'
         );
         $authUrl = $this->sandboxHost . $reqPath;
@@ -95,16 +91,11 @@ class IngAuthGateway
         );
 
         $request = new Request('GET', $authUrl, [
-            'Content-Type' => 'application/x-www-form-urlencoded',
             'Date' => $date,
             'Digest' => $digest,
             'TPP-Signature-Certificate' => $this->credentials->getTppCert(),
             'Authorization' => 'Bearer '.$accessToken->getToken(),
-            'Signature' => sprintf(
-                'keyId="%s",algorithm="rsa-sha256",headers="(request-target) date digest",signature="%s"',
-                $accessToken->getClientId(),
-                $signature
-            )
+            'Signature' => $this->makeSignatureHeader($accessToken->getClientId(), $signature)
         ]);
 
         $response = $this->client->sendRequest($request);
@@ -115,6 +106,21 @@ class IngAuthGateway
             throw new BadResponseException('BadResponse: ' . $responseBody);
         }
 
-        return $jsonPayload->location;
+        $queryParams = [
+            'client_id' => $accessToken->getClientId(),
+            'redirect_uri' => $this->credentials->getRedirectUrl(),
+            'scope' => $accessToken->getScope()
+        ];
+
+        return $jsonPayload->location . '?' . http_build_query($queryParams);
+    }
+
+    private function makeSignatureHeader(string $keyId, $signature): string
+    {
+        return sprintf(
+            'keyId="%s",algorithm="rsa-sha256",headers="(request-target) date digest",signature="%s"',
+            $keyId,
+            $signature
+        );
     }
 }

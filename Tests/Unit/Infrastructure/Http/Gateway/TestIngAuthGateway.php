@@ -8,7 +8,6 @@ use GuzzleHttp\Psr7\Response;
 use PayByBank\Infrastructure\Http\Gateway\Credential\IngCredentials;
 use PayByBank\Infrastructure\Http\Gateway\IngAuthGateway;
 use PayByBank\Infrastructure\Http\Helpers\HttpSignHelper;
-use PayByBank\Infrastructure\Models\IngAccessToken;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
@@ -102,7 +101,7 @@ class TestIngAuthGateway extends TestCase
 
     private function invalidAccessTokenJsonBodyResponse(): ResponseInterface
     {
-        $body = '{"access_token":"test_access_token","expires_in":905,"scope":"payment-accounts:orders:create granting","token_type":"Bearer","keys":[{"kty":"RSA","n":"3l3rdz4hy","e":"AQAB","use":"sig","alg":"RS256","x5t":"26e5d932936"}],"client_id":"5ca1ab1e-c0ca"}';
+        $body = 'access_token":"test_access_token","expires_in":905,"scope":"payment-accounts:orders:create granting","token_type":"Bearer","keys":[{"kty":"RSA","n":"3l3rdz4hy","e":"AQAB","use":"sig","alg":"RS256","x5t":"26e5d932936"}],"client_id":"5ca1ab1e-c0ca"}';
 
         return new Response(200, [], $body);
     }

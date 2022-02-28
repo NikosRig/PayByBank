@@ -1,10 +1,10 @@
 <phpunit bootstrap="vendor/autoload.php">
     <testsuites>
         <testsuite name="Gateway Unit">
-            <file>Tests/Unit/PayByBank/Infrastructure/Http/Gateway/TestIngAuthGateway.php</file>
+            <file>Tests/Unit/Infrastructure/Http/Gateway/TestIngAuthGateway.php</file>
         </testsuite>
         <testsuite name="Gateway Integration">
-            <file>Tests/Integration/PayByBank/Infrastructure/Http/Gateway/TestIngAuthGatewayIntegration.php</file>
+            <file>Tests/Integration/Infrastructure/Http/Gateway/TestIngAuthGatewayIntegration.php</file>
         </testsuite>
     </testsuites>
 </phpunit>

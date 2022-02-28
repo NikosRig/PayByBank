@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace PayByBank\Infrastructure\Http\Gateway;
 
 use GuzzleHttp\Psr7\Request;
-use PayByBank\Domain\Http\DTO\AccessToken;
 use PayByBank\Domain\Http\Exceptions\BadResponseException;
 use PayByBank\Domain\Http\Helper\HttpSignHelperInterface;
 use PayByBank\Infrastructure\Http\Gateway\Credential\IngCredentials;
+use PayByBank\Infrastructure\Models\IngAccessToken;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 
@@ -18,7 +18,7 @@ class IngAuthGateway
 
     private string $sandboxHost = 'https://api.sandbox.ing.com';
 
-    private string $tokenPath = '/oauth2/token';
+    public readonly string $tokenPath;
 
     private HttpSignHelperInterface $signHelper;
 
@@ -26,6 +26,7 @@ class IngAuthGateway
 
     public function __construct(ClientInterface $client, IngCredentials $credentials, HttpSignHelperInterface $signHelper)
     {
+        $this->tokenPath = '/oauth2/token';
         $this->client = $client;
         $this->credentials = $credentials;
         $this->signHelper = $signHelper;
@@ -34,57 +35,86 @@ class IngAuthGateway
     /**
      * @throws ClientExceptionInterface
      */
-    public function createAccessToken(): AccessToken
+    public function createAccessToken(): IngAccessToken
     {
         $url = $this->sandboxHost . $this->tokenPath;
-        $payload = 'grant_type=client_credentials';
-
         $date = $this->signHelper->makeDate();
-        $digest = $this->signHelper->makeDigest($payload);
-        $authHeader = $this->makeClientAuthHeader($this->credentials, $date, $digest);
+        $requestBody = 'grant_type=client_credentials';
+        $digest = $this->signHelper->makeDigest($requestBody);
+
+        $signString = "(request-target): post {$this->tokenPath}\ndate: {$date}\ndigest: {$digest}";
+        $signature = $this->signHelper->sign($this->credentials->getSignKey(), $signString);
         
-        $headers = [
-            'Accept' => 'application/json',
+        $request = new Request('POST', $url, [
             'Content-Type' => 'application/x-www-form-urlencoded',
             'Date' => $date,
             'Digest' => $digest,
             'TPP-Signature-Certificate' => $this->credentials->getTppCert(),
-            'Authorization' => $authHeader
-        ];
+            'Authorization' => sprintf(
+                'Signature keyId="%s",algorithm="rsa-sha256",headers="(request-target) date digest",signature="%s"',
+                $this->credentials->getKeyId(),
+                $signature
+            )],
+            $requestBody
+        );
 
-        $request = new Request('POST', $url, $headers, $payload);
         $response = $this->client->sendRequest($request);
-        $responsePayload = json_decode($response->getBody()->getContents());
+        $responseBody = $response->getBody()->getContents();
 
-        if (!$responsePayload || !isset($responsePayload->access_token)) {
-            throw new BadResponseException('Response body error');
+        $jsonResponse = json_decode($responseBody);
+
+        if (!$jsonResponse || empty($jsonResponse->access_token)) {
+            throw new BadResponseException('BadResponse: ' . $responseBody);
         }
 
-        return new AccessToken(
-            $responsePayload->access_token,
-            $responsePayload->expires_in
+        return new IngAccessToken(
+            $jsonResponse->access_token,
+            $jsonResponse->expires_in,
+            $jsonResponse->client_id,
+            $jsonResponse->scope
         );
     }
 
     /**
      * @throws ClientExceptionInterface
      */
-    public function authorizationUrl()
+    public function getAuthorizationUrl(): string
     {
         $accessToken = $this->createAccessToken();
-
-
-    }
-
-    private function makeClientAuthHeader(IngCredentials $credentials, string $date, string $digest): string
-    {
-        $signString = "(request-target): post /oauth2/token\ndate: {$date}\ndigest: {$digest}";
-        $signature = $this->signHelper->sign($credentials->getSignKey(), $signString);
-
-        return sprintf(
-            'Signature keyId="%s",algorithm="rsa-sha256",headers="(request-target) date digest",signature="%s"',
-            $credentials->getKeyId(),
-            $signature
+        $reqPath = sprintf("/oauth2/authorization-server-url?scope=%s&redirect_uri=%s&country_code=%s",
+            urlencode($accessToken->getScope()),
+            'https://www.example.com',
+            'NL'
         );
+        $authUrl = $this->sandboxHost . $reqPath;
+        $date = $this->signHelper->makeDate();
+        $digest = $this->signHelper->makeDigest('');
+        $signature = $this->signHelper->sign(
+            $this->credentials->getSignKey(),
+            "(request-target): get {$reqPath}\ndate: {$date}\ndigest: {$digest}"
+        );
+
+        $request = new Request('GET', $authUrl, [
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'Date' => $date,
+            'Digest' => $digest,
+            'TPP-Signature-Certificate' => $this->credentials->getTppCert(),
+            'Authorization' => 'Bearer '.$accessToken->getToken(),
+            'Signature' => sprintf(
+                'keyId="%s",algorithm="rsa-sha256",headers="(request-target) date digest",signature="%s"',
+                $accessToken->getClientId(),
+                $signature
+            )
+        ]);
+
+        $response = $this->client->sendRequest($request);
+        $responseBody = $response->getBody()->getContents();
+        $jsonPayload = json_decode($responseBody);
+
+        if (!$jsonPayload || empty($jsonPayload->location)) {
+            throw new BadResponseException('BadResponse: ' . $responseBody);
+        }
+
+        return $jsonPayload->location;
     }
 }

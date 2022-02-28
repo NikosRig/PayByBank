@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Integration\PayByBank\Infrastructure\Http\Gateway;
+namespace Tests\Integration\Infrastructure\Http\Gateway;
 
 use GuzzleHttp\Client;
 use PayByBank\Infrastructure\Http\Gateway\Credential\IngCredentials;
@@ -37,6 +37,19 @@ class TestIngAuthGatewayIntegration extends TestCase
     {
         $accessToken = $this->gateway->createAccessToken();
 
-        $this->assertIsString($accessToken->getAccessToken());
+        $this->assertIsString($accessToken->getToken());
+        $this->assertIsInt($accessToken->getExpires());
+        $this->assertIsString($accessToken->getClientId());
+        $this->assertIsString($accessToken->getScope());
+    }
+
+    /**
+     * @throws ClientExceptionInterface
+     */
+    public function testShouldParseAuthUrl(): void
+    {
+        $authUrl = $this->gateway->getAuthorizationUrl();
+
+        $this->assertIsString($authUrl);
     }
 }

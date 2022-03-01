@@ -24,6 +24,8 @@ class IngAuthGateway
 
     private IngCredentials $credentials;
 
+    private string $paymentInitiationScope = 'payment-accounts:orders:create';
+
     public function __construct(ClientInterface $client, IngCredentials $credentials, HttpSignHelperInterface $signHelper)
     {
         $this->tokenPath = '/oauth2/token';
@@ -39,7 +41,7 @@ class IngAuthGateway
     {
         $url = $this->sandboxHost . $this->tokenPath;
         $date = $this->signHelper->makeDate();
-        $requestBody = 'grant_type=client_credentials';
+        $requestBody = 'grant_type=client_credentials&scope=' . urlencode($this->paymentInitiationScope);
         $digest = $this->signHelper->makeDigest($requestBody);
 
         $signString = "(request-target): post {$this->tokenPath}\ndate: {$date}\ndigest: {$digest}";
@@ -109,7 +111,7 @@ class IngAuthGateway
         $queryParams = [
             'client_id' => $accessToken->getClientId(),
             'redirect_uri' => $this->credentials->getRedirectUrl(),
-            'scope' => $accessToken->getScope()
+            'scope' => $this->paymentInitiationScope
         ];
 
         return $jsonPayload->location . '?' . http_build_query($queryParams);

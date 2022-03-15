@@ -17,6 +17,24 @@ services:
     volumes:
       - ./:/var/www/html
 
+  paybybank_db:
+    image: mariadb
+    container_name: paybybank_db
+    volumes:
+      - paybybank_db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      pay_by_bank_network:
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: paybybank
+      MYSQL_USER: paybybank
+      MYSQL_PASSWORD: paybybank
+
 networks:
   pay_by_bank_network:
     driver: "bridge"
+
+volumes:
+  paybybank_db_data:

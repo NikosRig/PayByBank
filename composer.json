@@ -21,7 +21,6 @@
     "require": {
         "psr/http-client": "^1.0",
         "guzzlehttp/guzzle": "^7.0",
-        "ext-curl": "*",
-        "ext-openssl": "*"
+        "rakit/validation": "^1.4"
     }
 }

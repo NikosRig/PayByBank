@@ -16,11 +16,14 @@ class PaymentOrder
 
     private int $status;
 
+    public readonly string $token;
+
     public function __construct(string $creditorIban, string $creditorName, int $amount)
     {
         $this->creditorIban = $creditorIban;
         $this->creditorName = $creditorName;
         $this->amount = $amount;
         $this->status = PaymentOrderStatus::PENDING_CONSENT->value;
+        $this->token = md5(microtime(true).mt_Rand());
     }
 }

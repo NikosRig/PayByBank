@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\WebApi\UseCases\V1\PaymentOrders\CreatePaymentOrder;
 
+use PayByBank\Domain\Repository\IPaymentOrderPersistenceRepository;
 use PayByBank\WebApi\Modules\RequestValidator;
 use PayByBank\WebApi\UseCases\V1\PaymentOrders\CreatePaymentOrder\PaymentOrdersCreationController;
 use PHPUnit\Framework\TestCase;
@@ -17,6 +18,7 @@ class TestPaymentOrdersCreationController extends TestCase
     public function setUp(): void
     {
         $this->requestValidator = new RequestValidator(new Validator());
+        $this->paymentOrderPersistenceRepository = $this->createMock(IPaymentOrderPersistenceRepository::class);
     }
 
     public function testAssertCreditorIbanIsRequired(): void
@@ -26,7 +28,10 @@ class TestPaymentOrdersCreationController extends TestCase
            'creditorName' => 'Test'
         ]);
         $request = ServerRequestMocker::mock($requestBody);
-        $controller = new PaymentOrdersCreationController($this->requestValidator);
+        $controller = new PaymentOrdersCreationController(
+            $this->requestValidator,
+            $this->paymentOrderPersistenceRepository
+        );
         $response = json_decode($controller($request));
 
         $this->assertObjectHasAttribute('error', $response);
@@ -40,7 +45,10 @@ class TestPaymentOrdersCreationController extends TestCase
             'creditorName' => 'Test'
         ]);
         $request = ServerRequestMocker::mock($requestBody);
-        $controller = new PaymentOrdersCreationController($this->requestValidator);
+        $controller = new PaymentOrdersCreationController(
+            $this->requestValidator,
+            $this->paymentOrderPersistenceRepository
+        );
         $response = json_decode($controller($request));
 
         $this->assertObjectHasAttribute('error', $response);
@@ -53,7 +61,10 @@ class TestPaymentOrdersCreationController extends TestCase
            'creditorName' => 'Test'
         ]);
         $request = ServerRequestMocker::mock($requestBody);
-        $controller = new PaymentOrdersCreationController($this->requestValidator);
+        $controller = new PaymentOrdersCreationController(
+            $this->requestValidator,
+            $this->paymentOrderPersistenceRepository
+        );
         $response = json_decode($controller($request));
 
         $this->assertObjectHasAttribute('error', $response);
@@ -67,7 +78,10 @@ class TestPaymentOrdersCreationController extends TestCase
            'creditorName' => 'Test'
         ]);
         $request = ServerRequestMocker::mock($requestBody);
-        $controller = new PaymentOrdersCreationController($this->requestValidator);
+        $controller = new PaymentOrdersCreationController(
+            $this->requestValidator,
+            $this->paymentOrderPersistenceRepository
+        );
         $response = json_decode($controller($request));
 
         $this->assertObjectHasAttribute('error', $response);
@@ -80,7 +94,10 @@ class TestPaymentOrdersCreationController extends TestCase
            'creditorIban' => 'GR2101422757743955519929399',
         ]);
         $request = ServerRequestMocker::mock($requestBody);
-        $controller = new PaymentOrdersCreationController($this->requestValidator);
+        $controller = new PaymentOrdersCreationController(
+            $this->requestValidator,
+            $this->paymentOrderPersistenceRepository
+        );
         $response = json_decode($controller($request));
 
         $this->assertObjectHasAttribute('error', $response);
@@ -94,7 +111,10 @@ class TestPaymentOrdersCreationController extends TestCase
            'creditorName' => 1
         ]);
         $request = ServerRequestMocker::mock($requestBody);
-        $controller = new PaymentOrdersCreationController($this->requestValidator);
+        $controller = new PaymentOrdersCreationController(
+            $this->requestValidator,
+            $this->paymentOrderPersistenceRepository
+        );
         $response = json_decode($controller($request));
 
         $this->assertObjectHasAttribute('error', $response);

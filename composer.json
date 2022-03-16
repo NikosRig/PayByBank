@@ -5,7 +5,7 @@
     "autoload": {
         "psr-4": {
             "PayByBank\\": "src/",
-            "Tests\\": "Tests/"
+            "Test\\": "test/"
         }
     },
     "authors": [
@@ -19,8 +19,12 @@
         "friendsofphp/php-cs-fixer": "^3.6"
     },
     "require": {
+        "rakit/validation": "^1.4",
+        "doctrine/orm": "^2.11",
+        "guzzlehttp/guzzle": "^7.4",
         "psr/http-client": "^1.0",
-        "guzzlehttp/guzzle": "^7.0",
-        "rakit/validation": "^1.4"
+        "psr/container": "^2.0",
+        "vlucas/phpdotenv": "^5.4",
+        "ext-openssl": "*"
     }
 }

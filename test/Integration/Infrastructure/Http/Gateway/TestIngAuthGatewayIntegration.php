@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tests\Integration\Infrastructure\Http\Gateway;
 
 use GuzzleHttp\Client;
-use PayByBank\Infrastructure\Http\Gateway\Credential\IngCredentials;
-use PayByBank\Infrastructure\Http\Gateway\IngAuthGateway;
-use PayByBank\Infrastructure\Http\Helpers\HttpSignHelper;
+use PayByBank\Infrastructure\Helpers\HttpSignHelper;
+use PayByBank\Infrastructure\Http\Gateway\ING\IngAuthGateway;
+use PayByBank\Infrastructure\Http\Gateway\ING\IngCredentials;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientExceptionInterface;
 

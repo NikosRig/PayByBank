@@ -12,11 +12,11 @@ class PaymentOrder
 
     public readonly string $creditorName;
 
-    public readonly float $amount;
+    public readonly int $amount;
 
     private int $status;
 
-    public function __construct(string $creditorIban, string $creditorName, float $amount)
+    public function __construct(string $creditorIban, string $creditorName, int $amount)
     {
         $this->creditorIban = $creditorIban;
         $this->creditorName = $creditorName;

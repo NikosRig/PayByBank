@@ -6,7 +6,7 @@ namespace PayByBank\WebApi\Actions\PaymentOrders\CreatePaymentOrder;
 
 use Exception;
 use PayByBank\Application\UseCases\CreatePaymentOrder\CreatePaymentOrderUseCase;
-use PayByBank\Domain\Repository\IPaymentOrderPersistenceRepository;
+use PayByBank\Domain\Repository\IPaymentOrderStoreRepository;
 use PayByBank\WebApi\Interfaces\IOutputPort;
 use PayByBank\WebApi\Modules\RequestValidator;
 use Psr\Http\Message\RequestInterface;
@@ -15,14 +15,14 @@ class CreatePaymentOrderAction implements IOutputPort
 {
     private RequestValidator $requestValidator;
 
-    private IPaymentOrderPersistenceRepository $orderPersistenceRepository;
+    private IPaymentOrderStoreRepository $paymentOrderStoreRepository;
 
     public function __construct(
         RequestValidator $requestValidator,
-        IPaymentOrderPersistenceRepository $orderPersistenceRepository
+        IPaymentOrderStoreRepository $paymentOrderStoreRepository
     ) {
         $this->requestValidator = $requestValidator;
-        $this->orderPersistenceRepository = $orderPersistenceRepository;
+        $this->paymentOrderStoreRepository = $paymentOrderStoreRepository;
     }
 
     public function __invoke(RequestInterface $request): string
@@ -38,7 +38,7 @@ class CreatePaymentOrderAction implements IOutputPort
         try {
             $this->requestValidator->validateBody($requestBody, $validationRules);
             $requestParams = json_decode($requestBody);
-            $createPaymentOrder = new CreatePaymentOrderUseCase($this->orderPersistenceRepository);
+            $createPaymentOrder = new CreatePaymentOrderUseCase($this->paymentOrderStoreRepository);
 
             $paymentOrderToken = $createPaymentOrder(
                 $requestParams->creditorIban,

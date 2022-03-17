@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\WebApi\Actions\PaymentOrders\CreatePaymentOrder;
 
-use PayByBank\Domain\Repository\IPaymentOrderPersistenceRepository;
+use PayByBank\Domain\Repository\IPaymentOrderStoreRepository;
 use PayByBank\WebApi\Actions\PaymentOrders\CreatePaymentOrder\CreatePaymentOrderAction;
 use PayByBank\WebApi\Modules\RequestValidator;
 use PHPUnit\Framework\TestCase;
@@ -18,7 +18,7 @@ class TestCreatePaymentOrderAction extends TestCase
     public function setUp(): void
     {
         $this->requestValidator = new RequestValidator(new Validator());
-        $this->paymentOrderPersistenceRepository = $this->createMock(IPaymentOrderPersistenceRepository::class);
+        $this->paymentOrderStoreRepository = $this->createMock(IPaymentOrderStoreRepository::class);
     }
 
     public function testAssertCreditorIbanIsRequired(): void
@@ -30,7 +30,7 @@ class TestCreatePaymentOrderAction extends TestCase
         $request = ServerRequestMocker::mock($requestBody);
         $controller = new CreatePaymentOrderAction(
             $this->requestValidator,
-            $this->paymentOrderPersistenceRepository
+            $this->paymentOrderStoreRepository
         );
         $response = json_decode($controller($request));
 
@@ -47,7 +47,7 @@ class TestCreatePaymentOrderAction extends TestCase
         $request = ServerRequestMocker::mock($requestBody);
         $controller = new CreatePaymentOrderAction(
             $this->requestValidator,
-            $this->paymentOrderPersistenceRepository
+            $this->paymentOrderStoreRepository
         );
         $response = json_decode($controller($request));
 
@@ -63,7 +63,7 @@ class TestCreatePaymentOrderAction extends TestCase
         $request = ServerRequestMocker::mock($requestBody);
         $controller = new CreatePaymentOrderAction(
             $this->requestValidator,
-            $this->paymentOrderPersistenceRepository
+            $this->paymentOrderStoreRepository
         );
         $response = json_decode($controller($request));
 
@@ -80,7 +80,7 @@ class TestCreatePaymentOrderAction extends TestCase
         $request = ServerRequestMocker::mock($requestBody);
         $controller = new CreatePaymentOrderAction(
             $this->requestValidator,
-            $this->paymentOrderPersistenceRepository
+            $this->paymentOrderStoreRepository
         );
         $response = json_decode($controller($request));
 
@@ -96,7 +96,7 @@ class TestCreatePaymentOrderAction extends TestCase
         $request = ServerRequestMocker::mock($requestBody);
         $controller = new CreatePaymentOrderAction(
             $this->requestValidator,
-            $this->paymentOrderPersistenceRepository
+            $this->paymentOrderStoreRepository
         );
         $response = json_decode($controller($request));
 
@@ -113,7 +113,7 @@ class TestCreatePaymentOrderAction extends TestCase
         $request = ServerRequestMocker::mock($requestBody);
         $controller = new CreatePaymentOrderAction(
             $this->requestValidator,
-            $this->paymentOrderPersistenceRepository
+            $this->paymentOrderStoreRepository
         );
         $response = json_decode($controller($request));
 

@@ -6,7 +6,7 @@ namespace PayByBank\Domain\Repository;
 
 use PayByBank\Domain\Entity\PaymentOrder;
 
-interface IPaymentOrderPersistenceRepository
+interface IPaymentOrderStoreRepository
 {
     public function persist(PaymentOrder $order): void;
 }

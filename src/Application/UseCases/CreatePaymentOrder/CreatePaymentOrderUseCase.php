@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace PayByBank\Application\UseCases\CreatePaymentOrder;
 
 use PayByBank\Domain\Entity\PaymentOrder;
-use PayByBank\Domain\Repository\IPaymentOrderPersistenceRepository;
+use PayByBank\Domain\Repository\IPaymentOrderStoreRepository;
 
 class CreatePaymentOrderUseCase
 {
-    private IPaymentOrderPersistenceRepository $orderPersistenceRepository;
+    private IPaymentOrderStoreRepository $orderPersistenceRepository;
 
-    public function __construct(IPaymentOrderPersistenceRepository $orderPersistenceRepository)
+    public function __construct(IPaymentOrderStoreRepository $orderPersistenceRepository)
     {
         $this->orderPersistenceRepository = $orderPersistenceRepository;
     }

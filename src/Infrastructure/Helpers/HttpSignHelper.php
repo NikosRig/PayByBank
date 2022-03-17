@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\Infrastructure\Http\Helpers;
+namespace PayByBank\Infrastructure\Helpers;
 
 use OpenSSLAsymmetricKey;
 use PayByBank\Domain\Http\Helper\HttpSignHelperInterface;
@@ -12,10 +12,10 @@ class HttpSignHelper implements HttpSignHelperInterface
     public function makeDigest(string $payload): string
     {
         return 'SHA-256=' . base64_encode(
-                openssl_digest($payload, 'sha256', true)
-            );
+            openssl_digest($payload, 'sha256', true)
+        );
     }
-    
+
     public function makeDate(): string
     {
         return gmdate('D, d M Y H:i:s T');

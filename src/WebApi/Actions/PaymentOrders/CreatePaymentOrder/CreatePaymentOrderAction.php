@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\WebApi\UseCases\V1\PaymentOrders\CreatePaymentOrder;
+namespace PayByBank\WebApi\Actions\PaymentOrders\CreatePaymentOrder;
 
 use Exception;
-use PayByBank\Application\Interfaces\IOutputPort;
 use PayByBank\Application\UseCases\CreatePaymentOrder\CreatePaymentOrderUseCase;
 use PayByBank\Domain\Repository\IPaymentOrderPersistenceRepository;
+use PayByBank\WebApi\Interfaces\IOutputPort;
 use PayByBank\WebApi\Modules\RequestValidator;
 use Psr\Http\Message\RequestInterface;
 
-class PaymentOrdersCreationController implements IOutputPort
+class CreatePaymentOrderAction implements IOutputPort
 {
     private RequestValidator $requestValidator;
 

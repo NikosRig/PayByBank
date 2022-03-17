@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\Application\Interfaces;
+namespace PayByBank\WebApi\Interfaces;
 
 use Psr\Http\Message\ServerRequestInterface;
 

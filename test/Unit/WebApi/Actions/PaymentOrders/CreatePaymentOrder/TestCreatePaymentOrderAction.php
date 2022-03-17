@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\WebApi\UseCases\V1\PaymentOrders\CreatePaymentOrder;
+namespace Test\Unit\WebApi\Actions\PaymentOrders\CreatePaymentOrder;
 
 use PayByBank\Domain\Repository\IPaymentOrderPersistenceRepository;
+use PayByBank\WebApi\Actions\PaymentOrders\CreatePaymentOrder\CreatePaymentOrderAction;
 use PayByBank\WebApi\Modules\RequestValidator;
-use PayByBank\WebApi\UseCases\V1\PaymentOrders\CreatePaymentOrder\PaymentOrdersCreationController;
 use PHPUnit\Framework\TestCase;
 use Rakit\Validation\Validator;
 use Test\Unit\WebApi\TestHelpers\ServerRequestMocker;
 
-class TestPaymentOrdersCreationController extends TestCase
+class TestCreatePaymentOrderAction extends TestCase
 {
     private RequestValidator $requestValidator;
 
@@ -28,7 +28,7 @@ class TestPaymentOrdersCreationController extends TestCase
            'creditorName' => 'Test'
         ]);
         $request = ServerRequestMocker::mock($requestBody);
-        $controller = new PaymentOrdersCreationController(
+        $controller = new CreatePaymentOrderAction(
             $this->requestValidator,
             $this->paymentOrderPersistenceRepository
         );
@@ -45,7 +45,7 @@ class TestPaymentOrdersCreationController extends TestCase
             'creditorName' => 'Test'
         ]);
         $request = ServerRequestMocker::mock($requestBody);
-        $controller = new PaymentOrdersCreationController(
+        $controller = new CreatePaymentOrderAction(
             $this->requestValidator,
             $this->paymentOrderPersistenceRepository
         );
@@ -61,7 +61,7 @@ class TestPaymentOrdersCreationController extends TestCase
            'creditorName' => 'Test'
         ]);
         $request = ServerRequestMocker::mock($requestBody);
-        $controller = new PaymentOrdersCreationController(
+        $controller = new CreatePaymentOrderAction(
             $this->requestValidator,
             $this->paymentOrderPersistenceRepository
         );
@@ -78,7 +78,7 @@ class TestPaymentOrdersCreationController extends TestCase
            'creditorName' => 'Test'
         ]);
         $request = ServerRequestMocker::mock($requestBody);
-        $controller = new PaymentOrdersCreationController(
+        $controller = new CreatePaymentOrderAction(
             $this->requestValidator,
             $this->paymentOrderPersistenceRepository
         );
@@ -94,7 +94,7 @@ class TestPaymentOrdersCreationController extends TestCase
            'creditorIban' => 'GR2101422757743955519929399',
         ]);
         $request = ServerRequestMocker::mock($requestBody);
-        $controller = new PaymentOrdersCreationController(
+        $controller = new CreatePaymentOrderAction(
             $this->requestValidator,
             $this->paymentOrderPersistenceRepository
         );
@@ -111,7 +111,7 @@ class TestPaymentOrdersCreationController extends TestCase
            'creditorName' => 1
         ]);
         $request = ServerRequestMocker::mock($requestBody);
-        $controller = new PaymentOrdersCreationController(
+        $controller = new CreatePaymentOrderAction(
             $this->requestValidator,
             $this->paymentOrderPersistenceRepository
         );

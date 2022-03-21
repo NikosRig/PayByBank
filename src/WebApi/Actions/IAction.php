@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\WebApi\Interfaces;
+namespace PayByBank\WebApi\Actions;
 
 use Psr\Http\Message\ServerRequestInterface;
 
-interface IOutputPort
+interface IAction
 {
     public function __invoke(ServerRequestInterface $request): string;
 }

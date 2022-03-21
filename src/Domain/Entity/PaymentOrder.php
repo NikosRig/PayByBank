@@ -4,26 +4,39 @@ declare(strict_types=1);
 
 namespace PayByBank\Domain\Entity;
 
+use DateTime;
 use PayByBank\Domain\ValueObjects\PaymentOrderStatus;
 
 class PaymentOrder
 {
-    public readonly string $creditorIban;
+    private readonly int $id;
 
-    public readonly string $creditorName;
+    private readonly CreditorAccount $creditorAccount;
 
-    public readonly int $amount;
+    private readonly int $amount;
+
+    private readonly string $token;
+
+    private readonly DateTime $dateCreated;
 
     private int $status;
 
-    public readonly string $token;
-
-    public function __construct(string $creditorIban, string $creditorName, int $amount)
+    public function __construct(CreditorAccount $creditorAccount, int $amount)
     {
-        $this->creditorIban = $creditorIban;
-        $this->creditorName = $creditorName;
-        $this->amount = $amount;
         $this->status = PaymentOrderStatus::PENDING_CONSENT->value;
+        $this->dateCreated = new DateTime('now');
         $this->token = md5(microtime(true).mt_Rand());
+        $this->creditorAccount = $creditorAccount;
+        $this->amount = $amount;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getToken(): string
+    {
+        return $this->token;
     }
 }

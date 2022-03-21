@@ -8,5 +8,5 @@ use PayByBank\Domain\Entity\PaymentOrder;
 
 interface IPaymentOrderStoreRepository
 {
-    public function persist(PaymentOrder $order): void;
+    public function store(PaymentOrder $paymentOrder): void;
 }

@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Test\Unit\WebApi\Actions\PaymentOrders\CreatePaymentOrder;
 
+use Iban\Validation\Validator;
+use PayByBank\Application\UseCases\CreatePaymentOrder\CreatePaymentOrderUseCase;
 use PayByBank\Domain\Repository\IPaymentOrderStoreRepository;
 use PayByBank\WebApi\Actions\PaymentOrders\CreatePaymentOrder\CreatePaymentOrderAction;
-use PayByBank\WebApi\Modules\RequestValidator;
+use PayByBank\WebApi\Actions\PaymentOrders\CreatePaymentOrder\CreatePaymentOrderParamsValidator;
+use PayByBank\WebApi\Modules\Validation\RequestParamsValidator;
 use PHPUnit\Framework\TestCase;
-use Rakit\Validation\Validator;
 use Test\Unit\WebApi\TestHelpers\ServerRequestMocker;
 
 class TestCreatePaymentOrderAction extends TestCase
 {
-    private RequestValidator $requestValidator;
-
     public function setUp(): void
     {
-        $this->requestValidator = new RequestValidator(new Validator());
+        $this->validator = new CreatePaymentOrderParamsValidator(new Validator());
         $this->paymentOrderStoreRepository = $this->createMock(IPaymentOrderStoreRepository::class);
     }
 
@@ -29,8 +29,8 @@ class TestCreatePaymentOrderAction extends TestCase
         ]);
         $request = ServerRequestMocker::mock($requestBody);
         $controller = new CreatePaymentOrderAction(
-            $this->requestValidator,
-            $this->paymentOrderStoreRepository
+            $this->createMock(CreatePaymentOrderUseCase::class),
+            new RequestParamsValidator()
         );
         $response = json_decode($controller($request));
 
@@ -46,8 +46,8 @@ class TestCreatePaymentOrderAction extends TestCase
         ]);
         $request = ServerRequestMocker::mock($requestBody);
         $controller = new CreatePaymentOrderAction(
-            $this->requestValidator,
-            $this->paymentOrderStoreRepository
+            $this->createMock(CreatePaymentOrderUseCase::class),
+            new RequestParamsValidator()
         );
         $response = json_decode($controller($request));
 
@@ -62,8 +62,8 @@ class TestCreatePaymentOrderAction extends TestCase
         ]);
         $request = ServerRequestMocker::mock($requestBody);
         $controller = new CreatePaymentOrderAction(
-            $this->requestValidator,
-            $this->paymentOrderStoreRepository
+            $this->createMock(CreatePaymentOrderUseCase::class),
+            new RequestParamsValidator()
         );
         $response = json_decode($controller($request));
 
@@ -79,8 +79,8 @@ class TestCreatePaymentOrderAction extends TestCase
         ]);
         $request = ServerRequestMocker::mock($requestBody);
         $controller = new CreatePaymentOrderAction(
-            $this->requestValidator,
-            $this->paymentOrderStoreRepository
+            $this->createMock(CreatePaymentOrderUseCase::class),
+            new RequestParamsValidator()
         );
         $response = json_decode($controller($request));
 
@@ -95,8 +95,8 @@ class TestCreatePaymentOrderAction extends TestCase
         ]);
         $request = ServerRequestMocker::mock($requestBody);
         $controller = new CreatePaymentOrderAction(
-            $this->requestValidator,
-            $this->paymentOrderStoreRepository
+            $this->createMock(CreatePaymentOrderUseCase::class),
+            new RequestParamsValidator()
         );
         $response = json_decode($controller($request));
 
@@ -112,8 +112,26 @@ class TestCreatePaymentOrderAction extends TestCase
         ]);
         $request = ServerRequestMocker::mock($requestBody);
         $controller = new CreatePaymentOrderAction(
-            $this->requestValidator,
-            $this->paymentOrderStoreRepository
+            $this->createMock(CreatePaymentOrderUseCase::class),
+            new RequestParamsValidator()
+        );
+        $response = json_decode($controller($request));
+
+        $this->assertObjectHasAttribute('error', $response);
+    }
+
+    public function testAssertNumericBankIsNotAccepted(): void
+    {
+        $requestBody = json_encode([
+           'creditorIban' => 'GR2101422757743955519929399',
+           'amount' => 10,
+           'creditorName' => 'John Doe',
+           'bank' => 1
+        ]);
+        $request = ServerRequestMocker::mock($requestBody);
+        $controller = new CreatePaymentOrderAction(
+            $this->createMock(CreatePaymentOrderUseCase::class),
+            new RequestParamsValidator()
         );
         $response = json_decode($controller($request));
 

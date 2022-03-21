@@ -4,50 +4,54 @@ declare(strict_types=1);
 
 namespace PayByBank\WebApi\Actions\PaymentOrders\CreatePaymentOrder;
 
-use Exception;
+use InvalidArgumentException;
 use PayByBank\Application\UseCases\CreatePaymentOrder\CreatePaymentOrderUseCase;
-use PayByBank\Domain\Repository\IPaymentOrderStoreRepository;
-use PayByBank\WebApi\Interfaces\IOutputPort;
-use PayByBank\WebApi\Modules\RequestValidator;
+use PayByBank\WebApi\Actions\IAction;
+use PayByBank\WebApi\Modules\Validation\RequestParamsValidator;
+use PayByBank\WebApi\Modules\Validation\Rules\AmountRule;
+use PayByBank\WebApi\Modules\Validation\Rules\BankRule;
+use PayByBank\WebApi\Modules\Validation\Rules\CreditorIbanRule;
+use PayByBank\WebApi\Modules\Validation\Rules\CreditorNameRule;
 use Psr\Http\Message\RequestInterface;
 
-class CreatePaymentOrderAction implements IOutputPort
+class CreatePaymentOrderAction implements IAction
 {
-    private RequestValidator $requestValidator;
+    private CreatePaymentOrderUseCase $createPaymentOrderUseCase;
 
-    private IPaymentOrderStoreRepository $paymentOrderStoreRepository;
+    private RequestParamsValidator $requestParamsValidator;
 
     public function __construct(
-        RequestValidator $requestValidator,
-        IPaymentOrderStoreRepository $paymentOrderStoreRepository
+        CreatePaymentOrderUseCase $createPaymentOrderUseCase,
+        RequestParamsValidator $requestParamsValidator
     ) {
-        $this->requestValidator = $requestValidator;
-        $this->paymentOrderStoreRepository = $paymentOrderStoreRepository;
+        $this->createPaymentOrderUseCase = $createPaymentOrderUseCase;
+        $this->requestParamsValidator = $requestParamsValidator;
     }
 
     public function __invoke(RequestInterface $request): string
     {
         $requestBody = $request->getBody()->getContents();
-
-        $validationRules = [
-            'creditorIban' => 'required|min:6',
-            'creditorName' => 'required|min:4',
-            'amount' => 'required|numeric'
-        ];
-
         try {
-            $this->requestValidator->validateBody($requestBody, $validationRules);
-            $requestParams = json_decode($requestBody);
-            $createPaymentOrder = new CreatePaymentOrderUseCase($this->paymentOrderStoreRepository);
+            if (!$requestParams = json_decode($requestBody)) {
+                throw new InvalidArgumentException('Invalid payload');
+            }
 
-            $paymentOrderToken = $createPaymentOrder(
+            $this->requestParamsValidator
+                ->withRule(new CreditorIbanRule())
+                ->withRule(new CreditorNameRule())
+                ->withRule(new AmountRule())
+                ->withRule(new BankRule())
+                ->validate($requestParams);
+
+            $token = $this->createPaymentOrderUseCase->create(
                 $requestParams->creditorIban,
                 $requestParams->creditorName,
-                $requestParams->amount
+                $requestParams->amount,
+                $requestParams->bank
             );
 
-            return json_encode(['redirectUri' => "/{$paymentOrderToken}"]);
-        } catch (Exception $exception) {
+            return json_encode(['redirectUri' => "/{$token}"]);
+        } catch (InvalidArgumentException $exception) {
             return json_encode(['error' => $exception->getMessage()]);
         }
     }

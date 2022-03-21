@@ -19,8 +19,6 @@
         "friendsofphp/php-cs-fixer": "^3.6"
     },
     "require": {
-        "rakit/validation": "^1.4",
-        "doctrine/orm": "^2.11",
         "guzzlehttp/guzzle": "^7.4",
         "psr/http-client": "^1.0",
         "psr/container": "^2.0",

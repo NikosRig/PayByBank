@@ -6,7 +6,7 @@ namespace PayByBank\Domain\Repository;
 
 use PayByBank\Domain\Entity\PaymentOrder;
 
-interface IPaymentOrderStoreRepository
+interface PaymentOrderStoreRepository
 {
     public function store(PaymentOrder $paymentOrder): void;
 }

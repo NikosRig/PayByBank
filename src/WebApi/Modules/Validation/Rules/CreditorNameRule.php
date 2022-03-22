@@ -6,11 +6,15 @@ namespace PayByBank\WebApi\Modules\Validation\Rules;
 
 use InvalidArgumentException;
 
-class CreditorNameRule implements IValidationRule
+class CreditorNameRule implements ValidationRule
 {
-    public function check(object $params): void
+    /**
+     * @param array $params
+     * @return void
+     */
+    public function check(array $params): void
     {
-        isset($params->creditorName) && is_string($params->creditorName)
+        isset($params['creditorName']) && is_string($params['creditorName'])
             || throw new InvalidArgumentException('Invalid creditorName');
     }
 }

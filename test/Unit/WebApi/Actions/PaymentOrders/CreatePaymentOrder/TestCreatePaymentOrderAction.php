@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Test\Unit\WebApi\Actions\PaymentOrders\CreatePaymentOrder;
 
-use Iban\Validation\Validator;
 use PayByBank\Application\UseCases\CreatePaymentOrder\CreatePaymentOrderUseCase;
-use PayByBank\Domain\Repository\IPaymentOrderStoreRepository;
+use PayByBank\Domain\Repository\PaymentOrderStoreRepository;
 use PayByBank\WebApi\Actions\PaymentOrders\CreatePaymentOrder\CreatePaymentOrderAction;
-use PayByBank\WebApi\Actions\PaymentOrders\CreatePaymentOrder\CreatePaymentOrderParamsValidator;
-use PayByBank\WebApi\Modules\Validation\RequestParamsValidator;
+use PayByBank\WebApi\Actions\PaymentOrders\CreatePaymentOrder\CreatePaymentOrderValidatorBuilder;
 use PHPUnit\Framework\TestCase;
 use Test\Unit\WebApi\TestHelpers\ServerRequestMocker;
 
@@ -17,8 +15,8 @@ class TestCreatePaymentOrderAction extends TestCase
 {
     public function setUp(): void
     {
-        $this->validator = new CreatePaymentOrderParamsValidator(new Validator());
-        $this->paymentOrderStoreRepository = $this->createMock(IPaymentOrderStoreRepository::class);
+        $this->paymentOrderStoreRepository = $this->createMock(PaymentOrderStoreRepository::class);
+        $this->validatorBuilder = new CreatePaymentOrderValidatorBuilder();
     }
 
     public function testAssertCreditorIbanIsRequired(): void
@@ -28,10 +26,8 @@ class TestCreatePaymentOrderAction extends TestCase
            'creditorName' => 'Test'
         ]);
         $request = ServerRequestMocker::mock($requestBody);
-        $controller = new CreatePaymentOrderAction(
-            $this->createMock(CreatePaymentOrderUseCase::class),
-            new RequestParamsValidator()
-        );
+        $createPaymentOrderUseCase = $this->createMock(CreatePaymentOrderUseCase::class);
+        $controller = new CreatePaymentOrderAction($createPaymentOrderUseCase, $this->validatorBuilder);
         $response = json_decode($controller($request));
 
         $this->assertObjectHasAttribute('error', $response);
@@ -45,10 +41,8 @@ class TestCreatePaymentOrderAction extends TestCase
             'creditorName' => 'Test'
         ]);
         $request = ServerRequestMocker::mock($requestBody);
-        $controller = new CreatePaymentOrderAction(
-            $this->createMock(CreatePaymentOrderUseCase::class),
-            new RequestParamsValidator()
-        );
+        $createPaymentOrderUseCase = $this->createMock(CreatePaymentOrderUseCase::class);
+        $controller = new CreatePaymentOrderAction($createPaymentOrderUseCase, $this->validatorBuilder);
         $response = json_decode($controller($request));
 
         $this->assertObjectHasAttribute('error', $response);
@@ -61,10 +55,8 @@ class TestCreatePaymentOrderAction extends TestCase
            'creditorName' => 'Test'
         ]);
         $request = ServerRequestMocker::mock($requestBody);
-        $controller = new CreatePaymentOrderAction(
-            $this->createMock(CreatePaymentOrderUseCase::class),
-            new RequestParamsValidator()
-        );
+        $createPaymentOrderUseCase = $this->createMock(CreatePaymentOrderUseCase::class);
+        $controller = new CreatePaymentOrderAction($createPaymentOrderUseCase, $this->validatorBuilder);
         $response = json_decode($controller($request));
 
         $this->assertObjectHasAttribute('error', $response);
@@ -78,10 +70,8 @@ class TestCreatePaymentOrderAction extends TestCase
            'creditorName' => 'Test'
         ]);
         $request = ServerRequestMocker::mock($requestBody);
-        $controller = new CreatePaymentOrderAction(
-            $this->createMock(CreatePaymentOrderUseCase::class),
-            new RequestParamsValidator()
-        );
+        $createPaymentOrderUseCase = $this->createMock(CreatePaymentOrderUseCase::class);
+        $controller = new CreatePaymentOrderAction($createPaymentOrderUseCase, $this->validatorBuilder);
         $response = json_decode($controller($request));
 
         $this->assertObjectHasAttribute('error', $response);
@@ -94,10 +84,8 @@ class TestCreatePaymentOrderAction extends TestCase
            'creditorIban' => 'GR2101422757743955519929399',
         ]);
         $request = ServerRequestMocker::mock($requestBody);
-        $controller = new CreatePaymentOrderAction(
-            $this->createMock(CreatePaymentOrderUseCase::class),
-            new RequestParamsValidator()
-        );
+        $createPaymentOrderUseCase = $this->createMock(CreatePaymentOrderUseCase::class);
+        $controller = new CreatePaymentOrderAction($createPaymentOrderUseCase, $this->validatorBuilder);
         $response = json_decode($controller($request));
 
         $this->assertObjectHasAttribute('error', $response);
@@ -111,10 +99,8 @@ class TestCreatePaymentOrderAction extends TestCase
            'creditorName' => 1
         ]);
         $request = ServerRequestMocker::mock($requestBody);
-        $controller = new CreatePaymentOrderAction(
-            $this->createMock(CreatePaymentOrderUseCase::class),
-            new RequestParamsValidator()
-        );
+        $createPaymentOrderUseCase = $this->createMock(CreatePaymentOrderUseCase::class);
+        $controller = new CreatePaymentOrderAction($createPaymentOrderUseCase, $this->validatorBuilder);
         $response = json_decode($controller($request));
 
         $this->assertObjectHasAttribute('error', $response);
@@ -129,10 +115,8 @@ class TestCreatePaymentOrderAction extends TestCase
            'bank' => 1
         ]);
         $request = ServerRequestMocker::mock($requestBody);
-        $controller = new CreatePaymentOrderAction(
-            $this->createMock(CreatePaymentOrderUseCase::class),
-            new RequestParamsValidator()
-        );
+        $createPaymentOrderUseCase = $this->createMock(CreatePaymentOrderUseCase::class);
+        $controller = new CreatePaymentOrderAction($createPaymentOrderUseCase, $this->validatorBuilder);
         $response = json_decode($controller($request));
 
         $this->assertObjectHasAttribute('error', $response);

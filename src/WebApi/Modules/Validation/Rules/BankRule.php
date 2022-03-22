@@ -6,13 +6,17 @@ namespace PayByBank\WebApi\Modules\Validation\Rules;
 
 use InvalidArgumentException;
 
-class BankRule implements IValidationRule
+class BankRule implements ValidationRule
 {
-    public function check(object $params): void
+    /**
+     * @param array $params
+     * @return void
+     */
+    public function check(array $params): void
     {
         $supportedBanks = ['ING'];
 
-        isset($params->bank) && in_array($params->bank, $supportedBanks)
+        isset($params['bank']) && in_array($params['bank'], $supportedBanks)
         || throw new InvalidArgumentException('Invalid bank');
     }
 }

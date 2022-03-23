@@ -17,24 +17,24 @@ services:
     volumes:
       - ./:/var/www/html
 
-  paybybank_db:
-    image: mariadb
-    container_name: paybybank_db
-    volumes:
-      - paybybank_db_data:/var/lib/mysql
+  paybybankdb:
+    container_name: paybybankdb
+    image: mongo:latest
     ports:
-      - "3306:3306"
+      - "27017:27017"
+    volumes:
+      - paypaybank_db_volume:/data/db
+      - ./.dockerfiles/mongodb/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
     networks:
-      paybybank_network:
+      - paybybank_network
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: paybybank
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+      - DB=paybybank
+      - DB_USER=${DB_USER}
+      - DB_USER_PASSWORD=${DB_USER_PASSWORD}
 
 networks:
   paybybank_network:
     driver: "bridge"
 
 volumes:
-  paybybank_db_data:
+  paypaybank_db_volume:

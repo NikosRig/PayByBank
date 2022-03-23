@@ -23,6 +23,8 @@
         "psr/http-client": "^1.0",
         "psr/container": "^2.0",
         "vlucas/phpdotenv": "^5.4",
-        "ext-openssl": "*"
+        "ext-openssl": "*",
+        "mongodb/mongodb": "^1.11",
+        "ext-mongo": "*"
     }
 }

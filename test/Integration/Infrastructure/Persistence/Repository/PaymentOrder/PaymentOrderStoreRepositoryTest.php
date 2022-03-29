@@ -17,7 +17,7 @@ class PaymentOrderStoreRepositoryTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        $baseDir = __DIR__ . '/../../../../..';
+        $baseDir = __DIR__ . '/../../../../../../';
         $dotenv = Dotenv::createImmutable($baseDir);
         $dotenv->load();
         self::$mongoDB = new MongoDB();

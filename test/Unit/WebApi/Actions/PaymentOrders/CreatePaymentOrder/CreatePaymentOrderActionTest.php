@@ -10,7 +10,7 @@ use PayByBank\WebApi\Actions\PaymentOrders\CreatePaymentOrder\CreatePaymentOrder
 use PHPUnit\Framework\TestCase;
 use Test\Unit\WebApi\TestHelpers\ServerRequestMocker;
 
-class TestCreatePaymentOrderAction extends TestCase
+class CreatePaymentOrderActionTest extends TestCase
 {
     public function testAssertCreditorIbanIsRequired(): void
     {

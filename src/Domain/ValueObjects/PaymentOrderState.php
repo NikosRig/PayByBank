@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PayByBank\Domain\ValueObjects;
 
-enum PaymentOrderStatus: int
+enum PaymentOrderState
 {
-  case PENDING_CONSENT = 1;
+  case PENDING_CONSENT;
 }

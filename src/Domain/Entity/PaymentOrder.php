@@ -5,38 +5,80 @@ declare(strict_types=1);
 namespace PayByBank\Domain\Entity;
 
 use DateTime;
-use PayByBank\Domain\ValueObjects\PaymentOrderStatus;
+use PayByBank\Domain\ValueObjects\CreditorAccount;
+use PayByBank\Domain\ValueObjects\PaymentOrderState;
 
-class PaymentOrder
+final class PaymentOrder
 {
     private readonly int $id;
 
+    private readonly string $token;
+
     private readonly CreditorAccount $creditorAccount;
+
+    private readonly PaymentOrderState $state;
 
     private readonly int $amount;
 
-    private readonly string $token;
-
     private readonly DateTime $dateCreated;
 
-    private int $status;
+    private readonly string $bank;
 
-    public function __construct(CreditorAccount $creditorAccount, int $amount)
+    public function __construct(CreditorAccount $creditorAccount, int $amount, string $bank)
     {
-        $this->status = PaymentOrderStatus::PENDING_CONSENT->value;
-        $this->dateCreated = new DateTime('now');
-        $this->token = md5(microtime(true).mt_Rand());
+        $this->token = bin2hex(openssl_random_pseudo_bytes(24));
+        $this->state = PaymentOrderState::PENDING_CONSENT;
         $this->creditorAccount = $creditorAccount;
         $this->amount = $amount;
+        $this->dateCreated = new DateTime('now');
+        $this->bank = $bank;
     }
 
-    public function getId(): int
+    /**
+     * @return string
+     */
+    public function getBank(): string
     {
-        return $this->id;
+        return $this->bank;
     }
 
+    /**
+     * @return int
+     */
+    public function getAmount(): int
+    {
+        return $this->amount;
+    }
+
+    /**
+     * @return PaymentOrderState
+     */
+    public function getState(): PaymentOrderState
+    {
+        return $this->state;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getDateCreated(): DateTime
+    {
+        return $this->dateCreated;
+    }
+
+    /**
+     * @return string
+     */
     public function getToken(): string
     {
         return $this->token;
+    }
+
+    /**
+     * @return CreditorAccount
+     */
+    public function getCreditorAccount(): CreditorAccount
+    {
+        return $this->creditorAccount;
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Infrastructure\Persistence\Repository;
+namespace Test\Unit\Infrastructure\Persistence\Repository\PaymentOrder;
 
 use Dotenv\Dotenv;
 use PayByBank\Domain\Entity\PaymentOrder;
@@ -17,8 +17,7 @@ class PaymentOrderStoreRepositoryTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        $baseDir = __DIR__ . '/../../../../..';
-        $dotenv = Dotenv::createImmutable($baseDir);
+        $dotenv = Dotenv::createImmutable(__DIR__ . '/../../../../..');
         $dotenv->load();
         self::$mongoDb = new MongoDB();
     }

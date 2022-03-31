@@ -7,7 +7,7 @@ namespace PayByBank\WebApi\Actions\PaymentOrders\CreatePaymentOrder;
 use InvalidArgumentException;
 use PayByBank\Application\UseCases\CreatePaymentOrder\CreatePaymentOrderUseCase;
 use PayByBank\WebApi\Actions\Action;
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class CreatePaymentOrderAction implements Action
 {
@@ -23,7 +23,7 @@ class CreatePaymentOrderAction implements Action
         $this->validatorBuilder = $validatorBuilder;
     }
 
-    public function __invoke(RequestInterface $request): string
+    public function __invoke(ServerRequestInterface $request): string
     {
         $requestBody = $request->getBody()->getContents();
         $requestParams = json_decode($requestBody, true) ?? [];

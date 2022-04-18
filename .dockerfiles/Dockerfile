@@ -29,6 +29,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 --install-dir=/usr/bin --filename=composer && chmod +x /usr/bin/composer
 
 RUN echo "ServerName $APPLICATION_NAME" >> /etc/apache2/apache2.conf
+RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
 RUN mkdir /var/www/log && chown www-data:www-data /var/www/log
 COPY VirtualHost.conf /etc/apache2/sites-available
 

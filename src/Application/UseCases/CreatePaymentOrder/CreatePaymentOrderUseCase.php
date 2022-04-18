@@ -8,7 +8,7 @@ use PayByBank\Domain\Entity\PaymentOrder;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\Domain\ValueObjects\CreditorAccount;
 
-class CreatePaymentOrderUseCase
+final class CreatePaymentOrderUseCase
 {
     private PaymentOrderRepository $paymentOrderRepository;
 

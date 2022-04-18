@@ -10,6 +10,6 @@ enum PaymentOrderStatus: int
 
     public function isPending(): bool
     {
-        return $this->value == self::PENDING;
+        return $this->value === self::PENDING->value;
     }
 }

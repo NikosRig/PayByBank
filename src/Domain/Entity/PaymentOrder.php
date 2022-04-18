@@ -34,6 +34,11 @@ final class PaymentOrder
         $this->bank = $bank;
     }
 
+    public function canBeAuthorized(): bool
+    {
+        return $this->status->isPending();
+    }
+
     /**
      * @return string
      */

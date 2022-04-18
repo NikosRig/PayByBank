@@ -5,23 +5,23 @@ declare(strict_types=1);
 namespace PayByBank\Application\UseCases\CreatePaymentOrder;
 
 use PayByBank\Domain\Entity\PaymentOrder;
-use PayByBank\Domain\Repository\PaymentOrderStoreRepository;
+use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\Domain\ValueObjects\CreditorAccount;
 
 class CreatePaymentOrderUseCase
 {
-    private PaymentOrderStoreRepository $paymentOrderStoreRepository;
+    private PaymentOrderRepository $paymentOrderRepository;
 
-    public function __construct(PaymentOrderStoreRepository $paymentOrderStoreRepository)
+    public function __construct(PaymentOrderRepository $paymentOrderRepository)
     {
-        $this->paymentOrderStoreRepository = $paymentOrderStoreRepository;
+        $this->paymentOrderRepository = $paymentOrderRepository;
     }
 
     public function create(string $creditorIban, string $creditorName, int $amount, string $bank): string
     {
         $creditorAccount = new CreditorAccount($creditorIban, $creditorName);
         $paymentOrder = new PaymentOrder($creditorAccount, $amount, $bank);
-        $this->paymentOrderStoreRepository->store($paymentOrder);
+        $this->paymentOrderRepository->save($paymentOrder);
 
         return $paymentOrder->getToken();
     }

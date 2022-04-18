@@ -6,20 +6,20 @@ namespace PayByBank\Domain\ValueObjects;
 
 class CreditorAccount
 {
-    public readonly string $creditorIban;
+    public readonly string $iban;
 
     public readonly string $creditorName;
 
-    public function __construct(string $creditorIban, string $creditorName)
+    public function __construct(string $iban, string $creditorName)
     {
-        $this->creditorIban = $creditorIban;
+        $this->iban = $iban;
         $this->creditorName = $creditorName;
     }
 
     public function toArray(): array
     {
         return [
-          'creditorIban' => $this->creditorIban,
+          'iban' => $this->iban,
           'creditorName' => $this->creditorName
         ];
     }

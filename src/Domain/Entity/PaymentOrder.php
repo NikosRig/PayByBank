@@ -6,17 +6,17 @@ namespace PayByBank\Domain\Entity;
 
 use DateTime;
 use PayByBank\Domain\ValueObjects\CreditorAccount;
-use PayByBank\Domain\ValueObjects\PaymentOrderState;
+use PayByBank\Domain\ValueObjects\PaymentOrderStatus;
 
 final class PaymentOrder
 {
     private readonly int $id;
 
-    private readonly string $token;
+    private string $token;
+
+    private PaymentOrderStatus $status;
 
     private readonly CreditorAccount $creditorAccount;
-
-    private readonly PaymentOrderState $state;
 
     private readonly int $amount;
 
@@ -27,7 +27,7 @@ final class PaymentOrder
     public function __construct(CreditorAccount $creditorAccount, int $amount, string $bank)
     {
         $this->token = bin2hex(openssl_random_pseudo_bytes(24));
-        $this->state = PaymentOrderState::PENDING_CONSENT;
+        $this->status = PaymentOrderStatus::PENDING;
         $this->creditorAccount = $creditorAccount;
         $this->amount = $amount;
         $this->dateCreated = new DateTime('now');
@@ -51,11 +51,11 @@ final class PaymentOrder
     }
 
     /**
-     * @return PaymentOrderState
+     * @return int
      */
-    public function getState(): PaymentOrderState
+    public function getStatus(): int
     {
-        return $this->state;
+        return $this->status->value;
     }
 
     /**

@@ -17,10 +17,10 @@ class CreatePaymentOrderUseCase
         $this->paymentOrderRepository = $paymentOrderRepository;
     }
 
-    public function create(string $creditorIban, string $creditorName, int $amount, string $bank): string
+    public function create(CreatePaymentOrderRequest $request): string
     {
-        $creditorAccount = new CreditorAccount($creditorIban, $creditorName);
-        $paymentOrder = new PaymentOrder($creditorAccount, $amount, $bank);
+        $creditorAccount = new CreditorAccount($request->creditorIban, $request->creditorName);
+        $paymentOrder = new PaymentOrder($creditorAccount, $request->amount, $request->bank);
         $this->paymentOrderRepository->save($paymentOrder);
 
         return $paymentOrder->getToken();

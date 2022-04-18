@@ -6,6 +6,7 @@ namespace PayByBank\WebApi\Actions\PaymentOrders\CreatePaymentOrder;
 
 use InvalidArgumentException;
 use PayByBank\Application\UseCases\CreatePaymentOrder\CreatePaymentOrderUseCase;
+use PayByBank\Application\UseCases\CreatePaymentOrder\CreatePaymentOrderRequest;
 use PayByBank\WebApi\Actions\Action;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -34,12 +35,14 @@ class CreatePaymentOrderAction implements Action
             return json_encode(['error' => $exception->getMessage()]);
         }
 
-        $token = $this->createPaymentOrderUseCase->create(
+        $createPaymentOrderRequest = new CreatePaymentOrderRequest(
             $requestParams['creditorIban'],
             $requestParams['creditorName'],
             $requestParams['amount'],
             $requestParams['bank']
         );
+
+        $token = $this->createPaymentOrderUseCase->create($createPaymentOrderRequest);
 
         return json_encode(['redirectUri' => "/{$token}"]);
     }

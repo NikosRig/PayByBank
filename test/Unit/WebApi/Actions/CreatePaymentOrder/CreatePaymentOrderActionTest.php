@@ -6,8 +6,8 @@ namespace Test\Unit\WebApi\Actions\CreatePaymentOrder;
 
 use PayByBank\Application\UseCases\CreatePaymentOrder\CreatePaymentOrderUseCase;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
-use PayByBank\WebApi\Actions\PaymentOrders\CreatePaymentOrder\CreatePaymentOrderAction;
-use PayByBank\WebApi\Actions\PaymentOrders\CreatePaymentOrder\CreatePaymentOrderValidatorBuilder;
+use PayByBank\WebApi\Actions\CreatePaymentOrder\CreatePaymentOrderAction;
+use PayByBank\WebApi\Actions\CreatePaymentOrder\CreatePaymentOrderValidatorBuilder;
 use Test\Unit\WebApi\Actions\ActionTestCase;
 
 class CreatePaymentOrderActionTest extends ActionTestCase

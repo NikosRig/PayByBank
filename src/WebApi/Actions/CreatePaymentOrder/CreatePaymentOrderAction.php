@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\WebApi\Actions\PaymentOrders\CreatePaymentOrder;
+namespace PayByBank\WebApi\Actions\CreatePaymentOrder;
 
 use InvalidArgumentException;
-use PayByBank\Application\UseCases\CreatePaymentOrder\CreatePaymentOrderUseCase;
 use PayByBank\Application\UseCases\CreatePaymentOrder\CreatePaymentOrderInput;
+use PayByBank\Application\UseCases\CreatePaymentOrder\CreatePaymentOrderUseCase;
 use PayByBank\WebApi\Actions\Action;
 use Psr\Http\Message\ServerRequestInterface;
 

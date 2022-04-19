@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\WebApi\Actions\PaymentOrders\CreatePaymentOrder;
+namespace PayByBank\WebApi\Actions\CreatePaymentOrder;
 
 use PayByBank\WebApi\Modules\Validation\RequestParamValidator;
 use PayByBank\WebApi\Modules\Validation\Rules\AmountRule;

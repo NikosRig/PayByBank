@@ -2,16 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\WebApi\Actions\PaymentOrders\CreatePaymentOrder;
+namespace Test\Unit\WebApi\Actions\CreatePaymentOrder;
 
 use PayByBank\Application\UseCases\CreatePaymentOrder\CreatePaymentOrderUseCase;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\WebApi\Actions\PaymentOrders\CreatePaymentOrder\CreatePaymentOrderAction;
 use PayByBank\WebApi\Actions\PaymentOrders\CreatePaymentOrder\CreatePaymentOrderValidatorBuilder;
-use PHPUnit\Framework\TestCase;
-use Test\Unit\WebApi\TestHelpers\ServerRequestMocker;
+use Test\Unit\WebApi\Actions\ActionTestCase;
 
-class CreatePaymentOrderActionTest extends TestCase
+class CreatePaymentOrderActionTest extends ActionTestCase
 {
     public function testAssertCreditorIbanIsRequired(): void
     {
@@ -19,7 +18,8 @@ class CreatePaymentOrderActionTest extends TestCase
            'amount' => 10,
            'creditorName' => 'Test'
         ]);
-        $request = ServerRequestMocker::mock($requestBody);
+
+        $request = $this->mockServerRequest($requestBody);
         $validatorBuilder = new CreatePaymentOrderValidatorBuilder();
         $createPaymentOrderUseCase = new CreatePaymentOrderUseCase(
             $this->createMock(PaymentOrderRepository::class)
@@ -37,7 +37,7 @@ class CreatePaymentOrderActionTest extends TestCase
             'amount' => 10,
             'creditorName' => 'Test'
         ]);
-        $request = ServerRequestMocker::mock($requestBody);
+        $request = $this->mockServerRequest($requestBody);
         $createPaymentOrderUseCase = new CreatePaymentOrderUseCase(
             $this->createMock(PaymentOrderRepository::class)
         );
@@ -54,7 +54,7 @@ class CreatePaymentOrderActionTest extends TestCase
            'creditorIban' => 'GR2101422757743955519929399',
            'creditorName' => 'Test'
         ]);
-        $request = ServerRequestMocker::mock($requestBody);
+        $request = $this->mockServerRequest($requestBody);
         $createPaymentOrderUseCase = new CreatePaymentOrderUseCase(
             $this->createMock(PaymentOrderRepository::class)
         );
@@ -72,7 +72,7 @@ class CreatePaymentOrderActionTest extends TestCase
            'amount' => '10',
            'creditorName' => 'Test'
         ]);
-        $request = ServerRequestMocker::mock($requestBody);
+        $request = $this->mockServerRequest($requestBody);
         $createPaymentOrderUseCase = new CreatePaymentOrderUseCase(
             $this->createMock(PaymentOrderRepository::class)
         );
@@ -89,7 +89,7 @@ class CreatePaymentOrderActionTest extends TestCase
            'amount' => 10,
            'creditorIban' => 'GR2101422757743955519929399',
         ]);
-        $request = ServerRequestMocker::mock($requestBody);
+        $request = $this->mockServerRequest($requestBody);
         $createPaymentOrderUseCase = new CreatePaymentOrderUseCase(
             $this->createMock(PaymentOrderRepository::class)
         );
@@ -107,7 +107,7 @@ class CreatePaymentOrderActionTest extends TestCase
            'amount' => 10,
            'creditorName' => 1
         ]);
-        $request = ServerRequestMocker::mock($requestBody);
+        $request = $this->mockServerRequest($requestBody);
         $createPaymentOrderUseCase = new CreatePaymentOrderUseCase(
             $this->createMock(PaymentOrderRepository::class)
         );
@@ -126,7 +126,7 @@ class CreatePaymentOrderActionTest extends TestCase
            'creditorName' => 'John Doe',
            'bank' => 1
         ]);
-        $request = ServerRequestMocker::mock($requestBody);
+        $request = $this->mockServerRequest($requestBody);
         $createPaymentOrderUseCase = new CreatePaymentOrderUseCase(
             $this->createMock(PaymentOrderRepository::class)
         );
@@ -144,7 +144,7 @@ class CreatePaymentOrderActionTest extends TestCase
         );
         $validatorBuilder = new CreatePaymentOrderValidatorBuilder();
         $controller = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
-        $response = json_decode($controller(ServerRequestMocker::mock()));
+        $response = json_decode($controller($this->mockServerRequest()));
 
         $this->assertObjectHasAttribute('error', $response);
     }

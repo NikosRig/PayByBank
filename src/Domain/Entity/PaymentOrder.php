@@ -6,6 +6,7 @@ namespace PayByBank\Domain\Entity;
 
 use DateTime;
 use PayByBank\Domain\ValueObjects\CreditorAccount;
+use PayByBank\Domain\ValueObjects\PaymentOrderState;
 use PayByBank\Domain\ValueObjects\PaymentOrderStatus;
 
 final class PaymentOrder
@@ -20,7 +21,7 @@ final class PaymentOrder
 
     private readonly int $amount;
 
-    private readonly DateTime $dateCreated;
+    private DateTime $dateCreated;
 
     private readonly string $bank;
 
@@ -32,6 +33,20 @@ final class PaymentOrder
         $this->amount = $amount;
         $this->dateCreated = new DateTime('now');
         $this->bank = $bank;
+    }
+
+    public static function fromState(PaymentOrderState $paymentOrderState): PaymentOrder
+    {
+        $self = new self(
+            $paymentOrderState->creditorAccount,
+            $paymentOrderState->amount,
+            $paymentOrderState->bank
+        );
+
+        $self->status = $paymentOrderState->status;
+        $self->token = $paymentOrderState->token;
+
+        return $self;
     }
 
     public function canBeAuthorized(): bool

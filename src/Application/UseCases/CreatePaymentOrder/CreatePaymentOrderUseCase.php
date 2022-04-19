@@ -17,12 +17,12 @@ final class CreatePaymentOrderUseCase
         $this->paymentOrderRepository = $paymentOrderRepository;
     }
 
-    public function create(CreatePaymentOrderRequest $request): string
+    public function create(CreatePaymentOrderInput $input): CreatePaymentOrderOutput
     {
-        $creditorAccount = new CreditorAccount($request->creditorIban, $request->creditorName);
-        $paymentOrder = new PaymentOrder($creditorAccount, $request->amount, $request->bank);
+        $creditorAccount = new CreditorAccount($input->creditorIban, $input->creditorName);
+        $paymentOrder = new PaymentOrder($creditorAccount, $input->amount, $input->bank);
         $this->paymentOrderRepository->save($paymentOrder);
 
-        return $paymentOrder->getToken();
+        return new CreatePaymentOrderOutput($paymentOrder->getToken());
     }
 }

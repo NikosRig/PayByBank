@@ -19,16 +19,14 @@ final class GetPaymentOrderAuthUseCase
     /**
      * @throws InvalidArgumentException
      */
-    public function get(string $paymentOrderToken): GetPaymentOrderAuthResponse
+    public function get(GetPaymentOrderAuthInput $input): GetPaymentOrderAuthOutput
     {
-        $paymentOrder = $this->repository->findByToken($paymentOrderToken);
+        $paymentOrder = $this->repository->findByToken($input->paymentOrderToken);
 
         if (!$paymentOrder || !$paymentOrder->canBeAuthorized()) {
             throw new InvalidArgumentException('Invalid payment order token.');
         }
 
-        return new GetPaymentOrderAuthResponse(
-            $paymentOrder->getBank()
-        );
+        return new GetPaymentOrderAuthOutput($paymentOrder->getBank());
     }
 }

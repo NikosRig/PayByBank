@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Test\Unit\Application\UseCases\GetPaymentOrderAuth;
 
 use InvalidArgumentException;
-use PayByBank\Application\UseCases\GetPaymentOrderAuth\GetPaymentOrderAuthResponse;
+use PayByBank\Application\UseCases\GetPaymentOrderAuth\GetPaymentOrderAuthInput;
+use PayByBank\Application\UseCases\GetPaymentOrderAuth\GetPaymentOrderAuthOutput;
 use PayByBank\Application\UseCases\GetPaymentOrderAuth\GetPaymentOrderAuthUseCase;
 use PayByBank\Domain\Entity\PaymentOrder;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
@@ -21,7 +22,8 @@ class GetPaymentOrderAuthUseCaseTest extends TestCase
         $useCase = new GetPaymentOrderAuthUseCase($repository);
 
         $this->expectException(InvalidArgumentException::class);
-        $useCase->get('pmt_ord_dpwij134dpldeijh');
+        $input = new GetPaymentOrderAuthInput('pmt_ord_dpwij134dpldeijh');
+        $useCase->get($input);
     }
 
     public function testSuccessfulGetPaymentOrderResponse(): void
@@ -29,9 +31,10 @@ class GetPaymentOrderAuthUseCaseTest extends TestCase
         $repository = $this->createMock(PaymentOrderRepository::class);
         $repository->method('findByToken')->willReturn($this->makePaymentOrder());
         $useCase = new GetPaymentOrderAuthUseCase($repository);
-        $response = $useCase->get('pmt_ord_success');
+        $input = new GetPaymentOrderAuthInput('pmt_ord_success');
+        $output = $useCase->get($input);
 
-        $this->assertInstanceOf(GetPaymentOrderAuthResponse::class, $response);
+        $this->assertInstanceOf(GetPaymentOrderAuthOutput::class, $output);
     }
 
     public function makePaymentOrder(): PaymentOrder

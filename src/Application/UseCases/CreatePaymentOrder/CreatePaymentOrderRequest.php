@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PayByBank\Application\UseCases\CreatePaymentOrder;
 
-class CreatePaymentOrderInput
+class CreatePaymentOrderRequest
 {
     public readonly string $creditorIban;
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PayByBank\Application\UseCases\CreatePaymentOrder;
 
+use PayByBank\Application\UseCases\UseCase;
 use PayByBank\Domain\Entity\PaymentOrder;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\Domain\ValueObjects\CreditorAccount;
@@ -17,12 +18,12 @@ final class CreatePaymentOrderUseCase
         $this->paymentOrderRepository = $paymentOrderRepository;
     }
 
-    public function create(CreatePaymentOrderInput $input): CreatePaymentOrderOutput
+    public function create(CreatePaymentOrderRequest $request, CreatePaymentOrderPresenter $presenter): void
     {
-        $creditorAccount = new CreditorAccount($input->creditorIban, $input->creditorName);
-        $paymentOrder = new PaymentOrder($creditorAccount, $input->amount, $input->bank);
+        $creditorAccount = new CreditorAccount($request->creditorIban, $request->creditorName);
+        $paymentOrder = new PaymentOrder($creditorAccount, $request->amount, $request->bank);
         $this->paymentOrderRepository->save($paymentOrder);
 
-        return new CreatePaymentOrderOutput($paymentOrder->getToken());
+        $presenter->present($paymentOrder->getToken());
     }
 }

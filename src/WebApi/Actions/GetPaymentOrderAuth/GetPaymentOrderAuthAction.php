@@ -19,9 +19,9 @@ class GetPaymentOrderAuthAction implements Action
         $this->getPaymentOrderAuthUseCase = $getPaymentOrderAuthUseCase;
     }
 
-    public function __invoke(ServerRequestInterface $request): string
+    public function __invoke(ServerRequestInterface $serverRequest): string
     {
-        $paymentOrderToken = $request->getUri()->getQuery();
+        $paymentOrderToken = $serverRequest->getUri()->getQuery();
 
         $request = new GetPaymentOrderAuthRequest($paymentOrderToken);
         $presenter = new GetPaymentOrderAuthPresenter();

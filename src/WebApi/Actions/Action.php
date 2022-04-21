@@ -8,5 +8,5 @@ use Psr\Http\Message\ServerRequestInterface;
 
 interface Action
 {
-    public function __invoke(ServerRequestInterface $request): string;
+    public function __invoke(ServerRequestInterface $serverRequest): string;
 }

@@ -25,10 +25,10 @@ class CreatePaymentOrderAction implements Action
         $this->validatorBuilder = $validatorBuilder;
     }
 
-    public function __invoke(ServerRequestInterface $request): string
+    public function __invoke(ServerRequestInterface $serverRequest): string
     {
-        $requestBody = $request->getBody()->getContents();
-        $requestParams = json_decode($requestBody, true) ?? [];
+        $serverRequestBody = $serverRequest->getBody()->getContents();
+        $requestParams = json_decode($serverRequestBody, true) ?? [];
 
         try {
             $this->validatorBuilder->build()->validate($requestParams);

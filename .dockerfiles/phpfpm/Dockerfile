@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Xdebug installation
   && pecl install xdebug && docker-php-ext-enable xdebug \
 # Mongodb installation
-  && pecl install mongodb && echo "extension=mongodb.so" > $PHP_INI_DIR/conf.d/mongodb.ini \
+  && pecl install mongodb && echo "extension=mongodb.so" > $PHP_INI_DIR/conf.d/mongodb.ini
 
 # Copy xdebug configuration
 COPY conf.d/xdebug.ini /usr/local/etc/php/conf.d/

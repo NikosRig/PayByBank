@@ -2,28 +2,38 @@ version: "3.9"
 
 services:
 
-  paybybank:
+  paybybank_web:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www/html
+      - ./.dockerfiles/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - paybybank_fpm
+    networks:
+      - paybybank_network
+
+  paybybank_fpm:
     build:
-      context: ./.dockerfiles
+      context: ./.dockerfiles/phpfpm
       args:
         GID: 1000
         UID: 1000
         APPLICATION_NAME: ${APPLICATION_NAME}
     container_name: ${APPLICATION_NAME}
-    ports:
-      - "80:80"
     networks:
       - paybybank_network
     volumes:
       - ./:/var/www/html
 
-  paybybankdb:
+  paybybank_db:
     container_name: paybybankdb
     image: mongo:latest
     ports:
       - "27017:27017"
     volumes:
-      - paypaybank_db_volume:/data/db
+      - paybybank_db_volume:/data/db
       - ./.dockerfiles/mongodb/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
     networks:
       - paybybank_network
@@ -37,4 +47,4 @@ networks:
     driver: "bridge"
 
 volumes:
-  paypaybank_db_volume:
+  paybybank_db_volume:

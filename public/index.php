@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use DI\Bridge\Slim\Bridge;
+use PayByBank\WebApi\WebApp;
 
 require __DIR__ . '/../vendor/autoload.php';
 

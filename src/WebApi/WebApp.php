@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace PayByBank\WebApi;
+
 use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\Infrastructure\Persistence\Repository\MongoPaymentOrderRepository;
 use PayByBank\WebApi\Actions\CreatePaymentOrder\CreatePaymentOrderAction;
@@ -9,6 +11,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
 use Slim\Factory\ServerRequestCreatorFactory;
+
 use function DI\autowire;
 use function DI\factory;
 
@@ -33,9 +36,12 @@ final class WebApp
 
     private function addEntries(): void
     {
-        $this->container->set(ServerRequestInterface::class, factory(function () {
-            return ServerRequestCreatorFactory::create()->createServerRequestFromGlobals();
-        }));
+        $this->container->set(
+            ServerRequestInterface::class,
+            factory(function () {
+                return ServerRequestCreatorFactory::create()->createServerRequestFromGlobals();
+            })
+        );
         $this->container->set(PaymentOrderRepository::class, autowire(MongoPaymentOrderRepository::class));
     }
 

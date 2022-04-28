@@ -8,10 +8,10 @@ use Dotenv\Dotenv;
 use PayByBank\Domain\Entity\PaymentOrder;
 use PayByBank\Domain\ValueObjects\CreditorAccount;
 use PayByBank\Infrastructure\Persistence\Database\MongoDB;
-use PayByBank\Infrastructure\Persistence\Repository\PaymentOrderRepository;
+use PayByBank\Infrastructure\Persistence\Repository\MongoPaymentOrderRepository;
 use PHPUnit\Framework\TestCase;
 
-class PaymentOrderRepositoryTest extends TestCase
+class MongoPaymentOrderRepositoryTest extends TestCase
 {
     private static MongoDB $mongoDB;
 
@@ -27,7 +27,7 @@ class PaymentOrderRepositoryTest extends TestCase
     {
         $creditorAccount = new CreditorAccount('NL47RABO6233671132', 'Nikos Rigas');
         $paymentOrder = new PaymentOrder($creditorAccount, 7000, 'ING');
-        $repository = new PaymentOrderRepository(self::$mongoDB);
+        $repository = new MongoPaymentOrderRepository(self::$mongoDB);
         $repository->save($paymentOrder);
         $findResult = $repository->findByToken($paymentOrder->getToken());
 

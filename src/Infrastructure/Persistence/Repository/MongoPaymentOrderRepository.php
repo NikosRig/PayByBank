@@ -7,12 +7,13 @@ namespace PayByBank\Infrastructure\Persistence\Repository;
 use DateTime;
 use MongoDB\Collection;
 use PayByBank\Domain\Entity\PaymentOrder;
+use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\Domain\ValueObjects\CreditorAccount;
 use PayByBank\Domain\ValueObjects\PaymentOrderState;
 use PayByBank\Domain\ValueObjects\PaymentOrderStatus;
 use PayByBank\Infrastructure\Persistence\Database\MongoDB;
 
-class PaymentOrderRepository implements \PayByBank\Domain\Repository\PaymentOrderRepository
+class MongoPaymentOrderRepository implements PaymentOrderRepository
 {
     private Collection $collection;
 

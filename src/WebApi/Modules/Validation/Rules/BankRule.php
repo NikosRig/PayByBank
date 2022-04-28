@@ -8,10 +8,6 @@ use InvalidArgumentException;
 
 class BankRule implements ValidationRule
 {
-    /**
-     * @param array $params
-     * @return void
-     */
     public function check(array $params): void
     {
         $supportedBanks = ['ING'];

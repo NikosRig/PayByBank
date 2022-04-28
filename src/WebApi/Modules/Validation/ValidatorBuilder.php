@@ -6,8 +6,5 @@ namespace PayByBank\WebApi\Modules\Validation;
 
 interface ValidatorBuilder
 {
-    /**
-     * @return Validator
-     */
     public function build(): Validator;
 }

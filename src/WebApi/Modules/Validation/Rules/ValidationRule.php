@@ -9,9 +9,7 @@ use InvalidArgumentException;
 interface ValidationRule
 {
     /**
-     * @param array $params
      * @throws InvalidArgumentException
-     * @return void
      */
     public function check(array $params): void;
 }

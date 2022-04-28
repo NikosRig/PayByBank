@@ -8,15 +8,8 @@ use PayByBank\WebApi\Modules\Validation\Rules\ValidationRule;
 
 class RequestParamValidator implements Validator
 {
-    /**
-     * @var array
-     */
     private array $rules;
 
-    /**
-     * @param array $params
-     * @return void
-     */
     public function validate(array $params): void
     {
         foreach ($this->rules as $rule) {
@@ -24,10 +17,6 @@ class RequestParamValidator implements Validator
         }
     }
 
-    /**
-     * @param ValidationRule $rule
-     * @return $this
-     */
     public function withRule(ValidationRule $rule): self
     {
         $this->rules[] = $rule;

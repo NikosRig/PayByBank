@@ -24,6 +24,7 @@
         "vlucas/phpdotenv": "^5.4",
         "ext-openssl": "*",
         "mongodb/mongodb": "^1.11",
-        "php-di/slim-bridge": "^3.2"
+        "php-di/slim-bridge": "^3.2",
+        "twig/twig": "^3.3"
     }
 }

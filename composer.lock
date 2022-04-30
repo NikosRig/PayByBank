@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c92cd7c7b4333d075cf7029260fa77dd",
+    "content-hash": "68f6284f6099f650e0f832a3c938e2c0",
     "packages": [
         {
             "name": "graham-campbell/result-type",
@@ -562,6 +562,61 @@
                 "source": "https://github.com/Larium/framework/tree/0.0.8"
             },
             "time": "2021-01-05T11:00:21+00:00"
+        },
+        {
+            "name": "larium/template-bridge",
+            "version": "0.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Larium/template-bridge.git",
+                "reference": "5455cf4b7a674d5611aeb5ba58186e469fd34c49"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Larium/template-bridge/zipball/5455cf4b7a674d5611aeb5ba58186e469fd34c49",
+                "reference": "5455cf4b7a674d5611aeb5ba58186e469fd34c49",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2"
+            },
+            "require-dev": {
+                "liquid/liquid": "1.4.15",
+                "phpunit/phpunit": "~8.2.4",
+                "twig/twig": "~2.11.3"
+            },
+            "suggest": {
+                "liquid/liquid": "To bridge with Liquid template engine",
+                "twig/twig": "To bridge with Twig template engine"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Larium\\Bridge\\Template\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andreas Kollaros",
+                    "email": "andreas@larium.net"
+                }
+            ],
+            "description": "Template engine bridge for various template engines.",
+            "keywords": [
+                "Bridge",
+                "engine",
+                "template",
+                "view"
+            ],
+            "support": {
+                "issues": "https://github.com/Larium/template-bridge/issues",
+                "source": "https://github.com/Larium/template-bridge/tree/0.0.2"
+            },
+            "time": "2022-04-21T09:56:18+00:00"
         },
         {
             "name": "mongodb/mongodb",

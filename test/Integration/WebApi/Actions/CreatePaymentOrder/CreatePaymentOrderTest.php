@@ -13,11 +13,8 @@ class CreatePaymentOrderTest extends TestCase
 {
     private Client $client;
 
-    private string $host;
-
     public function setUp(): void
     {
-        $this->host = 'paybybank_web';
         $this->client = new Client();
     }
 
@@ -34,7 +31,7 @@ class CreatePaymentOrderTest extends TestCase
            'bank' => 'ING'
         ]);
 
-        $request = new Request('POST', "http://{$this->host}/payment/order", [
+        $request = new Request('POST', "http://{$_ENV['WEB_API_HOST']}/payment/order", [
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ], $requestBody);

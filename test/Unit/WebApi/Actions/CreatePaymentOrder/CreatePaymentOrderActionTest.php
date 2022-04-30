@@ -8,6 +8,7 @@ use PayByBank\Application\UseCases\CreatePaymentOrder\CreatePaymentOrderUseCase;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\WebApi\Actions\CreatePaymentOrder\CreatePaymentOrderAction;
 use PayByBank\WebApi\Actions\CreatePaymentOrder\CreatePaymentOrderValidatorBuilder;
+use Psr\Http\Message\ResponseInterface;
 use Test\Unit\WebApi\Actions\ActionTestCase;
 
 class CreatePaymentOrderActionTest extends ActionTestCase
@@ -24,10 +25,9 @@ class CreatePaymentOrderActionTest extends ActionTestCase
         $createPaymentOrderUseCase = new CreatePaymentOrderUseCase(
             $this->createMock(PaymentOrderRepository::class)
         );
-        $controller = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
-        $response = json_decode($controller($request));
+        $action = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
 
-        $this->assertObjectHasAttribute('error', $response);
+        $this->assertResponseIsJsonAndHasError($action($request));
     }
 
     public function testAssertNumericCreditorIbanIsNotAccepted(): void
@@ -42,10 +42,9 @@ class CreatePaymentOrderActionTest extends ActionTestCase
             $this->createMock(PaymentOrderRepository::class)
         );
         $validatorBuilder = new CreatePaymentOrderValidatorBuilder();
-        $controller = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
-        $response = json_decode($controller($request));
+        $action = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
 
-        $this->assertObjectHasAttribute('error', $response);
+        $this->assertResponseIsJsonAndHasError($action($request));
     }
 
     public function testAssertAmountIsRequired(): void
@@ -59,10 +58,9 @@ class CreatePaymentOrderActionTest extends ActionTestCase
             $this->createMock(PaymentOrderRepository::class)
         );
         $validatorBuilder = new CreatePaymentOrderValidatorBuilder();
-        $controller = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
-        $response = json_decode($controller($request));
+        $action = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
 
-        $this->assertObjectHasAttribute('error', $response);
+        $this->assertResponseIsJsonAndHasError($action($request));
     }
 
     public function testAssertStringAmountIsNotAccepted(): void
@@ -77,10 +75,9 @@ class CreatePaymentOrderActionTest extends ActionTestCase
             $this->createMock(PaymentOrderRepository::class)
         );
         $validatorBuilder = new CreatePaymentOrderValidatorBuilder();
-        $controller = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
-        $response = json_decode($controller($request));
+        $action = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
 
-        $this->assertObjectHasAttribute('error', $response);
+        $this->assertResponseIsJsonAndHasError($action($request));
     }
 
     public function testAssertCreditorNameIsRequired(): void
@@ -94,10 +91,9 @@ class CreatePaymentOrderActionTest extends ActionTestCase
             $this->createMock(PaymentOrderRepository::class)
         );
         $validatorBuilder = new CreatePaymentOrderValidatorBuilder();
-        $controller = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
-        $response = json_decode($controller($request));
+        $action = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
 
-        $this->assertObjectHasAttribute('error', $response);
+        $this->assertResponseIsJsonAndHasError($action($request));
     }
 
     public function testAssertNumericCreditorNameIsNotAccepted(): void
@@ -112,10 +108,9 @@ class CreatePaymentOrderActionTest extends ActionTestCase
             $this->createMock(PaymentOrderRepository::class)
         );
         $validatorBuilder = new CreatePaymentOrderValidatorBuilder();
-        $controller = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
-        $response = json_decode($controller($request));
+        $action = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
 
-        $this->assertObjectHasAttribute('error', $response);
+        $this->assertResponseIsJsonAndHasError($action($request));
     }
 
     public function testAssertNumericBankIsNotAccepted(): void
@@ -126,15 +121,14 @@ class CreatePaymentOrderActionTest extends ActionTestCase
            'creditorName' => 'John Doe',
            'bank' => 1
         ]);
-        $request = $this->mockServerRequest($requestBody);
         $createPaymentOrderUseCase = new CreatePaymentOrderUseCase(
             $this->createMock(PaymentOrderRepository::class)
         );
         $validatorBuilder = new CreatePaymentOrderValidatorBuilder();
-        $controller = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
-        $response = json_decode($controller($request));
+        $action = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
+        $response = $action($this->mockServerRequest($requestBody));
 
-        $this->assertObjectHasAttribute('error', $response);
+        $this->assertResponseIsJsonAndHasError($response);
     }
 
     public function testAssertErrorWithNonJsonBody(): void
@@ -143,9 +137,16 @@ class CreatePaymentOrderActionTest extends ActionTestCase
             $this->createMock(PaymentOrderRepository::class)
         );
         $validatorBuilder = new CreatePaymentOrderValidatorBuilder();
-        $controller = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
-        $response = json_decode($controller($this->mockServerRequest()));
+        $action = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
+        $response =  $action($this->mockServerRequest());
 
-        $this->assertObjectHasAttribute('error', $response);
+        $this->assertResponseIsJsonAndHasError($response);
+    }
+
+    private function assertResponseIsJsonAndHasError(ResponseInterface $response): void
+    {
+        $responseBody = $response->getBody()->getContents();
+        $this->assertJson($responseBody);
+        $this->assertObjectHasAttribute('error', json_decode($responseBody));
     }
 }

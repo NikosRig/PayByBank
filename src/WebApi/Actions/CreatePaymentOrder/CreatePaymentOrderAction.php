@@ -9,6 +9,8 @@ use PayByBank\Application\UseCases\CreatePaymentOrder\CreatePaymentOrderPresente
 use PayByBank\Application\UseCases\CreatePaymentOrder\CreatePaymentOrderRequest;
 use PayByBank\Application\UseCases\CreatePaymentOrder\CreatePaymentOrderUseCase;
 use PayByBank\WebApi\Actions\Action;
+use PayByBank\WebApi\Factory\HttpResponseFactory;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class CreatePaymentOrderAction implements Action
@@ -25,15 +27,14 @@ class CreatePaymentOrderAction implements Action
         $this->validatorBuilder = $validatorBuilder;
     }
 
-    public function __invoke(ServerRequestInterface $serverRequest): string
+    public function __invoke(ServerRequestInterface $serverRequest): ResponseInterface
     {
         $serverRequestBody = $serverRequest->getBody()->getContents();
         $requestParams = json_decode($serverRequestBody, true) ?? [];
-
         try {
             $this->validatorBuilder->build()->validate($requestParams);
-        } catch (InvalidArgumentException $exception) {
-            return json_encode(['error' => $exception->getMessage()]);
+        } catch (InvalidArgumentException $e) {
+            return HttpResponseFactory::createJson(['error' => $e->getMessage()]);
         }
 
         $request = new CreatePaymentOrderRequest(
@@ -45,6 +46,6 @@ class CreatePaymentOrderAction implements Action
         $presenter = new CreatePaymentOrderPresenter();
         $this->createPaymentOrderUseCase->create($request, $presenter);
 
-        return json_encode(['redirectUri' => "/{$presenter->getPaymentOrderToken()}"]);
+        return HttpResponseFactory::createJson(['redirectUrl' => "/{$presenter->getPaymentOrderToken()}"]);
     }
 }

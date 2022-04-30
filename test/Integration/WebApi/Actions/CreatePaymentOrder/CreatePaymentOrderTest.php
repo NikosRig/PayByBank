@@ -17,7 +17,7 @@ class CreatePaymentOrderTest extends TestCase
 
     public function setUp(): void
     {
-        $this->host = '';
+        $this->host = 'paybybank_web';
         $this->client = new Client();
     }
 
@@ -34,13 +34,14 @@ class CreatePaymentOrderTest extends TestCase
            'bank' => 'ING'
         ]);
 
-        $request = new Request('POST', 'http://localhost/payment/order', [
+        $request = new Request('POST', "http://{$this->host}/payment/order", [
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ], $requestBody);
 
         $response = $this->client->sendRequest($request);
-        $responseBody = $response->getBody()->getContents();
+        $responseBody = json_decode($response->getBody()->getContents());
         $this->assertEquals(200, $response->getStatusCode());
+        $this->assertIsString($responseBody->redirectUrl);
     }
 }

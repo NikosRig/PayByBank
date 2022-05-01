@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PayByBank\Application\UseCases\CreatePaymentOrder;
 
-use PayByBank\Application\UseCases\UseCase;
 use PayByBank\Domain\Entity\PaymentOrder;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\Domain\ValueObjects\CreditorAccount;

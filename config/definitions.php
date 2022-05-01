@@ -8,8 +8,10 @@ use Larium\Bridge\Template\TwigTemplate;
 use Larium\Framework\Bridge\Routing\FastRouteBridge;
 use Larium\Framework\Contract\Routing\Router;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
+use PayByBank\Domain\Repository\TransactionRepository;
 use PayByBank\Infrastructure\Persistence\Adapters\MongoAdapter;
 use PayByBank\Infrastructure\Persistence\Repository\MongoPaymentOrderRepository;
+use PayByBank\Infrastructure\Persistence\Repository\MongoTransactionRepository;
 use PayByBank\WebApi\Actions\CreatePaymentOrder\CreatePaymentOrderAction;
 use PayByBank\WebApi\Actions\GetPaymentOrderAuth\GetPaymentOrderAuthAction;
 
@@ -26,6 +28,7 @@ return [
     |--------------------------------------------------------------------------
     */
     PaymentOrderRepository::class => autowire(MongoPaymentOrderRepository::class),
+    TransactionRepository::class => autowire(MongoTransactionRepository::class),
 
     /*
     |--------------------------------------------------------------------------

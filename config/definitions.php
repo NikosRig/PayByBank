@@ -46,7 +46,7 @@ return [
     | Template
     |--------------------------------------------------------------------------
     */
-    Template::class => create(TwigTemplate::class)->constructor(__DIR__ . '/../template'),
+    Template::class => create(TwigTemplate::class)->constructor(__DIR__ . '/../resources/templates'),
 
     /*
     |--------------------------------------------------------------------------

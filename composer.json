@@ -27,6 +27,7 @@
         "larium/framework": "^0.0.8",
         "php-di/php-di": "^6.4",
         "nikic/fast-route": "^1.3",
-        "larium/template-bridge": "^0.0.2"
+        "larium/template-bridge": "^0.0.2",
+        "twig/twig": "^3.3"
     }
 }

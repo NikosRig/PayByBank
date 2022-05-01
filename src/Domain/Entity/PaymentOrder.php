@@ -26,11 +26,8 @@ final class PaymentOrder
 
     private readonly string $bank;
 
-    private ?Psu $psu;
-
     public function __construct(CreditorAccount $creditorAccount, int $amount, string $bank)
     {
-        $this->psu = null;
         $this->token = bin2hex(openssl_random_pseudo_bytes(24));
         $this->status = PaymentOrderStatus::PENDING;
         $this->creditorAccount = $creditorAccount;
@@ -49,14 +46,8 @@ final class PaymentOrder
 
         $self->status = $paymentOrderState->status;
         $self->token = $paymentOrderState->token;
-        $self->psu = $paymentOrderState->psu;
 
         return $self;
-    }
-
-    public function getPsu(): ?Psu
-    {
-        return $this->psu;
     }
 
     public function canBeAuthorized(): bool

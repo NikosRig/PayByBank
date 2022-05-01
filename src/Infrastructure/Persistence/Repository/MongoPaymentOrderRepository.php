@@ -39,8 +39,7 @@ class MongoPaymentOrderRepository implements PaymentOrderRepository
             $paymentOrder->token,
             $paymentOrder->amount,
             $paymentOrder->bank,
-            $creditorAccount,
-            $paymentOrder->psu ?? null
+            $creditorAccount
         );
 
         return PaymentOrder::fromState($state);
@@ -54,8 +53,7 @@ class MongoPaymentOrderRepository implements PaymentOrderRepository
              'dateCreated' => $paymentOrder->getDateCreated()->format('Y-m-d H:i:s'),
              'amount' => $paymentOrder->getAmount(),
              'creditorAccount' => $paymentOrder->getCreditorAccount()->toArray(),
-             'bank' => $paymentOrder->getBank(),
-             'psu' => $paymentOrder->getPsu() ?-> toArray()
+             'bank' => $paymentOrder->getBank()
         ]);
     }
 }

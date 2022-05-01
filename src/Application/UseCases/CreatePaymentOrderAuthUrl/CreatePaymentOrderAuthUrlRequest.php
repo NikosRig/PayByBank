@@ -8,8 +8,11 @@ class CreatePaymentOrderAuthUrlRequest
 {
     public readonly string $paymentOrderToken;
 
-    public function __construct(string $paymentOrderToken)
+    public readonly ?string $psuIpAddress;
+
+    public function __construct(string $paymentOrderToken, ?string $psuIpAddress)
     {
         $this->paymentOrderToken = $paymentOrderToken;
+        $this->psuIpAddress = $psuIpAddress;
     }
 }

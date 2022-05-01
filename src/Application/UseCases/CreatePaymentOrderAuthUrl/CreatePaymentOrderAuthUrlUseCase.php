@@ -5,24 +5,44 @@ declare(strict_types=1);
 namespace PayByBank\Application\UseCases\CreatePaymentOrderAuthUrl;
 
 use InvalidArgumentException;
-use PayByBank\Application\UseCases\CreatePaymentOrder\CreatePaymentOrderPresenter;
+use PayByBank\Domain\Entity\Transaction;
+use PayByBank\Domain\Http\Banks\BankResolver;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
+use PayByBank\Domain\Repository\TransactionRepository;
+use PayByBank\Domain\ValueObjects\Psu;
 
 final class CreatePaymentOrderAuthUrlUseCase
 {
-    private PaymentOrderRepository $repository;
+    private PaymentOrderRepository $paymentOrderRepository;
 
-    public function __construct(PaymentOrderRepository $repository)
-    {
-        $this->repository = $repository;
+    private BankResolver $bankResolver;
+
+    private TransactionRepository $transactionRepository;
+
+    public function __construct(
+        PaymentOrderRepository $paymentOrderRepository,
+        TransactionRepository $transactionRepository,
+        BankResolver $bankResolver
+    ) {
+        $this->paymentOrderRepository = $paymentOrderRepository;
+        $this->transactionRepository = $transactionRepository;
+        $this->bankResolver = $bankResolver;
     }
 
-    public function create(CreatePaymentOrderAuthUrlRequest $request, CreatePaymentOrderPresenter $presenter): void
+    public function create(CreatePaymentOrderAuthUrlRequest $request, CreatePaymentOrderAuthUrlPresenter $presenter): void
     {
-        $paymentOrder = $this->repository->findByToken($request->paymentOrderToken);
+        $paymentOrder = $this->paymentOrderRepository->findByToken($request->paymentOrderToken);
 
         if (!$paymentOrder || !$paymentOrder->canBeAuthorized()) {
             throw new InvalidArgumentException('Invalid payment order token.');
         }
+
+        $bank = $this->bankResolver->resolveWithName($paymentOrder->getBank());
+        $psu = new Psu($request->psuIpAddress);
+        $transaction = new Transaction($paymentOrder, $psu);
+        $authorizationUrl = $bank->getAuthorizationUrl($transaction);
+        $this->transactionRepository->save($transaction);
+
+        $presenter->present($authorizationUrl);
     }
 }

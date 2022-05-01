@@ -11,15 +11,15 @@ use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\Domain\ValueObjects\CreditorAccount;
 use PayByBank\Domain\ValueObjects\PaymentOrderState;
 use PayByBank\Domain\ValueObjects\PaymentOrderStatus;
-use PayByBank\Infrastructure\Persistence\Drivers\MongoDriver;
+use PayByBank\Infrastructure\Persistence\Adapters\MongoAdapter;
 
 class MongoPaymentOrderRepository implements PaymentOrderRepository
 {
     private Collection $collection;
 
-    public function __construct(MongoDriver $mongoDriver)
+    public function __construct(MongoAdapter $mongoAdapter)
     {
-        $this->collection = $mongoDriver->selectCollection('paymentOrders');
+        $this->collection = $mongoAdapter->selectCollection('paymentOrders');
     }
 
     public function findByToken(string $paymentOrderToken): ?PaymentOrder

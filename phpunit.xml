@@ -25,5 +25,10 @@
 
     <php>
         <env name="WEB_API_HOST" value="paybybank_web"/>
+        <env name="DB" value="paybybank"/>
+        <env name="DB_HOST" value="172.17.0.1"/>
+        <env name="DB_USER" value="paybybank"/>
+        <env name="DB_USER_PASSWORD" value="paybybank"/>
+        <env name="DB_PORT" value="27017"/>
     </php>
 </phpunit>

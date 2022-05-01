@@ -3,14 +3,19 @@
 declare(strict_types=1);
 
 use FastRoute\RouteCollector;
+use Larium\Bridge\Template\Template;
+use Larium\Bridge\Template\TwigTemplate;
 use Larium\Framework\Bridge\Routing\FastRouteBridge;
 use Larium\Framework\Contract\Routing\Router;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
+use PayByBank\Infrastructure\Persistence\Adapters\MongoAdapter;
 use PayByBank\Infrastructure\Persistence\Repository\MongoPaymentOrderRepository;
 use PayByBank\WebApi\Actions\CreatePaymentOrder\CreatePaymentOrderAction;
 use PayByBank\WebApi\Actions\GetPaymentOrderAuth\GetPaymentOrderAuthAction;
 
 use function DI\autowire;
+use function DI\create;
+use function DI\env;
 use function DI\factory;
 use function FastRoute\simpleDispatcher;
 
@@ -34,5 +39,25 @@ return [
         });
 
         return new FastRouteBridge($dispatcher);
-    })
+    }),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Template
+    |--------------------------------------------------------------------------
+    */
+    Template::class => create(TwigTemplate::class)->constructor(__DIR__ . '/../template'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Database
+    |--------------------------------------------------------------------------
+    */
+    MongoAdapter::class => create(MongoAdapter::class)->constructor(
+        env('DB'),
+        env('DB_HOST'),
+        env('DB_USER'),
+        env('DB_USER_PASSWORD'),
+        env('DB_PORT')
+    )
 ];

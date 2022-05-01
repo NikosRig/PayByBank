@@ -7,27 +7,30 @@ namespace Test\Integration\Infrastructure\Persistence\Repository;
 use Dotenv\Dotenv;
 use PayByBank\Domain\Entity\PaymentOrder;
 use PayByBank\Domain\ValueObjects\CreditorAccount;
-use PayByBank\Infrastructure\Persistence\Drivers\MongoDriver;
+use PayByBank\Infrastructure\Persistence\Adapters\MongoAdapter;
 use PayByBank\Infrastructure\Persistence\Repository\MongoPaymentOrderRepository;
 use PHPUnit\Framework\TestCase;
 
 class MongoPaymentOrderRepositoryTest extends TestCase
 {
-    private static MongoDriver $mongoDriver;
+    private static MongoAdapter $mongoAdapter;
 
     public static function setUpBeforeClass(): void
     {
-        $baseDir = __DIR__ . '/../../../../../';
-        $dotenv = Dotenv::createImmutable($baseDir);
-        $dotenv->load();
-        self::$mongoDriver = new MongoDriver();
+        self::$mongoAdapter = new MongoAdapter(
+            $_ENV['DB'],
+            $_ENV['DB_HOST'],
+            $_ENV['DB_USER'],
+            $_ENV['DB_USER_PASSWORD'],
+            $_ENV['DB_PORT']
+        );
     }
 
     public function testAssertPaymentOrderShouldBeSaved(): void
     {
         $creditorAccount = new CreditorAccount('NL47RABO6233671132', 'Nikos Rigas');
         $paymentOrder = new PaymentOrder($creditorAccount, 7000, 'ING');
-        $repository = new MongoPaymentOrderRepository(self::$mongoDriver);
+        $repository = new MongoPaymentOrderRepository(self::$mongoAdapter);
         $repository->save($paymentOrder);
         $findResult = $repository->findByToken($paymentOrder->getToken());
 

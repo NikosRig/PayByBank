@@ -46,6 +46,6 @@ class CreatePaymentOrderAction implements Action
         $presenter = new CreatePaymentOrderPresenter();
         $this->createPaymentOrderUseCase->create($request, $presenter);
 
-        return HttpResponseFactory::createJson(['redirectUrl' => "/{$presenter->getPaymentOrderToken()}"]);
+        return HttpResponseFactory::createJson(['token' => $presenter->getPaymentOrderToken()]);
     }
 }

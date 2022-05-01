@@ -39,6 +39,6 @@ class CreatePaymentOrderTest extends TestCase
         $response = $this->client->sendRequest($request);
         $responseBody = json_decode($response->getBody()->getContents());
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertIsString($responseBody->redirectUrl);
+        $this->assertIsString($responseBody->token);
     }
 }

@@ -13,6 +13,27 @@ use Test\Unit\WebApi\Actions\ActionTestCase;
 
 class CreatePaymentOrderActionTest extends ActionTestCase
 {
+    public function testAssertShouldReturnPaymentOrderToken(): void
+    {
+        $requestBody = json_encode([
+           'creditorIban' => 'GR2101422757743955519929399',
+           'amount' => 10,
+           'creditorName' => 'Nikos Rigas',
+           'bank' => 'ING'
+        ]);
+
+        $validatorBuilder = new CreatePaymentOrderValidatorBuilder();
+        $createPaymentOrderUseCase = new CreatePaymentOrderUseCase(
+            $this->createMock(PaymentOrderRepository::class)
+        );
+        $action = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
+
+        $response = $action($this->mockServerRequest($requestBody));
+        $responseBody = json_decode($response->getBody()->getContents());
+
+        $this->assertObjectHasAttribute('token', $responseBody);
+    }
+
     public function testAssertCreditorIbanIsRequired(): void
     {
         $requestBody = json_encode([

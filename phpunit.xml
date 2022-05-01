@@ -17,14 +17,13 @@
         </testsuite>
     </testsuites>
 
-    <coverage cacheDirectory=".phpunit.cache/code-coverage"
-              processUncoveredFiles="true">
+    <coverage cacheDirectory=".phpunit.cache/code-coverage" processUncoveredFiles="true">
         <include>
             <directory suffix=".php">src</directory>
         </include>
     </coverage>
 
     <php>
-        <env name="WEB_API_HOST" value="paybybank_web" />
+        <env name="WEB_API_HOST" value="paybybank_web"/>
     </php>
 </phpunit>

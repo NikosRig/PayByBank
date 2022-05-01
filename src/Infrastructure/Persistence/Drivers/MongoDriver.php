@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\Infrastructure\Persistence\Database;
+namespace PayByBank\Infrastructure\Persistence\Drivers;
 
 use MongoDB\Client;
 use MongoDB\Collection;
 use MongoDB\Database;
 
-class MongoDB
+class MongoDriver
 {
     private readonly string $dbName;
 

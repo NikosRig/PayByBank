@@ -9,12 +9,17 @@ use Psr\Http\Message\ResponseInterface;
 
 class HttpResponseFactory
 {
+    public static function create(string $body, int $status = 200, array $headers = []): ResponseInterface
+    {
+        return new Response($status, $headers, $body);
+    }
+
     public static function createJson(array $payload, int $status = 200, array $headers = []): ResponseInterface
     {
-        $headers = array_merge($headers, [
-            'Content-Type' => 'application/json'
-        ]);
-
-        return new Response($status, $headers, json_encode($payload));
+        return self::create(
+            json_encode($payload),
+            $status,
+            $headers
+        );
     }
 }

@@ -6,7 +6,7 @@ namespace PayByBank\Application\UseCases\GetPaymentOrderAuth;
 
 class GetPaymentOrderAuthPresenter
 {
-    public readonly string $bankName;
+    private readonly string $bankName;
 
     public function present(string $bankName): void
     {

@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace PayByBank\Application\UseCases\CreatePaymentOrderAuthUrl;
 
 use InvalidArgumentException;
+use PayByBank\Application\UseCases\CreatePaymentOrder\CreatePaymentOrderPresenter;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
 
-final class CreatePaymentOrderAuthUrl
+final class CreatePaymentOrderAuthUrlUseCase
 {
     private PaymentOrderRepository $repository;
 
@@ -16,7 +17,7 @@ final class CreatePaymentOrderAuthUrl
         $this->repository = $repository;
     }
 
-    public function __invoke(CreatePaymentOrderAuthUrlRequest $request): void
+    public function create(CreatePaymentOrderAuthUrlRequest $request, CreatePaymentOrderPresenter $presenter): void
     {
         $paymentOrder = $this->repository->findByToken($request->paymentOrderToken);
 

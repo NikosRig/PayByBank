@@ -20,4 +20,15 @@ class ActiveBankResolverTest extends TestCase
 
         $this->assertEquals($alphaBank, $resolvedBank);
     }
+
+    public function testExpectInvalidArgumentWithUnknownBankName(): void
+    {
+        $NBG = $this->getMockBuilder(Bank::class)
+            ->setMockClassName('NBG')->getMock();
+        $banks = ['NBG' => $NBG];
+        $activeBankResolver = new ActiveBankResolver($banks);
+        $this->expectException(\InvalidArgumentException::class);
+
+        $activeBankResolver->resolveWithName('Test');
+    }
 }

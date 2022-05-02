@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace PayByBank\Domain\Http\Banks;
 
+use InvalidArgumentException;
+
 interface BankResolver
 {
-    public function resolveWithName(string $bankName): Bank;
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function resolveWithName(string $name): Bank;
 }

@@ -6,7 +6,7 @@ namespace PayByBank\WebApi\Modules\Validation\Rules;
 
 use InvalidArgumentException;
 
-class BankRule implements ValidationRule
+class BankNameRule implements ValidationRule
 {
     public function check(array $params): void
     {

@@ -16,23 +16,23 @@ class PaymentOrderState
 
     public readonly int $amount;
 
-    public readonly string $bank;
+    public readonly string $bankName;
 
     public readonly CreditorAccount $creditorAccount;
-    
+
     public function __construct(
         DateTime $dateCreated,
         PaymentOrderStatus $status,
         string $token,
         int $amount,
-        string $bank,
+        string $bankName,
         CreditorAccount $creditorAccount
     ) {
         $this->dateCreated = $dateCreated;
         $this->status = $status;
         $this->token = $token;
         $this->amount = $amount;
-        $this->bank = $bank;
+        $this->bankName = $bankName;
         $this->creditorAccount = $creditorAccount;
     }
 }

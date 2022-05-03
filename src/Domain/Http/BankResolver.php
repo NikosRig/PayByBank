@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\Domain\Http\Banks;
+namespace PayByBank\Domain\Http;
 
 use InvalidArgumentException;
+use PayByBank\Domain\Http\Banks\Bank;
 
 interface BankResolver
 {

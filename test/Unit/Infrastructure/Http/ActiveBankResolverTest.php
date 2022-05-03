@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Infrastructure\Http\Banks;
+namespace Test\Unit\Infrastructure\Http;
 
 use PayByBank\Domain\Http\Banks\Bank;
-use PayByBank\Infrastructure\Http\Banks\ActiveBankResolver;
+use PayByBank\Infrastructure\Http\ActiveBankResolver;
 use PHPUnit\Framework\TestCase;
 
 class ActiveBankResolverTest extends TestCase

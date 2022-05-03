@@ -27,6 +27,6 @@ final class GetPaymentOrderAuthUseCase
             throw new InvalidArgumentException('Invalid payment order token.');
         }
 
-        $presenter->present($paymentOrder->getBank());
+        $presenter->present($paymentOrder->getBankName());
     }
 }

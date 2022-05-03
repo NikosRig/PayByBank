@@ -20,7 +20,7 @@ final class CreatePaymentOrderUseCase
     public function create(CreatePaymentOrderRequest $request, CreatePaymentOrderPresenter $presenter): void
     {
         $creditorAccount = new CreditorAccount($request->creditorIban, $request->creditorName);
-        $paymentOrder = new PaymentOrder($creditorAccount, $request->amount, $request->bank);
+        $paymentOrder = new PaymentOrder($creditorAccount, $request->amount, $request->bankName);
         $this->paymentOrderRepository->save($paymentOrder);
 
         $presenter->present($paymentOrder->getToken());

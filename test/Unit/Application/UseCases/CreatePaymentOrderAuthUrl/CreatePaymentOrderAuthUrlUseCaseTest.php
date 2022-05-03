@@ -7,8 +7,8 @@ use PayByBank\Application\UseCases\CreatePaymentOrderAuthUrl\CreatePaymentOrderA
 use PayByBank\Application\UseCases\CreatePaymentOrderAuthUrl\CreatePaymentOrderAuthUrlRequest;
 use PayByBank\Application\UseCases\CreatePaymentOrderAuthUrl\CreatePaymentOrderAuthUrlUseCase;
 use PayByBank\Domain\Entity\PaymentOrder;
+use PayByBank\Domain\Http\BankResolver;
 use PayByBank\Domain\Http\Banks\Bank;
-use PayByBank\Domain\Http\Banks\BankResolver;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\Domain\Repository\TransactionRepository;
 use PayByBank\Domain\ValueObjects\CreditorAccount;

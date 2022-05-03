@@ -6,7 +6,7 @@ namespace PayByBank\Application\UseCases\CreatePaymentOrderAuthUrl;
 
 use InvalidArgumentException;
 use PayByBank\Domain\Entity\Transaction;
-use PayByBank\Domain\Http\Banks\BankResolver;
+use PayByBank\Domain\Http\BankResolver;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\Domain\Repository\TransactionRepository;
 use PayByBank\Domain\ValueObjects\Psu;
@@ -37,7 +37,7 @@ final class CreatePaymentOrderAuthUrlUseCase
             throw new InvalidArgumentException('Invalid payment order token.');
         }
 
-        $bank = $this->bankResolver->resolveWithName($paymentOrder->getBank());
+        $bank = $this->bankResolver->resolveWithName($paymentOrder->getBankName());
         $psu = new Psu($request->psuIpAddress);
         $transaction = new Transaction($paymentOrder, $psu);
         $authorizationUrl = $bank->getAuthorizationUrl($transaction);

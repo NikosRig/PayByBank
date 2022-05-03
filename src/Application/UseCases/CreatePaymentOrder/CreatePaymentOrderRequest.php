@@ -12,17 +12,17 @@ class CreatePaymentOrderRequest
 
     public readonly int $amount;
 
-    public readonly string $bank;
+    public readonly string $bankName;
 
     public function __construct(
         string $creditorIban,
         string $creditorName,
         int $amount,
-        string $bank
+        string $bankName
     ) {
         $this->creditorIban = $creditorIban;
         $this->creditorName = $creditorName;
         $this->amount = $amount;
-        $this->bank = $bank;
+        $this->bankName = $bankName;
     }
 }

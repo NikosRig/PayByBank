@@ -24,16 +24,16 @@ final class PaymentOrder
 
     private DateTime $dateCreated;
 
-    private readonly string $bank;
+    private readonly string $bankName;
 
-    public function __construct(CreditorAccount $creditorAccount, int $amount, string $bank)
+    public function __construct(CreditorAccount $creditorAccount, int $amount, string $bankName)
     {
         $this->token = bin2hex(openssl_random_pseudo_bytes(24));
         $this->status = PaymentOrderStatus::PENDING;
         $this->creditorAccount = $creditorAccount;
         $this->amount = $amount;
         $this->dateCreated = new DateTime('now');
-        $this->bank = $bank;
+        $this->bankName = $bankName;
     }
 
     public static function fromState(PaymentOrderState $paymentOrderState): PaymentOrder
@@ -41,7 +41,7 @@ final class PaymentOrder
         $self = new self(
             $paymentOrderState->creditorAccount,
             $paymentOrderState->amount,
-            $paymentOrderState->bank
+            $paymentOrderState->bankName
         );
 
         $self->status = $paymentOrderState->status;
@@ -58,9 +58,9 @@ final class PaymentOrder
     /**
      * @return string
      */
-    public function getBank(): string
+    public function getBankName(): string
     {
-        return $this->bank;
+        return $this->bankName;
     }
 
     /**

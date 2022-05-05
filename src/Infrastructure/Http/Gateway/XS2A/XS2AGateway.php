@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace PayByBank\Infrastructure\Http\Gateway\XS2A;
 
 use GuzzleHttp\Psr7\Request;
+use PayByBank\Infrastructure\Http\Exceptions\BadResponseException;
+use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 
 class XS2AGateway
@@ -21,7 +23,10 @@ class XS2AGateway
         $this->tppRedirectUrl = $tppRedirectUrl;
     }
 
-    public function sepaPayment(XS2ASepaPaymentRequest $request): void
+    /**
+     * @throws ClientExceptionInterface
+     */
+    public function sepaPayment(XS2ASepaPaymentRequest $request): XS2ASepaPaymentResponse
     {
         $requestBody = json_encode([
            "endToEndIdentification" => $request->transactionId,
@@ -42,10 +47,20 @@ class XS2AGateway
             'TPP-Explicit-Authorisation-Preferred' => 'false',
             'Psu-IP-Address' => $request->psuIp,
             'TPP-Redirect-Preferred' => 'true',
-            ], $requestBody);
+        ], $requestBody);
 
         $response = $this->client->sendRequest($request);
         $responseBody = $response->getBody()->getContents();
+        $responsePayload = json_decode($responseBody);
 
+        if ($response->getStatusCode() !== 201 || !$responsePayload) {
+            throw new BadResponseException($responseBody, $response->getStatusCode());
+        }
+
+        return new XS2ASepaPaymentResponse(
+            scaRedirectUrl: $responsePayload->_links->scaRedirect->href,
+            paymentId: $responsePayload->paymentId,
+            transactionStatus: $responsePayload->transactionStatus
+        );
     }
 }

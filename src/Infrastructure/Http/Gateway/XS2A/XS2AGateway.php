@@ -53,14 +53,20 @@ class XS2AGateway
         $responseBody = $response->getBody()->getContents();
         $responsePayload = json_decode($responseBody);
 
-        if ($response->getStatusCode() !== 201 || !$responsePayload) {
+        $scaRedirectUrl = $responsePayload->_links->scaRedirect->href ?? null;
+        $paymentId = $responsePayload->paymentId ?? null;
+        $transactionStatus = $responsePayload->transactionStatus ?? null;
+
+        if ($response->getStatusCode() !== 201 || !$responsePayload || !$scaRedirectUrl
+            || !$paymentId || !$transactionStatus
+        ) {
             throw new BadResponseException($responseBody, $response->getStatusCode());
         }
 
         return new XS2ASepaPaymentResponse(
-            scaRedirectUrl: $responsePayload->_links->scaRedirect->href,
-            paymentId: $responsePayload->paymentId,
-            transactionStatus: $responsePayload->transactionStatus
+            $scaRedirectUrl,
+            $paymentId,
+            $transactionStatus
         );
     }
 }

@@ -29,7 +29,6 @@ class ABNAGateway
         $sandboxUrl = 'https://auth-mtls-sandbox.abnamro.com/as/token.oauth2';
         $productionUrl = 'https://auth.connect.abnamro.com:8443/as/token.oauth2';
         $url = $this->isSandbox ? $sandboxUrl : $productionUrl;
-
         $body = "grant_type=client_credentials&client_id={$clientId}&scope={$scope->value}";
 
         $request = new Request('POST', $url, [

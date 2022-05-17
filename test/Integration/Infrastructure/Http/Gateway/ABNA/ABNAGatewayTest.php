@@ -16,8 +16,8 @@ class ABNAGatewayTest extends TestCase
     public function setUp(): void
     {
         $clientOptions = [
-            'cert' => '/var/www/html/var/certs/AbnAmro/sandbox/tpp.crt',
-            'ssl_key' => '/var/www/html/var/certs/AbnAmro/sandbox/tpp.key'
+            'cert' => '/var/www/html/var/certs/ABNA/sandbox/tpp.crt',
+            'ssl_key' => '/var/www/html/var/certs/ABNA/sandbox/tpp.key'
         ];
         $this->client = new Client($clientOptions);
     }

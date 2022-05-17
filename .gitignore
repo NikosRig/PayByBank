@@ -4,4 +4,3 @@
 vendor
 .phpunit.cache
 .env
-var

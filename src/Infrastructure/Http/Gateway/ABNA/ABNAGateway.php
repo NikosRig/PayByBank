@@ -11,14 +11,38 @@ use Psr\Http\Client\ClientInterface;
 
 class ABNAGateway
 {
+    private const SEPA_PAYMENT_SCOPE = 'psd2:payment:sepa:write';
+
     private ClientInterface $client;
 
     private ABNACredentials $credentials;
+
+    private string $accessTokenUrl;
+
+    private string $oAuthUrl;
+
+    private string $paymentsUrl;
 
     public function __construct(ClientInterface $client, ABNACredentials $credentials)
     {
         $this->client = $client;
         $this->credentials = $credentials;
+        $this->setupGatewayUrls($this->credentials->isSandbox);
+    }
+
+    private function setupGatewayUrls(bool $isSandbox): void
+    {
+        $accessTokenSandboxUrl = 'https://auth-mtls-sandbox.abnamro.com/as/token.oauth2';
+        $accessTokenProductionUrl = 'https://auth.connect.abnamro.com:8443/as/token.oauth2';
+        $this->accessTokenUrl = $isSandbox ? $accessTokenSandboxUrl : $accessTokenProductionUrl;
+
+        $sandboxOAuthUrl = 'https://auth-sandbox.abnamro.com/as/authorization.oauth2';
+        $productionOAuthUrl = 'https://auth.connect.abnamro.com:8443/as/token.oauth2';
+        $this->oAuthUrl = $isSandbox ? $sandboxOAuthUrl : $productionOAuthUrl;
+
+        $paymentsSandboxUrl = 'https://api-sandbox.abnamro.com/v1/payments';
+        $paymentsProductionUrl = 'https://api.abnamro.com/v1/payments';
+        $this->paymentsUrl = $isSandbox ? $paymentsSandboxUrl : $paymentsProductionUrl;
     }
 
     /**
@@ -26,12 +50,9 @@ class ABNAGateway
      */
     public function createAccessToken(string $scope): string
     {
-        $sandboxUrl = 'https://auth-mtls-sandbox.abnamro.com/as/token.oauth2';
-        $productionUrl = 'https://auth.connect.abnamro.com:8443/as/token.oauth2';
-        $url = $this->credentials->isSandbox ? $sandboxUrl : $productionUrl;
         $body = "grant_type=client_credentials&client_id={$this->credentials->clientId}&scope={$scope}";
 
-        $request = new Request('POST', $url, [
+        $request = new Request('POST', $this->accessTokenUrl, [
             'Content-Type' => 'application/x-www-form-urlencoded'
         ], $body);
 
@@ -51,10 +72,7 @@ class ABNAGateway
      */
     public function sepaPayment(ABNASepaPaymentRequest $sepaRequest): ABNASepaPaymentResponse
     {
-        $accessToken = $this->createAccessToken('psd2:payment:sepa:write');
-        $sandboxUrl = 'https://api-sandbox.abnamro.com/v1/payments';
-        $productionUrl = 'https://api.abnamro.com/v1/payments';
-        $url = $this->credentials->isSandbox ? $sandboxUrl : $productionUrl;
+        $accessToken = $this->createAccessToken(self::SEPA_PAYMENT_SCOPE);
 
         $body = json_encode([
             'counterpartyAccountNumber' => $sepaRequest->creditorIban,
@@ -62,7 +80,7 @@ class ABNAGateway
             'amount' => $sepaRequest->amount,
         ]);
 
-        $request = new Request('POST', $url, [
+        $request = new Request('POST', $this->paymentsUrl, [
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer '.$accessToken,
             'API-Key' => $this->credentials->apiKey
@@ -79,6 +97,29 @@ class ABNAGateway
             throw new BadResponseException($responseBody, $response->getStatusCode());
         }
 
-        return new ABNASepaPaymentResponse($responsePayload->transactionId, $accessToken);
+        $authUrl = $this->makeAuthorizationUrl(
+            $responsePayload->transactionId,
+            self::SEPA_PAYMENT_SCOPE
+        );
+
+        return new ABNASepaPaymentResponse(
+            $responsePayload->transactionId,
+            $accessToken,
+            $authUrl
+        );
+    }
+
+    public function makeAuthorizationUrl(string $transactionId, string $scope): string
+    {
+        $query = http_build_query([
+            'scope' => $scope,
+            'client_id' => $this->credentials->clientId,
+            'transactionId' => $transactionId,
+            'response_type' => 'code',
+            'flow' => 'code',
+            'redirect_uri' => $this->credentials->tppRedirectUrl
+        ]);
+
+        return "{$this->oAuthUrl}?$query";
     }
 }

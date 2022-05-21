@@ -10,12 +10,15 @@ class ABNACredentials
 
     public readonly string $apiKey;
 
+    public readonly string $tppRedirectUrl;
+
     public readonly bool $isSandbox;
 
-    public function __construct(string $clientId, string $apiKey, bool $isSandbox = true)
+    public function __construct(string $clientId, string $apiKey, string $tppRedirectUrl, bool $isSandbox = true)
     {
         $this->clientId = $clientId;
         $this->apiKey = $apiKey;
+        $this->tppRedirectUrl = $tppRedirectUrl;
         $this->isSandbox = $isSandbox;
     }
 }

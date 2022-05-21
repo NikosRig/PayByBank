@@ -23,7 +23,12 @@ class ABNAGatewayTest extends TestCase
             'ssl_key' => '/var/www/html/var/certs/ABNA/sandbox/tpp.key'
         ];
         $this->client = new Client($clientOptions);
-        $this->credentials = new ABNACredentials('TPP_test', 'Pfkjb9TG3erj7uFlByFgZWixz1uKPlfk', true);
+        $this->credentials = new ABNACredentials(
+            'TPP_test',
+            'Pfkjb9TG3erj7uFlByFgZWixz1uKPlfk',
+            'https://localhost/auth',
+            true
+        );
     }
 
     /**
@@ -40,12 +45,13 @@ class ABNAGatewayTest extends TestCase
     /**
      * @throws ClientExceptionInterface
      */
-    public function testSepaResponseWillContainTransactionIdAndAccessToken(): void
+    public function testSepaResponseWillHasTheRequiredParams(): void
     {
         $gateway = new ABNAGateway($this->client, $this->credentials);
         $sepaRequest = new ABNASepaPaymentRequest('NL12ABNA9999876523', 'Nikos Rigas', 100);
         $sepaPayment = $gateway->sepaPayment($sepaRequest);
 
+        $this->assertIsString($sepaPayment->authUrl);
         $this->assertIsString($sepaPayment->transactionId);
         $this->assertIsString($sepaPayment->accessToken);
     }

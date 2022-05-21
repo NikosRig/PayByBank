@@ -16,7 +16,12 @@ class ABNAGatewayTest extends TestCase
 
     public function setUp(): void
     {
-        $this->credentials = new ABNACredentials('clientId', 'apiKey', true);
+        $this->credentials = new ABNACredentials(
+            'clientId',
+            'apiKey',
+            'https://localhost/auth',
+            true
+        );
     }
 
     /**
@@ -93,6 +98,23 @@ class ABNAGatewayTest extends TestCase
         $response = $gateway->sepaPayment($sepaRequest);
 
         $this->assertEquals('VS8BVLWKFJ1653162174254', $response->transactionId);
+    }
+
+    /**
+     * @throws ClientExceptionInterface
+     */
+    public function testSepaPaymentResponseWillHasAuthUrl(): void
+    {
+        $client = new Client();
+        $accessTokenResponse = new Response(200, [], $this->getAccessTokenResponse());
+        $client->addResponse($accessTokenResponse);
+        $sepaPaymentResponse = new Response(200, [], $this->getSuccessfulSepaPaymentResponse());
+        $client->addResponse($sepaPaymentResponse);
+        $gateway = new ABNAGateway($client, $this->credentials);
+        $sepaRequest = new ABNASepaPaymentRequest('iban', 'Nikos Rigas', 10);
+        $response = $gateway->sepaPayment($sepaRequest);
+
+        $this->assertIsString($response->authUrl);
     }
 
     private function getSuccessfulSepaPaymentResponse(): string

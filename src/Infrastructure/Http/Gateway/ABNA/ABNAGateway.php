@@ -115,6 +115,31 @@ class ABNAGateway
     /**
      * @throws ClientExceptionInterface
      */
+    public function executeSepaPayment(string $accessToken, string $transactionId): void
+    {
+        $url = "{$this->paymentsUrl}/{$transactionId}";
+
+        $request = new Request('PUT', $url, [
+            'API-Key' => $this->credentials->apiKey,
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '. $accessToken,
+            'Content-Length' => 0
+        ]);
+
+        $response = $this->client->sendRequest($request);
+        $responseBody = $response->getBody()->getContents();
+        $responsePayload = json_decode($responseBody);
+
+        # @ToDo retry request when payment status is pending
+
+        if (!isset($responsePayload->status) || $responsePayload->status != 'EXECUTED') {
+            throw new BadResponseException($responseBody, $response->getStatusCode());
+        }
+    }
+
+    /**
+     * @throws ClientExceptionInterface
+     */
     public function authorizeCode(string $code, string $accessToken): AuthorizeCodeResponse
     {
         $body = "grant_type=authorization_code&client_id={$this->credentials->clientId}&code={$code}&redirect_uri={$this->credentials->tppRedirectUrl}";

@@ -122,6 +122,47 @@ class ABNAGatewayTest extends TestCase
         $this->assertIsInt($response->expiresIn);
     }
 
+    public function testAssertSepaPaymentExceptionWhenTransactionStatusIsNotCorrect(): void
+    {
+        $this->client->addResponse($this->getSepaPaymentFailedResponse());
+        $this->expectException(ClientExceptionInterface::class);
+
+        $this->gateway->executeSepaPayment('accessToken', 'transactionId');
+    }
+
+    /**
+     * @throws ClientExceptionInterface
+     */
+    public function testAssertSuccessfulSepaPaymentExecution(): void
+    {
+        $this->client->addResponse($this->getSepaPaymentExecutedResponse());
+        $this->gateway->executeSepaPayment('accessToken', 'transactionId');
+        $this->assertTrue(true);
+    }
+
+    private function getSepaPaymentFailedResponse(): ResponseInterface
+    {
+        $responseBody = '{
+            	"errors": [
+                	{
+                	    "code": "MESSAGE_BAI561_0067",
+                		"message": "Mismatch TransactionID call and token",
+                		"reference": "https://developer.abnamro.com/api-products/payment-initiation-psd2/reference-documentation",
+                		"traceId": "1b6ffcf0-1aed-4505-add4-3ae03d1b822e",
+                	    "status": 403,
+                		"category":"BACKEND_ERROR"
+                	}
+            	]
+            }';
+        return new Response(200, [], $responseBody);
+    }
+
+    private function getSepaPaymentExecutedResponse(): ResponseInterface
+    {
+        $responseBody = '{"transactionId":"DRODWIC7M31653242065780","status":"EXECUTED"}';
+        return new Response(200, [], $responseBody);
+    }
+
     private function getCodeFailedToBeAuthorizedResponse(): ResponseInterface
     {
         $responseBody = '{"error_description":"Authorization code is invalid or expired.","error":"invalid_grant"}';

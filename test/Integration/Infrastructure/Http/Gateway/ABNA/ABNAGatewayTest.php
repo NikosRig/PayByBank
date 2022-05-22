@@ -5,7 +5,7 @@ namespace Test\Integration\Infrastructure\Http\Gateway\ABNA;
 use GuzzleHttp\Client;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\ABNACredentials;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\ABNAGateway;
-use PayByBank\Infrastructure\Http\Gateway\ABNA\ABNASepaPaymentRequest;
+use PayByBank\Infrastructure\Http\Gateway\ABNA\DTO\RegisterSepaPaymentRequest;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
@@ -45,14 +45,14 @@ class ABNAGatewayTest extends TestCase
     /**
      * @throws ClientExceptionInterface
      */
-    public function testSepaResponseWillHasTheRequiredParams(): void
+    public function testSepaPaymentRegistrationResponseWillHasTheRequiredParams(): void
     {
         $gateway = new ABNAGateway($this->client, $this->credentials);
-        $sepaRequest = new ABNASepaPaymentRequest('NL12ABNA9999876523', 'Nikos Rigas', 100);
-        $sepaPayment = $gateway->sepaPayment($sepaRequest);
+        $request = new RegisterSepaPaymentRequest('NL12ABNA9999876523', 'Nikos Rigas', 100);
+        $response = $gateway->registerSepaPayment($request);
 
-        $this->assertIsString($sepaPayment->authUrl);
-        $this->assertIsString($sepaPayment->transactionId);
-        $this->assertIsString($sepaPayment->accessToken);
+        $this->assertIsString($response->scaRedirectUrl);
+        $this->assertIsString($response->transactionId);
+        $this->assertIsString($response->accessToken);
     }
 }

@@ -6,7 +6,7 @@ namespace PayByBank\Infrastructure\Http\Gateway\ABNA;
 
 use GuzzleHttp\Psr7\Request;
 use PayByBank\Infrastructure\Http\Exceptions\BadResponseException;
-use PayByBank\Infrastructure\Http\Gateway\ABNA\DTO\CodeAuthorizationResponse;
+use PayByBank\Infrastructure\Http\Gateway\ABNA\DTO\AuthorizeCodeResponse;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\DTO\RegisterSepaPaymentRequest;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\DTO\RegisterSepaPaymentResponse;
 use Psr\Http\Client\ClientExceptionInterface;
@@ -115,7 +115,7 @@ class ABNAGateway
     /**
      * @throws ClientExceptionInterface
      */
-    public function authorizeCode(string $code, string $accessToken)
+    public function authorizeCode(string $code, string $accessToken): AuthorizeCodeResponse
     {
         $body = "grant_type=authorization_code&client_id={$this->credentials->clientId}&code={$code}&redirect_uri={$this->credentials->tppRedirectUrl}";
 
@@ -133,7 +133,7 @@ class ABNAGateway
             throw new BadResponseException($responseBody, $response->getStatusCode());
         }
 
-        return new CodeAuthorizationResponse(
+        return new AuthorizeCodeResponse(
             $responsePayload->access_token,
             $responsePayload->refresh_token,
             $responsePayload->expires_in

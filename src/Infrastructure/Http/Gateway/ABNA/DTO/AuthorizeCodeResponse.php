@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PayByBank\Infrastructure\Http\Gateway\ABNA\DTO;
 
-class CodeAuthorizationResponse
+class AuthorizeCodeResponse
 {
     public readonly string $accessToken;
 

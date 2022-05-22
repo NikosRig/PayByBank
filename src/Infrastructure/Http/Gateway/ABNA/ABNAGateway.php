@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace PayByBank\Infrastructure\Http\Gateway\ABNA;
 
 use GuzzleHttp\Psr7\Request;
-use PayByBank\Infrastructure\Http\Exceptions\BadResponseException;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\DTO\AuthorizeCodeResponse;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\DTO\RegisterSepaPaymentRequest;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\DTO\RegisterSepaPaymentResponse;
+use PayByBank\Infrastructure\Http\Gateway\Exceptions\BadResponseException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 

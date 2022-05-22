@@ -16,15 +16,15 @@ class ABNAGateway
 {
     private const SEPA_PAYMENT_SCOPE = 'psd2:payment:sepa:write';
 
-    private ClientInterface $client;
+    private readonly ClientInterface $client;
 
-    private ABNACredentials $credentials;
+    private readonly ABNACredentials $credentials;
 
-    private string $accessTokenUrl;
+    private readonly string $accessTokenUrl;
 
-    private string $oAuthUrl;
+    private readonly string $oAuthUrl;
 
-    private string $paymentsUrl;
+    private readonly string $paymentsUrl;
 
     public function __construct(ClientInterface $client, ABNACredentials $credentials)
     {

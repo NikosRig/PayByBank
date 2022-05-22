@@ -6,6 +6,7 @@ namespace PayByBank\Infrastructure\Http\Gateway\ABNA;
 
 use GuzzleHttp\Psr7\Request;
 use PayByBank\Infrastructure\Http\Exceptions\BadResponseException;
+use PayByBank\Infrastructure\Http\Gateway\ABNA\DTO\CodeAuthorizationResponse;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\DTO\RegisterSepaPaymentRequest;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\DTO\RegisterSepaPaymentResponse;
 use Psr\Http\Client\ClientExceptionInterface;
@@ -118,7 +119,7 @@ class ABNAGateway
     {
         $body = "grant_type=authorization_code&client_id={$this->credentials->clientId}&code={$code}&redirect_uri={$this->credentials->tppRedirectUrl}";
 
-        $request = new Request('POST', $this->oAuthUrl, [
+        $request = new Request('POST', $this->accessTokenUrl, [
             'Cache-Control' => 'no-cache',
             'Content-Type' => 'application/x-www-form-urlencoded',
             'Authorization' => 'Bearer '. $accessToken
@@ -128,7 +129,15 @@ class ABNAGateway
         $responseBody = $response->getBody()->getContents();
         $responsePayload = json_decode($responseBody);
 
-        return json_decode($responseBody, true);
+        if (!isset($responsePayload->access_token) || !isset($responsePayload->refresh_token)) {
+            throw new BadResponseException($responseBody, $response->getStatusCode());
+        }
+
+        return new CodeAuthorizationResponse(
+            $responsePayload->access_token,
+            $responsePayload->refresh_token,
+            $responsePayload->expires_in
+        );
     }
 
     private function createScaRedirectUrl(string $transactionId, string $scope): string

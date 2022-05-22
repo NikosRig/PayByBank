@@ -101,17 +101,48 @@ class ABNAGatewayTest extends TestCase
         $this->assertIsString($response->scaRedirectUrl);
     }
 
+    public function testAssertExceptionWhenCodeFailedToBeAuthorized(): void
+    {
+        $this->client->addResponse($this->getCodeFailedToBeAuthorizedResponse());
+        $this->expectException(ClientExceptionInterface::class);
+
+        $this->gateway->authorizeCode('code', 'accessToken');
+    }
+
+    /**
+     * @throws ClientExceptionInterface
+     */
+    public function testAssertCodeWillBeAuthorized(): void
+    {
+        $this->client->addResponse($this->getCodeAuthorizedResponse());
+        $response = $this->gateway->authorizeCode('code', 'accessToken');
+
+        $this->assertIsString($response->accessToken);
+        $this->assertIsString($response->refreshToken);
+        $this->assertIsInt($response->expiresIn);
+    }
+
+    private function getCodeFailedToBeAuthorizedResponse(): ResponseInterface
+    {
+        $responseBody = '{"error_description":"Authorization code is invalid or expired.","error":"invalid_grant"}';
+        return new Response(200, [], $responseBody);
+    }
+
+    private function getCodeAuthorizedResponse(): ResponseInterface
+    {
+        $responseBody = '{"access_token":"0003LV10KauEKsdnlwiIo9yJE90t","refresh_token":"wtHdJHLTNuV5miaKruUGDwAvoxuR0CB8z4DGDcnevo","token_type":"Bearer","expires_in":7200}';
+        return new Response(200, [], $responseBody);
+    }
+
     private function getSepaPaymentStoredResponse(): ResponseInterface
     {
         $responseBody = '{"transactionId":"VS8BVLWKFJ1653162174254","status":"STORED"}';
-
         return new Response(200, [], $responseBody);
     }
 
     private function getAccessTokenResponse(): ResponseInterface
     {
         $responseBody = '{"access_token":"0003mBb4xxDCqNxnyS4JmAp8dazy","token_type":"Bearer","expires_in":7200}';
-
         return new Response(200, [], $responseBody);
     }
 }

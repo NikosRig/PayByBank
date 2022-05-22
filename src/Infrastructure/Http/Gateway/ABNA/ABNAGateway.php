@@ -6,6 +6,8 @@ namespace PayByBank\Infrastructure\Http\Gateway\ABNA;
 
 use GuzzleHttp\Psr7\Request;
 use PayByBank\Infrastructure\Http\Exceptions\BadResponseException;
+use PayByBank\Infrastructure\Http\Gateway\ABNA\DTO\RegisterSepaPaymentRequest;
+use PayByBank\Infrastructure\Http\Gateway\ABNA\DTO\RegisterSepaPaymentResponse;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 
@@ -70,14 +72,14 @@ class ABNAGateway
     /**
      * @throws ClientExceptionInterface
      */
-    public function sepaPayment(ABNASepaPaymentRequest $sepaRequest): ABNASepaPaymentResponse
+    public function registerSepaPayment(RegisterSepaPaymentRequest $registerSepaPaymentRequest): RegisterSepaPaymentResponse
     {
         $accessToken = $this->createAccessToken(self::SEPA_PAYMENT_SCOPE);
 
         $body = json_encode([
-            'counterpartyAccountNumber' => $sepaRequest->creditorIban,
-            'counterpartyName' => $sepaRequest->creditorName,
-            'amount' => $sepaRequest->amount,
+            'counterpartyAccountNumber' => $registerSepaPaymentRequest->creditorIban,
+            'counterpartyName' => $registerSepaPaymentRequest->creditorName,
+            'amount' => $registerSepaPaymentRequest->amount,
         ]);
 
         $request = new Request('POST', $this->paymentsUrl, [
@@ -97,19 +99,39 @@ class ABNAGateway
             throw new BadResponseException($responseBody, $response->getStatusCode());
         }
 
-        $authUrl = $this->makeAuthorizationUrl(
+        $scaRedirectUrl = $this->createScaRedirectUrl(
             $responsePayload->transactionId,
             self::SEPA_PAYMENT_SCOPE
         );
 
-        return new ABNASepaPaymentResponse(
+        return new RegisterSepaPaymentResponse(
             $responsePayload->transactionId,
             $accessToken,
-            $authUrl
+            $scaRedirectUrl
         );
     }
 
-    public function makeAuthorizationUrl(string $transactionId, string $scope): string
+    /**
+     * @throws ClientExceptionInterface
+     */
+    public function authorizeCode(string $code, string $accessToken)
+    {
+        $body = "grant_type=authorization_code&client_id={$this->credentials->clientId}&code={$code}&redirect_uri={$this->credentials->tppRedirectUrl}";
+
+        $request = new Request('POST', $this->oAuthUrl, [
+            'Cache-Control' => 'no-cache',
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'Authorization' => 'Bearer '. $accessToken
+        ], $body);
+
+        $response = $this->client->sendRequest($request);
+        $responseBody = $response->getBody()->getContents();
+        $responsePayload = json_decode($responseBody);
+
+        return json_decode($responseBody, true);
+    }
+
+    public function createScaRedirectUrl(string $transactionId, string $scope): string
     {
         $query = http_build_query([
             'scope' => $scope,

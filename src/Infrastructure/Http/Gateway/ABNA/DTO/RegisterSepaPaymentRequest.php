@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\Infrastructure\Http\Gateway\ABNA;
+namespace PayByBank\Infrastructure\Http\Gateway\ABNA\DTO;
 
-class ABNASepaPaymentRequest
+class RegisterSepaPaymentRequest
 {
     public readonly string $creditorIban;
 

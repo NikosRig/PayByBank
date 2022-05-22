@@ -8,57 +8,27 @@ use OpenSSLAsymmetricKey;
 
 class IngCredentials
 {
-    private string $keyId;
+    public readonly OpenSSLAsymmetricKey $signKey;
 
-    private string $tppCert;
+    public readonly string $keyId;
 
-    private string $signKeyPath;
+    public readonly string $tppCert;
 
-    private string $redirectUrl;
+    public readonly string $tppRedirectUrl;
+
+    public readonly bool $isSandbox;
 
     public function __construct(
-        string $signKeyPath,
+        OpenSSLAsymmetricKey $signKey,
         string $tppCert,
         string $keyId,
-        string $redirectUrl
+        string $tppRedirectUrl,
+        bool $isSandbox = true
     ) {
-        $this->signKeyPath = $signKeyPath;
+        $this->signKey = $signKey;
         $this->tppCert = $tppCert;
         $this->keyId = $keyId;
-        $this->redirectUrl = $redirectUrl;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRedirectUrl(): string
-    {
-        return $this->redirectUrl;
-    }
-
-    /**
-     * @return OpenSSLAsymmetricKey
-     */
-    public function getSignKey(): OpenSSLAsymmetricKey
-    {
-        return openssl_pkey_get_private('file://' .$this->signKeyPath);
-    }
-
-    /**
-     * @return string
-     */
-    public function getTppCert(): string
-    {
-        openssl_x509_export($this->tppCert, $tppCert);
-
-        return str_replace(PHP_EOL, '', $tppCert);
-    }
-
-    /**
-     * @return string
-     */
-    public function getKeyId(): string
-    {
-        return $this->keyId;
+        $this->tppRedirectUrl = $tppRedirectUrl;
+        $this->isSandbox = $isSandbox;
     }
 }

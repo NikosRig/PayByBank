@@ -2,7 +2,6 @@
 
 namespace Test\Unit\Infrastructure\Http\Gateway\ABNA;
 
-use GuzzleHttp\Psr7\Response;
 use Http\Mock\Client;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\ABNACredentials;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\ABNAGateway;
@@ -10,6 +9,7 @@ use PayByBank\Infrastructure\Http\Gateway\ABNA\DTO\RegisterSepaPaymentRequest;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 
 class ABNAGatewayTest extends TestCase
 {
@@ -43,7 +43,7 @@ class ABNAGatewayTest extends TestCase
      */
     public function testExpectExceptionWhenAccessTokenMissing(): void
     {
-        $response = new Response(200, [], json_encode([]));
+        $response = $this->mockResponse(json_encode([]));
         $this->client->addResponse($response);
 
         $this->expectException(ClientExceptionInterface::class);
@@ -53,7 +53,7 @@ class ABNAGatewayTest extends TestCase
     public function testSepaPaymentRegistrationWhenResponseHasNotTransactionId(): void
     {
         $this->client->addResponse($this->getAccessTokenResponse());
-        $sepaPaymentResponse = new Response(200, [], json_encode(['status' => 'STORED']));
+        $sepaPaymentResponse = $this->mockResponse(json_encode(['status' => 'STORED']));
         $this->client->addResponse($sepaPaymentResponse);
         $request = new RegisterSepaPaymentRequest('iban', 'Nikos Rigas', 10);
 
@@ -64,9 +64,10 @@ class ABNAGatewayTest extends TestCase
     public function testSepaPaymentRegistrationWhenResponseHasInvalidStatus(): void
     {
         $this->client->addResponse($this->getAccessTokenResponse());
-        $sepaPaymentResponse = new Response(200, [], json_encode([
-            'transactionId' => 'dwxcefgve',
-            'status' => 'REJECTED'
+
+        $sepaPaymentResponse = $this->mockResponse(json_encode([
+           'transactionId' => 'dwxcefgve',
+           'status' => 'REJECTED'
         ]));
         $this->client->addResponse($sepaPaymentResponse);
         $request = new RegisterSepaPaymentRequest('iban', 'Nikos Rigas', 10);
@@ -154,36 +155,42 @@ class ABNAGatewayTest extends TestCase
                 	}
             	]
             }';
-        return new Response(200, [], $responseBody);
+        return $this->mockResponse($responseBody);
     }
 
     private function getSepaPaymentExecutedResponse(): ResponseInterface
     {
-        $responseBody = '{"transactionId":"DRODWIC7M31653242065780","status":"EXECUTED"}';
-        return new Response(200, [], $responseBody);
+        return $this->mockResponse('{"transactionId":"DRODWIC7M31653242065780","status":"EXECUTED"}');
     }
 
     private function getCodeFailedToBeAuthorizedResponse(): ResponseInterface
     {
-        $responseBody = '{"error_description":"Authorization code is invalid or expired.","error":"invalid_grant"}';
-        return new Response(200, [], $responseBody);
+        return $this->mockResponse('{"error_description":"Authorization code is invalid or expired.","error":"invalid_grant"}');
     }
 
     private function getCodeAuthorizedResponse(): ResponseInterface
     {
-        $responseBody = '{"access_token":"0003LV10KauEKsdnlwiIo9yJE90t","refresh_token":"wtHdJHLTNuV5miaKruUGDwAvoxuR0CB8z4DGDcnevo","token_type":"Bearer","expires_in":7200}';
-        return new Response(200, [], $responseBody);
+        return $this->mockResponse('{"access_token":"0003LV10KauEKsdnlwiIo9yJE90t","refresh_token":"wtHdJHLTNuV5miaKruUGDwAvoxuR0CB8z4DGDcnevo","token_type":"Bearer","expires_in":7200}');
     }
 
     private function getSepaPaymentStoredResponse(): ResponseInterface
     {
-        $responseBody = '{"transactionId":"VS8BVLWKFJ1653162174254","status":"STORED"}';
-        return new Response(200, [], $responseBody);
+        return $this->mockResponse('{"transactionId":"VS8BVLWKFJ1653162174254","status":"STORED"}');
     }
 
     private function getAccessTokenResponse(): ResponseInterface
     {
-        $responseBody = '{"access_token":"0003mBb4xxDCqNxnyS4JmAp8dazy","token_type":"Bearer","expires_in":7200}';
-        return new Response(200, [], $responseBody);
+        return $this->mockResponse('{"access_token":"0003mBb4xxDCqNxnyS4JmAp8dazy","token_type":"Bearer","expires_in":7200}');
+    }
+
+    private function mockResponse(?string $body, int $status = 200): ResponseInterface
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getStatusCode')->willReturn($status);
+        $stream = $this->createMock(StreamInterface::class);
+        $stream->method('getContents')->willReturn($body);
+        $response->method('getBody')->willReturn($stream);
+
+        return $response;
     }
 }

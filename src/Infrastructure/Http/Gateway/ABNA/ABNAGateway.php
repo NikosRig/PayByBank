@@ -131,7 +131,7 @@ class ABNAGateway
         return json_decode($responseBody, true);
     }
 
-    public function createScaRedirectUrl(string $transactionId, string $scope): string
+    private function createScaRedirectUrl(string $transactionId, string $scope): string
     {
         $query = http_build_query([
             'scope' => $scope,

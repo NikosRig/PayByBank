@@ -6,6 +6,8 @@ namespace PayByBank\Infrastructure\Http\Gateway\XS2A;
 
 use GuzzleHttp\Psr7\Request;
 use PayByBank\Infrastructure\Http\Gateway\Exceptions\BadResponseException;
+use PayByBank\Infrastructure\Http\Gateway\XS2A\DTO\XS2ASepaPaymentRequest;
+use PayByBank\Infrastructure\Http\Gateway\XS2A\DTO\XS2ASepaPaymentResponse;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 

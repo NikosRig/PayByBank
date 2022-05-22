@@ -7,8 +7,8 @@ namespace Test\Unit\Infrastructure\Http\Gateway\XS2A;
 use GuzzleHttp\Psr7\Response;
 use Http\Mock\Client;
 use PayByBank\Infrastructure\Http\Gateway\Exceptions\BadResponseException;
+use PayByBank\Infrastructure\Http\Gateway\XS2A\DTO\XS2ASepaPaymentRequest;
 use PayByBank\Infrastructure\Http\Gateway\XS2A\XS2AGateway;
-use PayByBank\Infrastructure\Http\Gateway\XS2A\XS2ASepaPaymentRequest;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientExceptionInterface;
 

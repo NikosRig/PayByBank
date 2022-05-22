@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\Infrastructure\Http\Gateway\XS2A;
+namespace PayByBank\Infrastructure\Http\Gateway\XS2A\DTO;
 
 class XS2ASepaPaymentRequest
 {

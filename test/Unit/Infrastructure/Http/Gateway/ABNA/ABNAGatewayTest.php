@@ -6,12 +6,11 @@ use Http\Mock\Client;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\ABNACredentials;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\ABNAGateway;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\DTO\RegisterSepaPaymentRequest;
-use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
+use Test\Unit\Infrastructure\Http\Gateway\GatewayTestCase;
 
-class ABNAGatewayTest extends TestCase
+class ABNAGatewayTest extends GatewayTestCase
 {
     private Client $client;
 
@@ -181,16 +180,5 @@ class ABNAGatewayTest extends TestCase
     private function getAccessTokenResponse(): ResponseInterface
     {
         return $this->mockResponse('{"access_token":"0003mBb4xxDCqNxnyS4JmAp8dazy","token_type":"Bearer","expires_in":7200}');
-    }
-
-    private function mockResponse(?string $body, int $status = 200): ResponseInterface
-    {
-        $response = $this->createMock(ResponseInterface::class);
-        $response->method('getStatusCode')->willReturn($status);
-        $stream = $this->createMock(StreamInterface::class);
-        $stream->method('getContents')->willReturn($body);
-        $response->method('getBody')->willReturn($stream);
-
-        return $response;
     }
 }

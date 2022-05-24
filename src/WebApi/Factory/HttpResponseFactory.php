@@ -9,7 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 
 class HttpResponseFactory
 {
-    public static function create(string $body, int $status = 200, array $headers = []): ResponseInterface
+    public static function create(?string $body, int $status = 200, array $headers = []): ResponseInterface
     {
         return new Response($status, $headers, $body);
     }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PayByBank\WebApi\Actions\CreateMerchant;
 
 use Exception;
-use InvalidArgumentException;
 use PayByBank\Application\UseCases\CreateMerchant\CreateMerchantRequest;
 use PayByBank\Application\UseCases\CreateMerchant\CreateMerchantUseCase;
 use PayByBank\WebApi\Actions\Action;

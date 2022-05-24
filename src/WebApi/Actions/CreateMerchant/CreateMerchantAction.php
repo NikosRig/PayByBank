@@ -32,16 +32,12 @@ class CreateMerchantAction implements Action
 
         try {
             $this->createMerchantValidatorBuilder->build()->validate($requestParams);
-        } catch (InvalidArgumentException $e) {
-            return HttpResponseFactory::createJson(['error' => $e->getMessage()], 400);
-        }
 
-        $createMerchantRequest = new CreateMerchantRequest(
-            $requestParams['username'],
-            $requestParams['password']
-        );
+            $createMerchantRequest = new CreateMerchantRequest(
+                $requestParams['username'],
+                $requestParams['password']
+            );
 
-        try {
             $this->createMerchantUseCase->create($createMerchantRequest);
         } catch (Exception $e) {
             return HttpResponseFactory::create(null, 400);

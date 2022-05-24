@@ -11,24 +11,24 @@ use Test\Unit\WebApi\Actions\ActionTestCase;
 
 class CreateMerchantActionTest extends ActionTestCase
 {
-    public function testAssertJsonErrorWhenUsernameValidationFailed(): void
+    public function testAssertBadRequestWhenUsernameValidationFailed(): void
     {
         $createMerchantUseCaseMock = $this->createMock(CreateMerchantUseCase::class);
         $createMerchantAction = new CreateMerchantAction($createMerchantUseCaseMock, new CreateMerchantValidatorBuilder());
         $requestBody = json_encode(['password' => 'password']);
         $response = $createMerchantAction($this->mockServerRequest($requestBody));
 
-        $this->assertResponseIsJsonAndHasError($response);
+        $this->assertEquals(400, $response->getStatusCode());
     }
 
-    public function testAssertJsonErrorWhenPasswordValidationFailed(): void
+    public function testAssertBadRequestWhenPasswordValidationFailed(): void
     {
         $createMerchantUseCaseMock = $this->createMock(CreateMerchantUseCase::class);
         $createMerchantAction = new CreateMerchantAction($createMerchantUseCaseMock, new CreateMerchantValidatorBuilder());
         $requestBody = json_encode(['username' => 'username']);
         $response = $createMerchantAction($this->mockServerRequest($requestBody));
 
-        $this->assertResponseIsJsonAndHasError($response);
+        $this->assertEquals(400, $response->getStatusCode());
     }
 
     public function testAssertBadRequestStatusWhenUseCaseThrowsException(): void
@@ -52,12 +52,5 @@ class CreateMerchantActionTest extends ActionTestCase
 
         $this->assertEquals(201, $response->getStatusCode());
         $this->assertEquals(null, $response->getBody()->getContents());
-    }
-
-    private function assertResponseIsJsonAndHasError(ResponseInterface $response): void
-    {
-        $responseBody = $response->getBody()->getContents();
-        $this->assertJson($responseBody);
-        $this->assertObjectHasAttribute('error', json_decode($responseBody));
     }
 }

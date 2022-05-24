@@ -8,7 +8,7 @@ use Exception;
 use PayByBank\Domain\Entity\Merchant;
 use PayByBank\Domain\Repository\MerchantRepository;
 
-class CreateMerchantUseCase
+final class CreateMerchantUseCase
 {
     private readonly MerchantRepository $merchantRepository;
 

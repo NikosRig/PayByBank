@@ -26,7 +26,7 @@ class IngGatewayTest extends TestCase
             $signKey,
             $tppCert,
             'SN=5E4299BE',
-            'https://localhost'
+            'https://localhost/auth'
         );
     }
 

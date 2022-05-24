@@ -39,7 +39,10 @@ class CreateMerchantAction implements Action
 
             $this->createMerchantUseCase->create($createMerchantRequest);
         } catch (Exception $e) {
-            return HttpResponseFactory::create(null, 400);
+            return HttpResponseFactory::create(
+                json_encode(['error' => 'Merchant failed to be created.']),
+                400
+            );
         }
 
         return HttpResponseFactory::create(null, 201);

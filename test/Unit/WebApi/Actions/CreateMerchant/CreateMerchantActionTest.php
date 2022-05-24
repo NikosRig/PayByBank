@@ -6,7 +6,6 @@ use Exception;
 use PayByBank\Application\UseCases\CreateMerchant\CreateMerchantUseCase;
 use PayByBank\WebApi\Actions\CreateMerchant\CreateMerchantAction;
 use PayByBank\WebApi\Actions\CreateMerchant\CreateMerchantValidatorBuilder;
-use Psr\Http\Message\ResponseInterface;
 use Test\Unit\WebApi\Actions\ActionTestCase;
 
 class CreateMerchantActionTest extends ActionTestCase
@@ -40,7 +39,6 @@ class CreateMerchantActionTest extends ActionTestCase
         $requestBody = json_encode(['username' => 'username', 'password' => 'password']);
         $response = $createMerchantAction($this->mockServerRequest($requestBody));
         $this->assertEquals(400, $response->getStatusCode());
-        $this->assertEquals(null, $response->getBody()->getContents());
     }
 
     public function testAssertCreatedStatusWhenMerchantSuccessfullyCreated(): void
@@ -51,6 +49,5 @@ class CreateMerchantActionTest extends ActionTestCase
         $response = $createMerchantAction($this->mockServerRequest($requestBody));
 
         $this->assertEquals(201, $response->getStatusCode());
-        $this->assertEquals(null, $response->getBody()->getContents());
     }
 }

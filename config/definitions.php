@@ -7,11 +7,14 @@ use Larium\Bridge\Template\Template;
 use Larium\Bridge\Template\TwigTemplate;
 use Larium\Framework\Bridge\Routing\FastRouteBridge;
 use Larium\Framework\Contract\Routing\Router;
+use PayByBank\Domain\Repository\MerchantRepository;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\Domain\Repository\TransactionRepository;
 use PayByBank\Infrastructure\Persistence\Adapters\MongoAdapter;
+use PayByBank\Infrastructure\Persistence\Repository\MongoMerchantRepository;
 use PayByBank\Infrastructure\Persistence\Repository\MongoPaymentOrderRepository;
 use PayByBank\Infrastructure\Persistence\Repository\MongoTransactionRepository;
+use PayByBank\WebApi\Actions\CreateMerchant\CreateMerchantAction;
 use PayByBank\WebApi\Actions\CreatePaymentOrder\CreatePaymentOrderAction;
 use PayByBank\WebApi\Actions\GetPaymentOrderAuth\GetPaymentOrderAuthAction;
 
@@ -29,6 +32,7 @@ return [
     */
     PaymentOrderRepository::class => autowire(MongoPaymentOrderRepository::class),
     TransactionRepository::class => autowire(MongoTransactionRepository::class),
+    MerchantRepository::class => autowire(MongoMerchantRepository::class),
 
     /*
     |--------------------------------------------------------------------------
@@ -39,6 +43,8 @@ return [
         $dispatcher = simpleDispatcher(function (RouteCollector $routeCollector) {
             $routeCollector->post('/payment/order', CreatePaymentOrderAction::class);
             $routeCollector->get('/payment/order/auth/{token}', GetPaymentOrderAuthAction::class);
+
+            $routeCollector->post('/merchant', CreateMerchantAction::class);
         });
 
         return new FastRouteBridge($dispatcher);

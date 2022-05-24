@@ -35,4 +35,16 @@ class PaymentOrderState
         $this->bankName = $bankName;
         $this->creditorAccount = $creditorAccount;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'token' => $this->token,
+            'status' => $this->status->value,
+            'dateCreated' => $this->dateCreated->format('Y-m-d H:i:s'),
+            'amount' => $this->amount,
+            'creditorAccount' => $this->creditorAccount->toArray(),
+            'bankName' => $this->bankName
+        ];
+    }
 }

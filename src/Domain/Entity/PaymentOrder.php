@@ -36,6 +36,18 @@ final class PaymentOrder
         $this->bankName = $bankName;
     }
 
+    public function getState(): PaymentOrderState
+    {
+        return new PaymentOrderState(
+            $this->dateCreated,
+            $this->status,
+            $this->token,
+            $this->amount,
+            $this->bankName,
+            $this->creditorAccount
+        );
+    }
+
     public static function fromState(PaymentOrderState $paymentOrderState): PaymentOrder
     {
         $self = new self(
@@ -43,7 +55,6 @@ final class PaymentOrder
             $paymentOrderState->amount,
             $paymentOrderState->bankName
         );
-
         $self->status = $paymentOrderState->status;
         $self->token = $paymentOrderState->token;
 
@@ -55,51 +66,13 @@ final class PaymentOrder
         return $this->status->isPending();
     }
 
-    /**
-     * @return string
-     */
     public function getBankName(): string
     {
         return $this->bankName;
     }
 
-    /**
-     * @return int
-     */
-    public function getAmount(): int
-    {
-        return $this->amount;
-    }
-
-    /**
-     * @return int
-     */
-    public function getStatus(): int
-    {
-        return $this->status->value;
-    }
-
-    /**
-     * @return DateTime
-     */
-    public function getDateCreated(): DateTime
-    {
-        return $this->dateCreated;
-    }
-
-    /**
-     * @return string
-     */
     public function getToken(): string
     {
         return $this->token;
-    }
-
-    /**
-     * @return CreditorAccount
-     */
-    public function getCreditorAccount(): CreditorAccount
-    {
-        return $this->creditorAccount;
     }
 }

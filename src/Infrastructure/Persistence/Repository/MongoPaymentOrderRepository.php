@@ -47,13 +47,8 @@ class MongoPaymentOrderRepository implements PaymentOrderRepository
 
     public function save(PaymentOrder $paymentOrder): void
     {
-        $this->collection->insertOne([
-             'token' => $paymentOrder->getToken(),
-             'status' => $paymentOrder->getStatus(),
-             'dateCreated' => $paymentOrder->getDateCreated()->format('Y-m-d H:i:s'),
-             'amount' => $paymentOrder->getAmount(),
-             'creditorAccount' => $paymentOrder->getCreditorAccount()->toArray(),
-             'bankName' => $paymentOrder->getBankName()
-        ]);
+        $this->collection->insertOne(
+            $paymentOrder->getState()->toArray()
+        );
     }
 }

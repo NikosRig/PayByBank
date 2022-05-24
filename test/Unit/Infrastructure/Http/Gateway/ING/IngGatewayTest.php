@@ -3,13 +3,12 @@
 namespace Test\Unit\Infrastructure\Http\Gateway\ING;
 
 use Http\Mock\Client;
+use PayByBank\Infrastructure\Http\Gateway\Exceptions\BadResponseException;
 use PayByBank\Infrastructure\Http\Gateway\ING\IngCredentials;
 use PayByBank\Infrastructure\Http\Gateway\ING\IngGateway;
 use PayByBank\Infrastructure\Http\HttpSigner;
-use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
 use Test\Unit\Infrastructure\Http\Gateway\GatewayTestCase;
 
 class IngGatewayTest extends GatewayTestCase
@@ -25,7 +24,7 @@ class IngGatewayTest extends GatewayTestCase
             openssl_pkey_new(),
             'tppCert',
             '',
-            'https://localhost'
+            'https://localhost/auth'
         );
         $this->gateway = new IngGateway($this->client, $credentials, new HttpSigner());
     }
@@ -42,6 +41,16 @@ class IngGatewayTest extends GatewayTestCase
         $this->assertEquals(905, $accessToken->expiresIn);
         $this->assertEquals('client-id', $accessToken->clientId);
         $this->assertEquals('scope', $accessToken->scope);
+    }
+
+    /**
+     * @throws ClientExceptionInterface
+     */
+    public function testAssertExceptionWhenAccessTokenMissingFromResponse(): void
+    {
+        $this->client->addResponse($this->mockResponse(''));
+        $this->expectException(BadResponseException::class);
+        $this->gateway->createAccessToken(IngGateway::PAYMENT_INITIATION_SCOPE);
     }
 
     private function getAccessTokenResponse(): ResponseInterface

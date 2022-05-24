@@ -25,7 +25,8 @@ class CreateMerchantUseCase
         if ($this->merchantRepository->findByUsername($request->username)) {
             throw new Exception('Merchant already exists.');
         }
-        $merchant = new Merchant($request->username, $request->password);
+        $password = password_hash($request->password, PASSWORD_DEFAULT);
+        $merchant = new Merchant($request->username, $password);
         $this->merchantRepository->save($merchant);
     }
 }

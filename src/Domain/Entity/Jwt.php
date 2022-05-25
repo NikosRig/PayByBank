@@ -13,7 +13,7 @@ class Jwt
 
     private readonly string $token;
 
-    private readonly DateTime $dateCreated;
+    private DateTime $dateCreated;
 
     private bool $isUsed;
 
@@ -32,6 +32,16 @@ class Jwt
         $jwt->isUsed = $jwtState->isUsed;
 
         return $jwt;
+    }
+
+    public function getState(): JwtState
+    {
+        return new JwtState(
+            $this->token,
+            $this->mid,
+            $this->dateCreated,
+            $this->isUsed
+        );
     }
 
     public function markUsed(): void

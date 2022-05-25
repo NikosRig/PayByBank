@@ -7,10 +7,12 @@ use Larium\Bridge\Template\Template;
 use Larium\Bridge\Template\TwigTemplate;
 use Larium\Framework\Bridge\Routing\FastRouteBridge;
 use Larium\Framework\Contract\Routing\Router;
+use PayByBank\Domain\Repository\JwtRepository;
 use PayByBank\Domain\Repository\MerchantRepository;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\Domain\Repository\TransactionRepository;
 use PayByBank\Infrastructure\Persistence\Adapters\MongoAdapter;
+use PayByBank\Infrastructure\Persistence\Repository\MongoJwtRepository;
 use PayByBank\Infrastructure\Persistence\Repository\MongoMerchantRepository;
 use PayByBank\Infrastructure\Persistence\Repository\MongoPaymentOrderRepository;
 use PayByBank\Infrastructure\Persistence\Repository\MongoTransactionRepository;
@@ -33,6 +35,7 @@ return [
     PaymentOrderRepository::class => autowire(MongoPaymentOrderRepository::class),
     TransactionRepository::class => autowire(MongoTransactionRepository::class),
     MerchantRepository::class => autowire(MongoMerchantRepository::class),
+    JwtRepository::class => autowire(MongoJwtRepository::class),
 
     /*
     |--------------------------------------------------------------------------

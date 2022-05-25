@@ -20,15 +20,14 @@ class MongoMerchantRepository implements MerchantRepository
         $this->collection = $mongoAdapter->selectCollection('merchants');
     }
 
-    public function findByUsername(string $username): ?Merchant
+    public function findByMid(string $mid): ?Merchant
     {
-        if (!$merchant = $this->collection->findOne(['username' => $username])) {
+        if (!$merchant = $this->collection->findOne(['mid' => $mid])) {
             return null;
         }
 
         $merchantState = new MerchantState(
-            $merchant->username,
-            $merchant->password,
+            $merchant->mid,
             DateTime::createFromFormat('Y-m-d H:i:s', $merchant->dateCreated)
         );
 

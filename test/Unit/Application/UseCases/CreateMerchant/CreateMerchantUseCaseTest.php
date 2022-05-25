@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\Unit\Application\UseCases\CreateMerchant;
 
 use Exception;
+use PayByBank\Application\UseCases\CreateMerchant\CreateMerchantPresenter;
 use PayByBank\Application\UseCases\CreateMerchant\CreateMerchantRequest;
 use PayByBank\Application\UseCases\CreateMerchant\CreateMerchantUseCase;
 use PayByBank\Domain\Entity\Merchant;
@@ -25,16 +26,17 @@ class CreateMerchantUseCaseTest extends TestCase
 
     public function testAssertExceptionWhenMerchantUsernameExists(): void
     {
-        $username = 'username';
-        $password = 'password';
+        $mid = 'mid_widjwi';
+        $merchantName = 'Nick Rigas';
 
-        $this->merchantRepository->method('findByUsername')->willReturn(
-            new Merchant($username, $password)
+        $this->merchantRepository->method('findByMid')->willReturn(
+            new Merchant($mid, $merchantName)
         );
-        $createMerchantRequest = new CreateMerchantRequest($username, $password);
+        $request = new CreateMerchantRequest($merchantName);
+        $presenter = new CreateMerchantPresenter();
 
         $this->expectException(Exception::class);
-        $this->createMerchantUseCase->create($createMerchantRequest);
+        $this->createMerchantUseCase->create($request, $presenter);
     }
 
     /**
@@ -42,12 +44,10 @@ class CreateMerchantUseCaseTest extends TestCase
      */
     public function testAssertSuccessfullyMerchantCreation(): void
     {
-        $username = 'username';
-        $password = 'password';
-
-        $this->merchantRepository->method('findByUsername')->willReturn(null);
+        $this->merchantRepository->method('findByMid')->willReturn(null);
         $this->merchantRepository->expects($this->once())->method('save');
-        $createMerchantRequest = new CreateMerchantRequest($username, $password);
-        $this->createMerchantUseCase->create($createMerchantRequest);
+        $request = new CreateMerchantRequest('Nick Rigas');
+        $presenter = new CreateMerchantPresenter();
+        $this->createMerchantUseCase->create($request, $presenter);
     }
 }

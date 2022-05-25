@@ -26,27 +26,21 @@ class MongoMerchantRepositoryTest extends TestCase
 
     public function testAssertMerchantShouldBeSaved(): void
     {
-        $username = bin2hex(openssl_random_pseudo_bytes(24)) . bin2hex(openssl_random_pseudo_bytes(24));
+        $mid = bin2hex(openssl_random_pseudo_bytes(24));
         $merchantRepository = new MongoMerchantRepository(self::$mongoAdapter);
-        $merchantRepository->save(
-            new Merchant($username, 'password')
-        );
-        $merchant = $merchantRepository->findByUsername($username);
+        $merchantRepository->save(new Merchant($mid));
+        $merchant = $merchantRepository->findByMid($mid);
+
         $this->assertInstanceOf(Merchant::class, $merchant);
     }
 
     public function testAssertSavedMerchantHasCorrectValues(): void
     {
-        $username = bin2hex(openssl_random_pseudo_bytes(24)) . bin2hex(openssl_random_pseudo_bytes(24));
-        $password = 'password';
-
+        $mid = bin2hex(openssl_random_pseudo_bytes(24));
         $merchantRepository = new MongoMerchantRepository(self::$mongoAdapter);
-        $merchantRepository->save(
-            new Merchant($username, $password)
-        );
-        $merchant = $merchantRepository->findByUsername($username);
+        $merchantRepository->save(new Merchant($mid));
+        $merchant = $merchantRepository->findByMid($mid);
 
-        $this->assertEquals($password, $merchant->getState()->password);
-        $this->assertEquals($username, $merchant->getState()->username);
+        $this->assertEquals($mid, $merchant->getState()->mid);
     }
 }

@@ -6,13 +6,10 @@ namespace PayByBank\Application\UseCases\CreateMerchant;
 
 class CreateMerchantRequest
 {
-    public readonly string $username;
+    public readonly string $merchantName;
 
-    public readonly string $password;
-
-    public function __construct(string $username, string $password)
+    public function __construct(string $merchantName)
     {
-        $this->username = $username;
-        $this->password = $password;
+        $this->merchantName = $merchantName;
     }
 }

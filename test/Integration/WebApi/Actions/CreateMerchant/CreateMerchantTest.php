@@ -24,8 +24,7 @@ class CreateMerchantTest extends TestCase
     public function testSuccessfullyCreatedMerchant(): void
     {
         $requestBody = json_encode([
-            'username' => 'mer_' .bin2hex(openssl_random_pseudo_bytes(24)),
-            'password' => 'password'
+            'merchantName' => 'mer_' .bin2hex(openssl_random_pseudo_bytes(24))
          ]);
 
         $request = new Request('POST', "http://{$_ENV['WEB_API_HOST']}/merchant", [
@@ -34,7 +33,9 @@ class CreateMerchantTest extends TestCase
         ], $requestBody);
 
         $response = $this->client->sendRequest($request);
+        $responsePayload =  json_decode($response->getBody()->getContents());
+
         $this->assertEquals(201, $response->getStatusCode());
-        $this->assertEquals(null, $response->getBody()->getContents());
+        $this->assertIsString($responsePayload->mid);
     }
 }

@@ -4,50 +4,46 @@ namespace Test\Unit\WebApi\Actions\CreateMerchant;
 
 use Exception;
 use PayByBank\Application\UseCases\CreateMerchant\CreateMerchantUseCase;
+use PayByBank\Domain\Repository\MerchantRepository;
 use PayByBank\WebApi\Actions\CreateMerchant\CreateMerchantAction;
 use PayByBank\WebApi\Actions\CreateMerchant\CreateMerchantValidatorBuilder;
 use Test\Unit\WebApi\Actions\ActionTestCase;
 
 class CreateMerchantActionTest extends ActionTestCase
 {
-    public function testAssertBadRequestWhenUsernameValidationFailed(): void
+    public function testAssertBadRequestWhenMerchantNameValidationFails(): void
     {
-        $createMerchantUseCaseMock = $this->createMock(CreateMerchantUseCase::class);
-        $createMerchantAction = new CreateMerchantAction($createMerchantUseCaseMock, new CreateMerchantValidatorBuilder());
-        $requestBody = json_encode(['password' => 'password']);
-        $response = $createMerchantAction($this->mockServerRequest($requestBody));
-
-        $this->assertEquals(400, $response->getStatusCode());
-    }
-
-    public function testAssertBadRequestWhenPasswordValidationFailed(): void
-    {
-        $createMerchantUseCaseMock = $this->createMock(CreateMerchantUseCase::class);
-        $createMerchantAction = new CreateMerchantAction($createMerchantUseCaseMock, new CreateMerchantValidatorBuilder());
-        $requestBody = json_encode(['username' => 'username']);
-        $response = $createMerchantAction($this->mockServerRequest($requestBody));
+        $createMerchantUseCase = new CreateMerchantUseCase(
+            $this->createMock(MerchantRepository::class)
+        );
+        $createMerchantAction = new CreateMerchantAction($createMerchantUseCase, new CreateMerchantValidatorBuilder());
+        $response = $createMerchantAction($this->mockServerRequest());
 
         $this->assertEquals(400, $response->getStatusCode());
     }
 
     public function testAssertBadRequestStatusWhenUseCaseThrowsException(): void
     {
-        $createMerchantUseCaseMock = $this->createMock(CreateMerchantUseCase::class);
-        $createMerchantUseCaseMock->expects($this->once())->method('create')
-            ->willThrowException(new Exception('error'));
-        $createMerchantAction = new CreateMerchantAction($createMerchantUseCaseMock, new CreateMerchantValidatorBuilder());
-        $requestBody = json_encode(['username' => 'username', 'password' => 'password']);
+        $merchantRepository =  $this->createMock(MerchantRepository::class);
+        $merchantRepository->method('findByMid')->willThrowException(new Exception(''));
+        $createMerchantUseCase = new CreateMerchantUseCase($merchantRepository);
+        $createMerchantAction = new CreateMerchantAction($createMerchantUseCase, new CreateMerchantValidatorBuilder());
+        $requestBody = json_encode(['merchantName' => 'Nick Rigas']);
         $response = $createMerchantAction($this->mockServerRequest($requestBody));
         $this->assertEquals(400, $response->getStatusCode());
     }
 
-    public function testAssertCreatedStatusWhenMerchantSuccessfullyCreated(): void
+    public function testAssertWillReturnMidWhenMerchantIsCreated(): void
     {
-        $createMerchantUseCaseMock = $this->createMock(CreateMerchantUseCase::class);
-        $createMerchantAction = new CreateMerchantAction($createMerchantUseCaseMock, new CreateMerchantValidatorBuilder());
-        $requestBody = json_encode(['username' => 'username', 'password' => 'password']);
+        $createMerchantUseCase = new CreateMerchantUseCase(
+            $this->createMock(MerchantRepository::class)
+        );
+        $createMerchantAction = new CreateMerchantAction($createMerchantUseCase, new CreateMerchantValidatorBuilder());
+        $requestBody = json_encode(['merchantName' => 'Nick Rigas']);
         $response = $createMerchantAction($this->mockServerRequest($requestBody));
+        $responsePayload =  json_decode($response->getBody()->getContents());
 
+        $this->assertIsString($responsePayload->mid);
         $this->assertEquals(201, $response->getStatusCode());
     }
 }

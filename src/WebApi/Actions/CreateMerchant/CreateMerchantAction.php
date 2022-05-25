@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PayByBank\WebApi\Actions\CreateMerchant;
 
 use Exception;
+use PayByBank\Application\UseCases\CreateMerchant\CreateMerchantPresenter;
 use PayByBank\Application\UseCases\CreateMerchant\CreateMerchantRequest;
 use PayByBank\Application\UseCases\CreateMerchant\CreateMerchantUseCase;
 use PayByBank\WebApi\Actions\Action;
@@ -31,20 +32,16 @@ class CreateMerchantAction implements Action
 
         try {
             $this->createMerchantValidatorBuilder->build()->validate($requestParams);
-
-            $createMerchantRequest = new CreateMerchantRequest(
-                $requestParams['username'],
-                $requestParams['password']
-            );
-
-            $this->createMerchantUseCase->create($createMerchantRequest);
+            $createMerchantRequest = new CreateMerchantRequest($requestParams['merchantName']);
+            $createMerchantPresenter = new CreateMerchantPresenter();
+            $this->createMerchantUseCase->create($createMerchantRequest, $createMerchantPresenter);
         } catch (Exception $e) {
             return HttpResponseFactory::create(
                 json_encode(['error' => 'Merchant failed to be created.']),
                 400
             );
         }
-
-        return HttpResponseFactory::create(null, 201);
+        $responsePayload = json_encode(['mid' => $createMerchantPresenter->mid]);
+        return HttpResponseFactory::create($responsePayload, 201);
     }
 }

@@ -8,7 +8,7 @@ use PayByBank\Domain\Entity\Merchant;
 
 interface MerchantRepository
 {
-    public function findByUsername(string $username): ?Merchant;
+    public function findByMid(string $mid): ?Merchant;
 
     public function save(Merchant $merchant): void;
 }

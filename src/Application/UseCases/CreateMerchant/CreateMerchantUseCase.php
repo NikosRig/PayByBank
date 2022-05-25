@@ -20,13 +20,14 @@ final class CreateMerchantUseCase
     /**
      * @throws Exception
      */
-    public function create(CreateMerchantRequest $request): void
+    public function create(CreateMerchantRequest $request, CreateMerchantPresenter $presenter): void
     {
-        if ($this->merchantRepository->findByUsername($request->username)) {
+        $mid = bin2hex(openssl_random_pseudo_bytes(24));
+        if ($this->merchantRepository->findByMid($mid)) {
             throw new Exception('Merchant already exists.');
         }
-        $password = password_hash($request->password, PASSWORD_DEFAULT);
-        $merchant = new Merchant($request->username, $password);
+        $merchant = new Merchant($mid, $request->merchantName);
         $this->merchantRepository->save($merchant);
+        $presenter->present($mid);
     }
 }

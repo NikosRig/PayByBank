@@ -10,14 +10,17 @@ class MerchantState
 {
     public readonly string $mid;
 
-    public readonly string $merchantName;
+    public readonly string $firstName;
+
+    public readonly string $lastName;
 
     public readonly DateTime $dateCreated;
 
-    public function __construct(string $mid, string $merchantName, DateTime $dateCreated)
+    public function __construct(string $mid, string $firstName, string $lastName, DateTime $dateCreated)
     {
         $this->mid = $mid;
-        $this->merchantName = $merchantName;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
         $this->dateCreated = $dateCreated;
     }
 
@@ -25,7 +28,8 @@ class MerchantState
     {
         return [
             'mid' => $this->mid,
-            'merchantName' => $this->merchantName,
+            'firstName' => $this->firstName,
+            'lastName' => $this->lastName,
             'dateCreated' => $this->dateCreated->format('Y-m-d H:i:s')
         ];
     }

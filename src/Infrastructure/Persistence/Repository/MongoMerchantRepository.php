@@ -28,6 +28,8 @@ class MongoMerchantRepository implements MerchantRepository
 
         $merchantState = new MerchantState(
             $merchant->mid,
+            $merchant->firstName,
+            $merchant->lastName,
             DateTime::createFromFormat('Y-m-d H:i:s', $merchant->dateCreated)
         );
 

@@ -26,7 +26,7 @@ final class CreateMerchantUseCase
         if ($this->merchantRepository->findByMid($mid)) {
             throw new Exception('Merchant already exists.');
         }
-        $merchant = new Merchant($mid, $request->merchantName);
+        $merchant = new Merchant($mid, $request->firstName, $request->lastName);
         $this->merchantRepository->save($merchant);
         $presenter->present($mid);
     }

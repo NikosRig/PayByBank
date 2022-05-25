@@ -27,12 +27,13 @@ class CreateMerchantUseCaseTest extends TestCase
     public function testAssertExceptionWhenMerchantUsernameExists(): void
     {
         $mid = 'mid_widjwi';
-        $merchantName = 'Nick Rigas';
+        $firstName = 'Rigas';
+        $lastName = 'Rigas';
 
         $this->merchantRepository->method('findByMid')->willReturn(
-            new Merchant($mid, $merchantName)
+            new Merchant($mid, $firstName, $lastName)
         );
-        $request = new CreateMerchantRequest($merchantName);
+        $request = new CreateMerchantRequest($firstName, $lastName);
         $presenter = new CreateMerchantPresenter();
 
         $this->expectException(Exception::class);
@@ -46,7 +47,7 @@ class CreateMerchantUseCaseTest extends TestCase
     {
         $this->merchantRepository->method('findByMid')->willReturn(null);
         $this->merchantRepository->expects($this->once())->method('save');
-        $request = new CreateMerchantRequest('Nick Rigas');
+        $request = new CreateMerchantRequest('Nick', 'Rigas');
         $presenter = new CreateMerchantPresenter();
         $this->createMerchantUseCase->create($request, $presenter);
     }

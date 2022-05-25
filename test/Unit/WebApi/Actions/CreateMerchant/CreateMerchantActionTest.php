@@ -28,7 +28,7 @@ class CreateMerchantActionTest extends ActionTestCase
         $merchantRepository->method('findByMid')->willThrowException(new Exception(''));
         $createMerchantUseCase = new CreateMerchantUseCase($merchantRepository);
         $createMerchantAction = new CreateMerchantAction($createMerchantUseCase, new CreateMerchantValidatorBuilder());
-        $requestBody = json_encode(['merchantName' => 'Nick Rigas']);
+        $requestBody = json_encode(['firstName' => 'Nick', 'lastName' => 'Rigas']);
         $response = $createMerchantAction($this->mockServerRequest($requestBody));
         $this->assertEquals(400, $response->getStatusCode());
     }
@@ -39,7 +39,7 @@ class CreateMerchantActionTest extends ActionTestCase
             $this->createMock(MerchantRepository::class)
         );
         $createMerchantAction = new CreateMerchantAction($createMerchantUseCase, new CreateMerchantValidatorBuilder());
-        $requestBody = json_encode(['merchantName' => 'Nick Rigas']);
+        $requestBody = json_encode(['firstName' => 'Nick', 'lastName' => 'Rigas']);
         $response = $createMerchantAction($this->mockServerRequest($requestBody));
         $responsePayload =  json_decode($response->getBody()->getContents());
 

@@ -28,7 +28,7 @@ class MongoMerchantRepositoryTest extends TestCase
     {
         $mid = bin2hex(openssl_random_pseudo_bytes(24));
         $merchantRepository = new MongoMerchantRepository(self::$mongoAdapter);
-        $merchantRepository->save(new Merchant($mid));
+        $merchantRepository->save(new Merchant($mid, 'Nick', 'Rigas'));
         $merchant = $merchantRepository->findByMid($mid);
 
         $this->assertInstanceOf(Merchant::class, $merchant);
@@ -38,7 +38,7 @@ class MongoMerchantRepositoryTest extends TestCase
     {
         $mid = bin2hex(openssl_random_pseudo_bytes(24));
         $merchantRepository = new MongoMerchantRepository(self::$mongoAdapter);
-        $merchantRepository->save(new Merchant($mid));
+        $merchantRepository->save(new Merchant($mid, 'Nick', 'Rigas'));
         $merchant = $merchantRepository->findByMid($mid);
 
         $this->assertEquals($mid, $merchant->getState()->mid);

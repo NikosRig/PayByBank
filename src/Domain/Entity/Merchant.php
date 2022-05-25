@@ -13,20 +13,27 @@ class Merchant
 
     private readonly string $mid;
 
+    private readonly string $firstName;
+
+    private readonly string $lastName;
+
     private DateTime $dateCreated;
 
-    private readonly string $merchantName;
-
-    public function __construct(string $mid, string $merchantName)
+    public function __construct(string $mid, string $firstName, string $lastName)
     {
         $this->mid = $mid;
-        $this->merchantName = $merchantName;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
         $this->dateCreated = new DateTime('now');
     }
 
     public static function fromState(MerchantState $merchantState): Merchant
     {
-        $self = new self($merchantState->mid, $merchantState->merchantName);
+        $self = new self(
+            $merchantState->mid,
+            $merchantState->firstName,
+            $merchantState->lastName
+        );
         $self->dateCreated = $merchantState->dateCreated;
 
         return $self;
@@ -36,7 +43,8 @@ class Merchant
     {
         return new MerchantState(
             $this->mid,
-            $this->merchantName,
+            $this->firstName,
+            $this->lastName,
             $this->dateCreated
         );
     }

@@ -32,7 +32,10 @@ class CreateMerchantAction implements Action
 
         try {
             $this->createMerchantValidatorBuilder->build()->validate($requestParams);
-            $createMerchantRequest = new CreateMerchantRequest($requestParams['merchantName']);
+            $createMerchantRequest = new CreateMerchantRequest(
+                $requestParams['firstName'],
+                $requestParams['lastName']
+            );
             $createMerchantPresenter = new CreateMerchantPresenter();
             $this->createMerchantUseCase->create($createMerchantRequest, $createMerchantPresenter);
         } catch (Exception $e) {

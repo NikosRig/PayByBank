@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PayByBank\Domain\Entity;
 
 use DateTime;
+use PayByBank\Domain\ValueObjects\JwtState;
 
 class Jwt
 {
@@ -22,6 +23,15 @@ class Jwt
         $this->token = $token;
         $this->dateCreated = new DateTime('now');
         $this->isUsed = false;
+    }
+
+    public static function fromState(JwtState $jwtState): Jwt
+    {
+        $jwt = new self($jwtState->mid, $jwtState->token);
+        $jwt->dateCreated = $jwtState->dateCreated;
+        $jwt->isUsed = $jwtState->isUsed;
+
+        return $jwt;
     }
 
     public function markUsed(): void

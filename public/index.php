@@ -15,7 +15,7 @@ $dotenv = Dotenv\Dotenv::createImmutable($rootPath);
 $dotenv->load();
 
 $containerBuilder = new ContainerBuilder();
-$containerBuilder->addDefinitions("{$rootPath}/config/definitions.php");
+$containerBuilder->addDefinitions("{$rootPath}/config/ContainerConfig.php");
 $framework = new Framework($containerBuilder->build());
 
 $framework->pipe(RoutingMiddleware::class, 1);

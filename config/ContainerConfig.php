@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Config\JwtConfig;
 use FastRoute\RouteCollector;
 use Larium\Bridge\Template\Template;
 use Larium\Bridge\Template\TwigTemplate;
@@ -71,5 +72,16 @@ return [
         env('DB_USER'),
         env('DB_USER_PASSWORD'),
         env('DB_PORT')
-    )
+    ),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Config
+    |--------------------------------------------------------------------------
+    */
+    JwtConfig::class => create(JwtConfig::class)->constructor(
+        env('JWT_ISSUER'),
+        env('JWT_SECRET_KEY'),
+        env('JWT_LIFETIME_SECONDS')
+    ),
 ];

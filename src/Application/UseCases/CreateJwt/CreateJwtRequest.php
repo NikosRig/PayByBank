@@ -8,8 +8,21 @@ class CreateJwtRequest
 {
     public readonly string $mid;
 
-    public function __construct(string $mid)
-    {
+    public readonly string $jwtIssuer;
+
+    public readonly string $jwtSecretKey;
+
+    public readonly int $tokenLifeTimeSeconds;
+
+    public function __construct(
+        string $mid,
+        string $jwtIssuer,
+        string $jwtSecretKey,
+        int $tokenLifeTimeSeconds
+    ) {
         $this->mid = $mid;
+        $this->jwtIssuer = $jwtIssuer;
+        $this->jwtSecretKey = $jwtSecretKey;
+        $this->tokenLifeTimeSeconds = $tokenLifeTimeSeconds;
     }
 }

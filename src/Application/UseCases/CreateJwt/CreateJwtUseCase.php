@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PayByBank\Application\UseCases\CreateJwt;
 
+use DateTime;
 use Exception;
 use Firebase\JWT\JWT as JwtTokenGenerator;
 use PayByBank\Domain\Entity\Jwt;
@@ -31,15 +32,22 @@ final class CreateJwtUseCase
             throw new Exception('Merchant cannot be found.');
         }
 
+        $now = strtotime("now");
         $merchantState = $merchant->getState();
-        $payload = [
-            'iss' => $merchantState->firstName,
+        $expirationTime = $now + $request->tokenLifeTimeSeconds;
+        $expirationDateTime = date('Y-m-d H:i:s', $expirationTime);
+        $jwtPayload = [
+            'iss' => $request->jwtIssuer,
             'aud' => $merchantState->lastName,
-            'iat' => time()
+            'iat' => $now,
+            "nbf" => $now,
+            "exp" => $expirationTime,
+            "mid" => $merchantState->mid
         ];
-        $token = JwtTokenGenerator::encode($payload, $merchantState->mid, 'HS256');
-        $jwt = new Jwt($merchantState->mid, $token);
+
+        $jwtToken = JwtTokenGenerator::encode($jwtPayload, $request->jwtSecretKey, 'HS256');
+        $jwt = new Jwt($merchantState->mid, $jwtToken, new DateTime($expirationDateTime));
         $this->jwtRepository->save($jwt);
-        $presenter->present($token);
+        $presenter->present($jwtToken);
     }
 }

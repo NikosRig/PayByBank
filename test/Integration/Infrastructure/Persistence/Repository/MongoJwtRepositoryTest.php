@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Integration\Infrastructure\Persistence\Repository;
 
+use DateTime;
 use PayByBank\Domain\Entity\Jwt;
 use PayByBank\Infrastructure\Persistence\Adapters\MongoAdapter;
 use PayByBank\Infrastructure\Persistence\Repository\MongoJwtRepository;
@@ -28,7 +29,9 @@ class MongoJwtRepositoryTest extends TestCase
     {
         $token = bin2hex(openssl_random_pseudo_bytes(24));
         $jwtRepository = new MongoJwtRepository(self::$mongoAdapter);
-        $jwtRepository->save(new Jwt('mid', $token));
+        $jwtRepository->save(
+            new Jwt('mid', $token, new DateTime('now'))
+        );
         $merchant = $jwtRepository->findByToken($token);
 
         $this->assertInstanceOf(Jwt::class, $merchant);

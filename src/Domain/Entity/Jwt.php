@@ -15,19 +15,22 @@ class Jwt
 
     private DateTime $dateCreated;
 
+    private DateTime $expirationDate;
+
     private bool $isUsed;
 
-    public function __construct(string $mid, string $token)
+    public function __construct(string $mid, string $token, DateTime $expirationDate)
     {
         $this->mid = $mid;
         $this->token = $token;
         $this->dateCreated = new DateTime('now');
+        $this->expirationDate = $expirationDate;
         $this->isUsed = false;
     }
 
     public static function fromState(JwtState $jwtState): Jwt
     {
-        $jwt = new self($jwtState->mid, $jwtState->token);
+        $jwt = new self($jwtState->mid, $jwtState->token, $jwtState->expirationDate);
         $jwt->dateCreated = $jwtState->dateCreated;
         $jwt->isUsed = $jwtState->isUsed;
 
@@ -40,6 +43,7 @@ class Jwt
             $this->token,
             $this->mid,
             $this->dateCreated,
+            $this->expirationDate,
             $this->isUsed
         );
     }

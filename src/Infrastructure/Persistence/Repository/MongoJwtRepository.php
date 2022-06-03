@@ -30,6 +30,7 @@ class MongoJwtRepository implements JwtRepository
             $jwt->token,
             $jwt->mid,
             DateTime::createFromFormat('Y-m-d H:i:s', $jwt->dateCreated),
+            DateTime::createFromFormat('Y-m-d H:i:s', $jwt->expirationDate),
             $jwt->isUsed
         );
 

@@ -35,11 +35,10 @@ class CreateJwtUseCaseTest extends TestCase
     {
         $this->merchantRepository->expects($this->once())
         ->method('findByMid')->willReturn(null);
-        $createJwtRequest = new CreateJwtRequest('mid');
         $createJwtPresenter = new CreateJwtPresenter();
         $this->expectException(Exception::class);
 
-        $this->createJwtUseCase->create($createJwtRequest, $createJwtPresenter);
+        $this->createJwtUseCase->create($this->createJwtRequest(), $createJwtPresenter);
     }
 
     /**
@@ -51,9 +50,8 @@ class CreateJwtUseCaseTest extends TestCase
         $this->merchantRepository->expects($this->once())
             ->method('findByMid')->willReturn($merchant);
         $this->jwtRepository->expects($this->once())->method('save');
-        $createJwtRequest = new CreateJwtRequest('mid');
         $createJwtPresenter = new CreateJwtPresenter();
-        $this->createJwtUseCase->create($createJwtRequest, $createJwtPresenter);
+        $this->createJwtUseCase->create($this->createJwtRequest(), $createJwtPresenter);
     }
 
     /**
@@ -64,10 +62,19 @@ class CreateJwtUseCaseTest extends TestCase
         $merchant = new Merchant('mid', 'Nick', 'Rigas');
         $this->merchantRepository->expects($this->once())
             ->method('findByMid')->willReturn($merchant);
-        $createJwtRequest = new CreateJwtRequest('mid');
         $createJwtPresenter = new CreateJwtPresenter();
-        $this->createJwtUseCase->create($createJwtRequest, $createJwtPresenter);
+        $this->createJwtUseCase->create($this->createJwtRequest(), $createJwtPresenter);
 
         $this->assertIsString($createJwtPresenter->token);
+    }
+
+    private function createJwtRequest(): CreateJwtRequest
+    {
+        return new CreateJwtRequest(
+            'mid',
+            'testIssuer',
+            'secretKey',
+            900
+        );
     }
 }

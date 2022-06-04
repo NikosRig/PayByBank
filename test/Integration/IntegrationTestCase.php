@@ -16,7 +16,7 @@ class IntegrationTestCase extends TestCase
 {
     private readonly Client $client;
 
-    private readonly Generator $faker;
+    public readonly Generator $faker;
 
     public function setUp(): void
     {

@@ -22,4 +22,18 @@ class CreateJwtTest extends IntegrationTestCase
         $this->assertEquals(201, $response->getStatusCode());
         $this->assertIsString($responsePayload->token);
     }
+
+    /**
+     * @throws ClientExceptionInterface
+     */
+    public function testExpectErrorWithInvalidMid(): void
+    {
+        $body = json_encode(['mid' => $this->faker->randomKey()]);
+        $response = $this->sendCreateJwtRequest($body);
+        $responseBody = $response->getBody()->getContents();
+        $responsePayload = json_decode($responseBody);
+
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertIsString($responsePayload->error);
+    }
 }

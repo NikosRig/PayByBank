@@ -46,12 +46,18 @@ return [
     */
     Router::class => factory(function () {
         $dispatcher = simpleDispatcher(function (RouteCollector $routeCollector) {
-            $routeCollector->post('/payment/order', CreatePaymentOrderAction::class);
-            $routeCollector->get('/payment/order/auth/{token}', GetPaymentOrderAuthAction::class);
+            $routeCollector->addGroup('/payment/order', function (RouteCollector $routeGroupCollector) {
+                $routeGroupCollector->post('', CreatePaymentOrderAction::class);
+                // $routeGroupCollector->get('/auth/{token}', GetPaymentOrderAuthAction::class);
+            });
 
-            $routeCollector->post('/merchant', CreateMerchantAction::class);
+            $routeCollector->addGroup('/merchant', function (RouteCollector $routeGroupCollector) {
+                $routeGroupCollector->post('', CreateMerchantAction::class);
+            });
 
-            $routeCollector->post('/oauth2/token', CreateJwtAction::class);
+            $routeCollector->addGroup('/oauth2', function (RouteCollector $routeGroupCollector) {
+                $routeGroupCollector->post('/token', CreateJwtAction::class);
+            });
         });
 
         return new FastRouteBridge($dispatcher);

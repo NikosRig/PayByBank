@@ -33,20 +33,19 @@ final class CreateJwtUseCase
         }
 
         $now = strtotime("now");
-        $merchantState = $merchant->getState();
         $expirationTime = $now + $request->tokenLifeTimeSeconds;
         $expirationDateTime = date('Y-m-d H:i:s', $expirationTime);
         $jwtPayload = [
             'iss' => $request->jwtIssuer,
-            'aud' => $merchantState->lastName,
+            'aud' => $merchant->getLastName(),
             'iat' => $now,
             "nbf" => $now,
             "exp" => $expirationTime,
-            "mid" => $merchantState->mid
+            "mid" => $merchant->getMid()
         ];
 
         $jwtToken = JwtTokenGenerator::encode($jwtPayload, $request->jwtSecretKey, 'HS256');
-        $jwt = new Jwt($merchantState->mid, $jwtToken, new DateTime($expirationDateTime));
+        $jwt = new Jwt($merchant->getMid(), $jwtToken, new DateTime($expirationDateTime));
         $this->jwtRepository->save($jwt);
         $presenter->present($jwtToken);
     }

@@ -9,7 +9,7 @@ use PayByBank\Domain\ValueObjects\MerchantState;
 
 class Merchant
 {
-    private readonly int $id;
+    private readonly ?string $id;
 
     private readonly string $mid;
 
@@ -35,17 +35,33 @@ class Merchant
             $merchantState->lastName
         );
         $self->dateCreated = $merchantState->dateCreated;
+        $self->id = $merchantState->id;
 
         return $self;
     }
 
-    public function getState(): MerchantState
+    public function getId(): ?string
     {
-        return new MerchantState(
-            $this->mid,
-            $this->firstName,
-            $this->lastName,
-            $this->dateCreated
-        );
+        return $this->id;
+    }
+
+    public function getDateCreated(): DateTime
+    {
+        return $this->dateCreated;
+    }
+
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
+
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
+
+    public function getMid(): string
+    {
+        return $this->mid;
     }
 }

@@ -41,6 +41,6 @@ class MongoMerchantRepositoryTest extends TestCase
         $merchantRepository->save(new Merchant($mid, 'Nick', 'Rigas'));
         $merchant = $merchantRepository->findByMid($mid);
 
-        $this->assertEquals($mid, $merchant->getState()->mid);
+        $this->assertEquals($mid, $merchant->getMid());
     }
 }

@@ -5,21 +5,21 @@ declare(strict_types=1);
 namespace Test\Integration\WebApi\Actions\CreateMerchant;
 
 use Psr\Http\Client\ClientExceptionInterface;
-use Test\Integration\WebApi\Actions\ActionIntegrationTestCase;
+use Test\Integration\IntegrationTestCase;
 
-class CreateMerchantTest extends ActionIntegrationTestCase
+class CreateMerchantTest extends IntegrationTestCase
 {
     /**
      * @throws ClientExceptionInterface
      */
     public function testSuccessfullyCreatedMerchant(): void
     {
-        $payload = json_encode([
+        $body = json_encode([
             'firstName' => 'merchant',
             'lastName' => 'merchant'
          ]);
 
-        $response = $this->createMerchant($payload);
+        $response = $this->sendCreateMerchantRequest($body);
         $responsePayload =  json_decode($response->getBody()->getContents());
 
         $this->assertEquals(201, $response->getStatusCode());

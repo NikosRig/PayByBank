@@ -49,7 +49,7 @@ class CreateJwtAction implements Action
             $this->createJwtUseCase->create($request, $presenter);
         } catch (Exception $e) {
             return HttpResponseFactory::create(
-                json_encode(['error' => 'Jwt failed to be created.']),
+                json_encode(['error' => 'Token failed to be created.']),
                 400
             );
         }

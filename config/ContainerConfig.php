@@ -17,6 +17,7 @@ use PayByBank\Infrastructure\Persistence\Repository\MongoJwtRepository;
 use PayByBank\Infrastructure\Persistence\Repository\MongoMerchantRepository;
 use PayByBank\Infrastructure\Persistence\Repository\MongoPaymentOrderRepository;
 use PayByBank\Infrastructure\Persistence\Repository\MongoTransactionRepository;
+use PayByBank\WebApi\Actions\CreateJwt\CreateJwtAction;
 use PayByBank\WebApi\Actions\CreateMerchant\CreateMerchantAction;
 use PayByBank\WebApi\Actions\CreatePaymentOrder\CreatePaymentOrderAction;
 use PayByBank\WebApi\Actions\GetPaymentOrderAuth\GetPaymentOrderAuthAction;
@@ -49,6 +50,8 @@ return [
             $routeCollector->get('/payment/order/auth/{token}', GetPaymentOrderAuthAction::class);
 
             $routeCollector->post('/merchant', CreateMerchantAction::class);
+
+            $routeCollector->post('/oauth2/token', CreateJwtAction::class);
         });
 
         return new FastRouteBridge($dispatcher);
@@ -82,6 +85,6 @@ return [
     JwtConfig::class => create(JwtConfig::class)->constructor(
         env('JWT_ISSUER'),
         env('JWT_SECRET_KEY'),
-        env('JWT_LIFETIME_SECONDS')
+        (int) getenv('JWT_LIFETIME_SECONDS')
     ),
 ];

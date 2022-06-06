@@ -17,7 +17,7 @@ class CreateBankAccountValidatorBuilder implements ValidatorBuilder
 
     private readonly AccountHolderNameRule $accountHolderNameRule;
 
-    private readonly ibanRule $ibanRule;
+    private readonly IbanRule $ibanRule;
 
     public function __construct(
         MidRule $midRule,

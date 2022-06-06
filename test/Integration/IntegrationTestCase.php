@@ -14,7 +14,7 @@ use Psr\Http\Message\ResponseInterface;
 
 class IntegrationTestCase extends TestCase
 {
-    private readonly Client $client;
+    protected readonly Client $client;
 
     public readonly Generator $faker;
 

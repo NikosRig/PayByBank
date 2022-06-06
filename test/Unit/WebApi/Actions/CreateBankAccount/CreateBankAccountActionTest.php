@@ -48,7 +48,7 @@ class CreateBankAccountActionTest extends ActionTestCase
         $action = new CreateBankAccountAction($this->useCase, $this->validatorBuilder);
         $requestBody = json_encode([
             'accountHolderName' => 'Nick Rigas',
-            'iban' => 'iban'
+            'iban' => 'NL49RABO1579872026'
         ]);
         $request = $this->mockServerRequest($requestBody);
         $response = $action($request);
@@ -74,7 +74,7 @@ class CreateBankAccountActionTest extends ActionTestCase
         $action = new CreateBankAccountAction($this->useCase, $this->validatorBuilder);
         $requestBody = json_encode([
             'mid' => 'mid',
-            'iban' => 'iban'
+            'iban' => 'NL49RABO1579872026'
         ]);
         $request = $this->mockServerRequest($requestBody);
         $response = $action($request);
@@ -103,7 +103,7 @@ class CreateBankAccountActionTest extends ActionTestCase
         $action = new CreateBankAccountAction($this->useCase, $this->validatorBuilder);
         $requestBody = json_encode([
             'mid' => 'mid',
-            'iban' => 'iban',
+            'iban' => 'NL49RABO1579872026',
             'accountHolderName' => 'Nick Rigas'
         ]);
         $request = $this->mockServerRequest($requestBody);

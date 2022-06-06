@@ -20,6 +20,7 @@ use PayByBank\Infrastructure\Persistence\Repository\MongoMerchantRepository;
 use PayByBank\Infrastructure\Persistence\Repository\MongoPaymentOrderRepository;
 use PayByBank\Infrastructure\Persistence\Repository\MongoTransactionRepository;
 use PayByBank\WebApi\Actions\CreateAccessToken\CreateAccessTokenAction;
+use PayByBank\WebApi\Actions\CreateBankAccount\CreateBankAccountAction;
 use PayByBank\WebApi\Actions\CreateMerchant\CreateMerchantAction;
 use PayByBank\WebApi\Actions\CreatePaymentOrder\CreatePaymentOrderAction;
 use PayByBank\WebApi\Actions\GetPaymentOrderAuth\GetPaymentOrderAuthAction;
@@ -56,6 +57,7 @@ return [
 
             $routeCollector->addGroup('/merchant', function (RouteCollector $routeGroupCollector) {
                 $routeGroupCollector->post('', CreateMerchantAction::class);
+                $routeGroupCollector->put('/accounts', CreateBankAccountAction::class);
             });
 
             $routeCollector->addGroup('/oauth2', function (RouteCollector $routeGroupCollector) {

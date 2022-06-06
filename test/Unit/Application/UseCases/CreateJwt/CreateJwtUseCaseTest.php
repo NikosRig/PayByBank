@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Test\Unit\Application\UseCases\CreateJwt;
 
 use Exception;
-use PayByBank\Application\UseCases\CreateJwt\CreateJwtPresenter;
-use PayByBank\Application\UseCases\CreateJwt\CreateJwtRequest;
-use PayByBank\Application\UseCases\CreateJwt\CreateAccessTokenUseCase;
+use PayByBank\Application\UseCases\CreateAccessToken\CreateJwtPresenter;
+use PayByBank\Application\UseCases\CreateAccessToken\CreateJwtRequest;
+use PayByBank\Application\UseCases\CreateAccessToken\CreateAccessTokenUseCase;
 use PayByBank\Domain\Entity\Merchant;
 use PayByBank\Domain\Repository\AccessTokenRepository;
 use PayByBank\Domain\Repository\MerchantRepository;

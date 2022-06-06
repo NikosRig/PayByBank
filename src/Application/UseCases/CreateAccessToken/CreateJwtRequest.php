@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\Application\UseCases\CreateJwt;
+namespace PayByBank\Application\UseCases\CreateAccessToken;
 
 class CreateJwtRequest
 {

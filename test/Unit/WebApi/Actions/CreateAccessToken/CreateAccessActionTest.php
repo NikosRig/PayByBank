@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Test\Unit\WebApi\Actions\CreateAccessToken;
 
 use Config\AccessTokenConfig;
-use PayByBank\Application\UseCases\CreateJwt\CreateAccessTokenUseCase;
+use PayByBank\Application\UseCases\CreateAccessToken\CreateAccessTokenUseCase;
 use PayByBank\Domain\Entity\Merchant;
 use PayByBank\Domain\Repository\AccessTokenRepository;
 use PayByBank\Domain\Repository\MerchantRepository;

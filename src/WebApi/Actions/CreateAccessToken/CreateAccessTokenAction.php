@@ -6,9 +6,9 @@ namespace PayByBank\WebApi\Actions\CreateAccessToken;
 
 use Config\AccessTokenConfig;
 use Exception;
-use PayByBank\Application\UseCases\CreateJwt\CreateJwtPresenter;
-use PayByBank\Application\UseCases\CreateJwt\CreateJwtRequest;
-use PayByBank\Application\UseCases\CreateJwt\CreateAccessTokenUseCase;
+use PayByBank\Application\UseCases\CreateAccessToken\CreateJwtPresenter;
+use PayByBank\Application\UseCases\CreateAccessToken\CreateJwtRequest;
+use PayByBank\Application\UseCases\CreateAccessToken\CreateAccessTokenUseCase;
 use PayByBank\WebApi\Actions\Action;
 use PayByBank\WebApi\Factory\HttpResponseFactory;
 use Psr\Http\Message\ResponseInterface;

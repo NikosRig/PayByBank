@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PayByBank\Domain\Entity;
 
-use PayByBank\Domain\ValueObjects\AccountState;
+use PayByBank\Domain\ValueObjects\BankAccountState;
 
-class Account
+class BankAccount
 {
     private readonly ?string $id;
 
@@ -21,16 +21,16 @@ class Account
         $this->merchantId = $merchantId;
     }
 
-    public static function fromState(AccountState $accountState): Account
+    public static function fromState(BankAccountState $state): BankAccount
     {
-        $account = new self(
-            $accountState->iban,
-            $accountState->accountHolderName,
-            $accountState->merchantId
+        $self = new self(
+            $state->iban,
+            $state->accountHolderName,
+            $state->merchantId
         );
-        $account->id = $accountState->id;
+        $self->id = $state->id;
 
-        return $account;
+        return $self;
     }
 
     public function getId(): ?string

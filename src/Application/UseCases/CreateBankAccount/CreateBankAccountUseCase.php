@@ -2,28 +2,28 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\Application\UseCases\AddAccount;
+namespace PayByBank\Application\UseCases\CreateBankAccount;
 
 use InvalidArgumentException;
-use PayByBank\Domain\Entity\Account;
-use PayByBank\Domain\Repository\AccountRepository;
+use PayByBank\Domain\Entity\BankAccount;
+use PayByBank\Domain\Repository\BankAccountRepository;
 use PayByBank\Domain\Repository\MerchantRepository;
 
-final class AddAccountUseCase
+final class CreateBankAccountUseCase
 {
     private readonly MerchantRepository $merchantRepository;
 
-    private readonly AccountRepository $accountRepository;
+    private readonly BankAccountRepository $accountRepository;
 
     public function __construct(
         MerchantRepository $merchantRepository,
-        AccountRepository $accountRepository
+        BankAccountRepository $accountRepository
     ) {
         $this->merchantRepository = $merchantRepository;
         $this->accountRepository = $accountRepository;
     }
 
-    public function add(AddAccountRequest $request): void
+    public function create(CreateBankAccountRequest $request): void
     {
         if (!$merchant = $this->merchantRepository->findByMid($request->mid)) {
             throw new InvalidArgumentException("Mid {$request->mid} cannot be found.");
@@ -36,11 +36,11 @@ final class AddAccountUseCase
             throw new InvalidArgumentException("Duplicate account {$bankCode} {$merchantId}");
         }
 
-        $account = new Account(
+        $bankAccount = new BankAccount(
             $request->iban,
             $request->accountHolderName,
             $merchantId
         );
-        $this->accountRepository->save($account);
+        $this->accountRepository->save($bankAccount);
     }
 }

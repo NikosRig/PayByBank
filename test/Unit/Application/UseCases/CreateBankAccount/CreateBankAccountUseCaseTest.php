@@ -2,34 +2,34 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Application\UseCases\AddAccount;
+namespace Test\Unit\Application\UseCases\CreateBankAccount;
 
 use DateTime;
 use InvalidArgumentException;
-use PayByBank\Application\UseCases\AddAccount\AddAccountRequest;
-use PayByBank\Application\UseCases\AddAccount\AddAccountUseCase;
-use PayByBank\Domain\Entity\Account;
+use PayByBank\Application\UseCases\CreateBankAccount\CreateBankAccountRequest;
+use PayByBank\Application\UseCases\CreateBankAccount\CreateBankAccountUseCase;
+use PayByBank\Domain\Entity\BankAccount;
 use PayByBank\Domain\Entity\Merchant;
-use PayByBank\Domain\Repository\AccountRepository;
+use PayByBank\Domain\Repository\BankAccountRepository;
 use PayByBank\Domain\Repository\MerchantRepository;
 use PayByBank\Domain\ValueObjects\MerchantState;
 use PHPUnit\Framework\TestCase;
 
-class AddAccountUseCaseTest extends TestCase
+class CreateBankAccountUseCaseTest extends TestCase
 {
     private readonly MerchantRepository $merchantRepository;
 
-    private readonly AccountRepository $accountRepository;
+    private readonly BankAccountRepository $bankAccountRepository;
 
-    private readonly AddAccountUseCase $useCase;
+    private readonly CreateBankAccountUseCase $useCase;
 
     public function setUp(): void
     {
         $this->merchantRepository = $this->createMock(MerchantRepository::class);
-        $this->accountRepository = $this->createMock(AccountRepository::class);
-        $this->useCase = new AddAccountUseCase(
+        $this->bankAccountRepository = $this->createMock(BankAccountRepository::class);
+        $this->useCase = new CreateBankAccountUseCase(
             $this->merchantRepository,
-            $this->accountRepository
+            $this->bankAccountRepository
         );
     }
 
@@ -39,7 +39,7 @@ class AddAccountUseCaseTest extends TestCase
         $request = $this->createAddAccountRequest();
         $this->expectException(InvalidArgumentException::class);
 
-        $this->useCase->add($request);
+        $this->useCase->create($request);
     }
 
     public function testExpectItWontSaveAccountWithTheSameBankCode(): void
@@ -47,14 +47,14 @@ class AddAccountUseCaseTest extends TestCase
         $this->merchantRepository->method('findByMid')->willReturn(
             $this->createMerchant()
         );
-        $this->accountRepository->method('findByBankCodeAndMerchantId')->willReturn(
-            $this->createMock(Account::class)
+        $this->bankAccountRepository->method('findByBankCodeAndMerchantId')->willReturn(
+            $this->createMock(BankAccount::class)
         );
-        $this->accountRepository->expects($this->never())->method('save');
+        $this->bankAccountRepository->expects($this->never())->method('save');
         $request = $this->createAddAccountRequest();
 
         $this->expectException(InvalidArgumentException::class);
-        $this->useCase->add($request);
+        $this->useCase->create($request);
     }
 
     public function testAssertItWillCreateAccount(): void
@@ -62,16 +62,16 @@ class AddAccountUseCaseTest extends TestCase
         $this->merchantRepository->method('findByMid')->willReturn(
             $this->createMerchant()
         );
-        $this->accountRepository->method('findByBankCodeAndMerchantId')->willReturn(null);
-        $this->accountRepository->expects($this->once())->method('save')->willReturnCallback(
-            function (Account $account) {
+        $this->bankAccountRepository->method('findByBankCodeAndMerchantId')->willReturn(null);
+        $this->bankAccountRepository->expects($this->once())->method('save')->willReturnCallback(
+            function (BankAccount $account) {
                 $this->assertIsString($account->getIban());
                 $this->assertIsString($account->getMerchantId());
                 $this->assertIsString($account->getAccountHolderName());
             }
         );
         $request = $this->createAddAccountRequest();
-        $this->useCase->add($request);
+        $this->useCase->create($request);
     }
 
     private function createMerchant(): Merchant
@@ -86,9 +86,9 @@ class AddAccountUseCaseTest extends TestCase
         return Merchant::fromState($merchantState);
     }
 
-    private function createAddAccountRequest(): AddAccountRequest
+    private function createAddAccountRequest(): CreateBankAccountRequest
     {
-        return new AddAccountRequest(
+        return new CreateBankAccountRequest(
             'NL53RABO1964258413',
             'Nick Rigas',
             'RABO',

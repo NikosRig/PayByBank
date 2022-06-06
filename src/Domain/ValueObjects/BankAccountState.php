@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PayByBank\Domain\ValueObjects;
 
-class AccountState
+class BankAccountState
 {
     public readonly string $id;
 

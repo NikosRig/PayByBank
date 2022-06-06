@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\Application\UseCases\AddAccount;
+namespace PayByBank\Application\UseCases\CreateBankAccount;
 
-class AddAccountRequest
+class CreateBankAccountRequest
 {
     public readonly string $iban;
 

@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Test\Integration\WebApi\Actions\CreateJwt;
+namespace Test\Integration\WebApi\Actions\CreateAccessToken;
 
 use Psr\Http\Client\ClientExceptionInterface;
 use Test\Integration\IntegrationTestCase;
 
-class CreateJwtTest extends IntegrationTestCase
+class CreateAccessTokenTest extends IntegrationTestCase
 {
     /**
      * @throws ClientExceptionInterface
      */
-    public function testSuccessfullyJwtCreation(): void
+    public function testSuccessfullyTokenCreation(): void
     {
         $body = json_encode(['mid' => $this->createMerchant()]);
         $response = $this->sendCreateJwtRequest($body);

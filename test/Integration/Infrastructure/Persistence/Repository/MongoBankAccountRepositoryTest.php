@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Test\Integration\Infrastructure\Persistence\Repository;
 
 use PayByBank\Domain\Entity\BankAccount;
-use PayByBank\Domain\ValueObjects\BankAccountState;
 use PayByBank\Infrastructure\Persistence\Adapters\MongoAdapter;
 use PayByBank\Infrastructure\Persistence\Repository\MongoBankAccountRepository;
 use Test\Integration\IntegrationTestCase;
@@ -13,6 +12,8 @@ use Test\Integration\IntegrationTestCase;
 class MongoBankAccountRepositoryTest extends IntegrationTestCase
 {
     private static MongoAdapter $mongoAdapter;
+
+    private readonly MongoBankAccountRepository $repository;
 
     public static function setUpBeforeClass(): void
     {
@@ -25,9 +26,14 @@ class MongoBankAccountRepositoryTest extends IntegrationTestCase
         );
     }
 
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->repository = new MongoBankAccountRepository(self::$mongoAdapter);
+    }
+
     public function testBankAccountShouldBeSaved(): void
     {
-        $repository = new MongoBankAccountRepository(self::$mongoAdapter);
         $merchantId = $this->faker->name();
         $bankCode = $this->faker->name();
 
@@ -37,11 +43,18 @@ class MongoBankAccountRepositoryTest extends IntegrationTestCase
             $merchantId,
             $bankCode,
         );
-        $repository->save($bankAccount);
+        $this->repository->save($bankAccount);
 
         $this->assertInstanceOf(
             BankAccount::class,
-            $repository->findByBankCodeAndMerchantId($bankCode, $merchantId)
+            $this->repository->findByBankCodeAndMerchantId($bankCode, $merchantId)
+        );
+    }
+
+    public function testShouldReturnNullWhenBankAccountCannotBeFound(): void
+    {
+        $this->assertNull(
+            $this->repository->findByBankCodeAndMerchantId('', '')
         );
     }
 }

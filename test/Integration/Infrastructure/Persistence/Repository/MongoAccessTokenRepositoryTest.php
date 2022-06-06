@@ -10,7 +10,7 @@ use PayByBank\Infrastructure\Persistence\Adapters\MongoAdapter;
 use PayByBank\Infrastructure\Persistence\Repository\MongoAccessTokenRepository;
 use PHPUnit\Framework\TestCase;
 
-class MongoJwtRepositoryTest extends TestCase
+class MongoAccessTokenRepositoryTest extends TestCase
 {
     private static MongoAdapter $mongoAdapter;
 
@@ -25,14 +25,14 @@ class MongoJwtRepositoryTest extends TestCase
         );
     }
 
-    public function testAssertJwtShouldBeSaved(): void
+    public function testAssertAccessTokenShouldBeSaved(): void
     {
         $token = bin2hex(openssl_random_pseudo_bytes(24));
-        $jwtRepository = new MongoAccessTokenRepository(self::$mongoAdapter);
-        $jwtRepository->save(
+        $repository = new MongoAccessTokenRepository(self::$mongoAdapter);
+        $repository->save(
             new AccessToken('mid', $token, new DateTime('now'))
         );
-        $merchant = $jwtRepository->findByToken($token);
+        $merchant = $repository->findByToken($token);
 
         $this->assertInstanceOf(AccessToken::class, $merchant);
     }

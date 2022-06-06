@@ -9,11 +9,13 @@ use Larium\Bridge\Template\TwigTemplate;
 use Larium\Framework\Bridge\Routing\FastRouteBridge;
 use Larium\Framework\Contract\Routing\Router;
 use PayByBank\Domain\Repository\AccessTokenRepository;
+use PayByBank\Domain\Repository\BankAccountRepository;
 use PayByBank\Domain\Repository\MerchantRepository;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\Domain\Repository\TransactionRepository;
 use PayByBank\Infrastructure\Persistence\Adapters\MongoAdapter;
 use PayByBank\Infrastructure\Persistence\Repository\MongoAccessTokenRepository;
+use PayByBank\Infrastructure\Persistence\Repository\MongoBankAccountRepository;
 use PayByBank\Infrastructure\Persistence\Repository\MongoMerchantRepository;
 use PayByBank\Infrastructure\Persistence\Repository\MongoPaymentOrderRepository;
 use PayByBank\Infrastructure\Persistence\Repository\MongoTransactionRepository;
@@ -38,6 +40,7 @@ return [
     TransactionRepository::class => autowire(MongoTransactionRepository::class),
     MerchantRepository::class => autowire(MongoMerchantRepository::class),
     AccessTokenRepository::class => autowire(MongoAccessTokenRepository::class),
+    BankAccountRepository::class => autowire(MongoBankAccountRepository::class),
 
     /*
     |--------------------------------------------------------------------------

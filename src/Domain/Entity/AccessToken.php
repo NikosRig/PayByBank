@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace PayByBank\Domain\Entity;
 
 use DateTime;
-use PayByBank\Domain\ValueObjects\JwtState;
+use PayByBank\Domain\ValueObjects\AccessTokenState;
 
-class Jwt
+class AccessToken
 {
     private readonly string $mid;
 
@@ -28,18 +28,18 @@ class Jwt
         $this->isUsed = false;
     }
 
-    public static function fromState(JwtState $jwtState): Jwt
+    public static function fromState(AccessTokenState $state): AccessToken
     {
-        $jwt = new self($jwtState->mid, $jwtState->token, $jwtState->expirationDate);
-        $jwt->dateCreated = $jwtState->dateCreated;
-        $jwt->isUsed = $jwtState->isUsed;
+        $self = new self($state->mid, $state->token, $state->expirationDate);
+        $self->dateCreated = $state->dateCreated;
+        $self->isUsed = $state->isUsed;
 
-        return $jwt;
+        return $self;
     }
 
-    public function getState(): JwtState
+    public function getState(): AccessTokenState
     {
-        return new JwtState(
+        return new AccessTokenState(
             $this->token,
             $this->mid,
             $this->dateCreated,

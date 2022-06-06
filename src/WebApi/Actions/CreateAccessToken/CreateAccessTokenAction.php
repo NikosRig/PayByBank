@@ -2,34 +2,34 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\WebApi\Actions\CreateJwt;
+namespace PayByBank\WebApi\Actions\CreateAccessToken;
 
-use Config\JwtConfig;
+use Config\AccessTokenConfig;
 use Exception;
 use PayByBank\Application\UseCases\CreateJwt\CreateJwtPresenter;
 use PayByBank\Application\UseCases\CreateJwt\CreateJwtRequest;
-use PayByBank\Application\UseCases\CreateJwt\CreateJwtUseCase;
+use PayByBank\Application\UseCases\CreateJwt\CreateAccessTokenUseCase;
 use PayByBank\WebApi\Actions\Action;
 use PayByBank\WebApi\Factory\HttpResponseFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class CreateJwtAction implements Action
+class CreateAccessTokenAction implements Action
 {
-    private readonly CreateJwtUseCase $createJwtUseCase;
+    private readonly CreateAccessTokenUseCase $useCase;
 
-    private readonly CreateJwtValidatorBuilder $validatorBuilder;
+    private readonly CreateAccessTokenValidatorBuilder $validatorBuilder;
 
-    private readonly JwtConfig $jwtConfig;
+    private readonly AccessTokenConfig $accessTokenConfig;
 
     public function __construct(
-        CreateJwtUseCase $createJwtUseCase,
-        CreateJwtValidatorBuilder $createJwtValidatorBuilder,
-        JwtConfig $jwtConfig
+        CreateAccessTokenUseCase          $useCase,
+        CreateAccessTokenValidatorBuilder $createJwtValidatorBuilder,
+        AccessTokenConfig                 $accessTokenConfig
     ) {
-        $this->createJwtUseCase = $createJwtUseCase;
+        $this->useCase = $useCase;
         $this->validatorBuilder = $createJwtValidatorBuilder;
-        $this->jwtConfig = $jwtConfig;
+        $this->accessTokenConfig = $accessTokenConfig;
     }
 
     public function __invoke(ServerRequestInterface $serverRequest): ResponseInterface
@@ -42,11 +42,11 @@ class CreateJwtAction implements Action
             $presenter = new CreateJwtPresenter();
             $request = new CreateJwtRequest(
                 $requestParams['mid'],
-                $this->jwtConfig->jwtIssuer,
-                $this->jwtConfig->jwtSecretKey,
-                $this->jwtConfig->tokenLifeTimeSeconds
+                $this->accessTokenConfig->issuer,
+                $this->accessTokenConfig->secretKey,
+                $this->accessTokenConfig->tokenLifeTimeSeconds
             );
-            $this->createJwtUseCase->create($request, $presenter);
+            $this->useCase->create($request, $presenter);
         } catch (Exception $e) {
             return HttpResponseFactory::create(
                 json_encode(['error' => 'Token failed to be created.']),

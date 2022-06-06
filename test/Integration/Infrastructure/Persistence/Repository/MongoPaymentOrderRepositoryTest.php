@@ -28,7 +28,6 @@ class MongoPaymentOrderRepositoryTest extends TestCase
 
     public function testAssertPaymentOrderShouldBeSaved(): void
     {
-        $creditorAccount = new CreditorAccount('NL47RABO6233671132', 'Nikos Rigas');
         $paymentOrder = new PaymentOrder(7000);
         $repository = new MongoPaymentOrderRepository(self::$mongoAdapter);
         $repository->save($paymentOrder);

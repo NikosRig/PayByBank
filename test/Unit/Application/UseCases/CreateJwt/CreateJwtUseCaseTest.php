@@ -7,9 +7,9 @@ namespace Test\Unit\Application\UseCases\CreateJwt;
 use Exception;
 use PayByBank\Application\UseCases\CreateJwt\CreateJwtPresenter;
 use PayByBank\Application\UseCases\CreateJwt\CreateJwtRequest;
-use PayByBank\Application\UseCases\CreateJwt\CreateJwtUseCase;
+use PayByBank\Application\UseCases\CreateJwt\CreateAccessTokenUseCase;
 use PayByBank\Domain\Entity\Merchant;
-use PayByBank\Domain\Repository\JwtRepository;
+use PayByBank\Domain\Repository\AccessTokenRepository;
 use PayByBank\Domain\Repository\MerchantRepository;
 use PHPUnit\Framework\TestCase;
 
@@ -17,15 +17,15 @@ class CreateJwtUseCaseTest extends TestCase
 {
     private readonly MerchantRepository $merchantRepository;
 
-    private readonly JwtRepository $jwtRepository;
+    private readonly AccessTokenRepository $jwtRepository;
 
-    private readonly CreateJwtUseCase $createJwtUseCase;
+    private readonly CreateAccessTokenUseCase $createJwtUseCase;
 
     public function setUp(): void
     {
         $this->merchantRepository = $this->createMock(MerchantRepository::class);
-        $this->jwtRepository = $this->createMock(JwtRepository::class);
-        $this->createJwtUseCase = new CreateJwtUseCase(
+        $this->jwtRepository = $this->createMock(AccessTokenRepository::class);
+        $this->createJwtUseCase = new CreateAccessTokenUseCase(
             $this->merchantRepository,
             $this->jwtRepository
         );

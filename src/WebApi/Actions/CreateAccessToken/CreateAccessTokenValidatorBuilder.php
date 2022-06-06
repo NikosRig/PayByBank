@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\WebApi\Actions\CreateJwt;
+namespace PayByBank\WebApi\Actions\CreateAccessToken;
 
 use InvalidArgumentException;
 use PayByBank\WebApi\Modules\Validation\RequestParamValidator;
@@ -10,7 +10,7 @@ use PayByBank\WebApi\Modules\Validation\Rules\MidRule;
 use PayByBank\WebApi\Modules\Validation\Validator;
 use PayByBank\WebApi\Modules\Validation\ValidatorBuilder;
 
-class CreateJwtValidatorBuilder implements ValidatorBuilder
+class CreateAccessTokenValidatorBuilder implements ValidatorBuilder
 {
     /**
      * @throws InvalidArgumentException

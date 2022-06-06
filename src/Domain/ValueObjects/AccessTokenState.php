@@ -6,7 +6,7 @@ namespace PayByBank\Domain\ValueObjects;
 
 use DateTime;
 
-class JwtState
+class AccessTokenState
 {
     public readonly string $token;
 

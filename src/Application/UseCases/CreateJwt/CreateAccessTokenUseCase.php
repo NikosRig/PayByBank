@@ -6,21 +6,21 @@ namespace PayByBank\Application\UseCases\CreateJwt;
 
 use DateTime;
 use Exception;
-use Firebase\JWT\JWT as JwtTokenGenerator;
-use PayByBank\Domain\Entity\Jwt;
-use PayByBank\Domain\Repository\JwtRepository;
+use Firebase\JWT\JWT;
+use PayByBank\Domain\Entity\AccessToken;
+use PayByBank\Domain\Repository\AccessTokenRepository;
 use PayByBank\Domain\Repository\MerchantRepository;
 
-final class CreateJwtUseCase
+final class CreateAccessTokenUseCase
 {
     private readonly MerchantRepository $merchantRepository;
 
-    private readonly JwtRepository $jwtRepository;
+    private readonly AccessTokenRepository $accessTokenRepository;
 
-    public function __construct(MerchantRepository $merchantRepository, JwtRepository $jwtRepository)
+    public function __construct(MerchantRepository $merchantRepository, AccessTokenRepository $accessTokenRepository)
     {
         $this->merchantRepository = $merchantRepository;
-        $this->jwtRepository = $jwtRepository;
+        $this->accessTokenRepository = $accessTokenRepository;
     }
 
     /**
@@ -44,9 +44,9 @@ final class CreateJwtUseCase
             "mid" => $merchant->getMid()
         ];
 
-        $jwtToken = JwtTokenGenerator::encode($jwtPayload, $request->jwtSecretKey, 'HS256');
-        $jwt = new Jwt($merchant->getMid(), $jwtToken, new DateTime($expirationDateTime));
-        $this->jwtRepository->save($jwt);
+        $jwtToken = JWT::encode($jwtPayload, $request->jwtSecretKey, 'HS256');
+        $accessToken = new AccessToken($merchant->getMid(), $jwtToken, new DateTime($expirationDateTime));
+        $this->accessTokenRepository->save($accessToken);
         $presenter->present($jwtToken);
     }
 }

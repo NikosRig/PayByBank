@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-use Config\JwtConfig;
+use Config\AccessTokenConfig;
 use FastRoute\RouteCollector;
 use Larium\Bridge\Template\Template;
 use Larium\Bridge\Template\TwigTemplate;
 use Larium\Framework\Bridge\Routing\FastRouteBridge;
 use Larium\Framework\Contract\Routing\Router;
-use PayByBank\Domain\Repository\JwtRepository;
+use PayByBank\Domain\Repository\AccessTokenRepository;
 use PayByBank\Domain\Repository\MerchantRepository;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\Domain\Repository\TransactionRepository;
 use PayByBank\Infrastructure\Persistence\Adapters\MongoAdapter;
-use PayByBank\Infrastructure\Persistence\Repository\MongoJwtRepository;
+use PayByBank\Infrastructure\Persistence\Repository\MongoAccessTokenRepository;
 use PayByBank\Infrastructure\Persistence\Repository\MongoMerchantRepository;
 use PayByBank\Infrastructure\Persistence\Repository\MongoPaymentOrderRepository;
 use PayByBank\Infrastructure\Persistence\Repository\MongoTransactionRepository;
-use PayByBank\WebApi\Actions\CreateJwt\CreateJwtAction;
+use PayByBank\WebApi\Actions\CreateAccessToken\CreateAccessTokenAction;
 use PayByBank\WebApi\Actions\CreateMerchant\CreateMerchantAction;
 use PayByBank\WebApi\Actions\CreatePaymentOrder\CreatePaymentOrderAction;
 use PayByBank\WebApi\Actions\GetPaymentOrderAuth\GetPaymentOrderAuthAction;
@@ -37,7 +37,7 @@ return [
     PaymentOrderRepository::class => autowire(MongoPaymentOrderRepository::class),
     TransactionRepository::class => autowire(MongoTransactionRepository::class),
     MerchantRepository::class => autowire(MongoMerchantRepository::class),
-    JwtRepository::class => autowire(MongoJwtRepository::class),
+    AccessTokenRepository::class => autowire(MongoAccessTokenRepository::class),
 
     /*
     |--------------------------------------------------------------------------
@@ -56,7 +56,7 @@ return [
             });
 
             $routeCollector->addGroup('/oauth2', function (RouteCollector $routeGroupCollector) {
-                $routeGroupCollector->post('/token', CreateJwtAction::class);
+                $routeGroupCollector->post('/token', CreateAccessTokenAction::class);
             });
         });
 
@@ -88,7 +88,7 @@ return [
     | Config
     |--------------------------------------------------------------------------
     */
-    JwtConfig::class => create(JwtConfig::class)->constructor(
+    AccessTokenConfig::class => create(AccessTokenConfig::class)->constructor(
         env('JWT_ISSUER'),
         env('JWT_SECRET_KEY'),
         (int) getenv('JWT_LIFETIME_SECONDS')

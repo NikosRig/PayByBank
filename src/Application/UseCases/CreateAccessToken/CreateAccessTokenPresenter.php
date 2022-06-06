@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PayByBank\Application\UseCases\CreateAccessToken;
 
-class CreateJwtPresenter
+class CreateAccessTokenPresenter
 {
     public readonly string $token;
 

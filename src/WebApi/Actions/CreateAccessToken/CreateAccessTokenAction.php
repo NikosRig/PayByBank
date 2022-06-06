@@ -6,8 +6,8 @@ namespace PayByBank\WebApi\Actions\CreateAccessToken;
 
 use Config\AccessTokenConfig;
 use Exception;
-use PayByBank\Application\UseCases\CreateAccessToken\CreateJwtPresenter;
-use PayByBank\Application\UseCases\CreateAccessToken\CreateJwtRequest;
+use PayByBank\Application\UseCases\CreateAccessToken\CreateAccessTokenPresenter;
+use PayByBank\Application\UseCases\CreateAccessToken\CreateAccessTokenRequest;
 use PayByBank\Application\UseCases\CreateAccessToken\CreateAccessTokenUseCase;
 use PayByBank\WebApi\Actions\Action;
 use PayByBank\WebApi\Factory\HttpResponseFactory;
@@ -39,8 +39,8 @@ class CreateAccessTokenAction implements Action
 
         try {
             $this->validatorBuilder->build()->validate($requestParams);
-            $presenter = new CreateJwtPresenter();
-            $request = new CreateJwtRequest(
+            $presenter = new CreateAccessTokenPresenter();
+            $request = new CreateAccessTokenRequest(
                 $requestParams['mid'],
                 $this->accessTokenConfig->issuer,
                 $this->accessTokenConfig->secretKey,

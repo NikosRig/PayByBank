@@ -2,32 +2,32 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Application\UseCases\CreateJwt;
+namespace Test\Unit\Application\UseCases\CreateAccessToken;
 
 use Exception;
-use PayByBank\Application\UseCases\CreateAccessToken\CreateJwtPresenter;
-use PayByBank\Application\UseCases\CreateAccessToken\CreateJwtRequest;
+use PayByBank\Application\UseCases\CreateAccessToken\CreateAccessTokenPresenter;
+use PayByBank\Application\UseCases\CreateAccessToken\CreateAccessTokenRequest;
 use PayByBank\Application\UseCases\CreateAccessToken\CreateAccessTokenUseCase;
 use PayByBank\Domain\Entity\Merchant;
 use PayByBank\Domain\Repository\AccessTokenRepository;
 use PayByBank\Domain\Repository\MerchantRepository;
 use PHPUnit\Framework\TestCase;
 
-class CreateJwtUseCaseTest extends TestCase
+class CreateAccessTokenUseCaseTest extends TestCase
 {
     private readonly MerchantRepository $merchantRepository;
 
-    private readonly AccessTokenRepository $jwtRepository;
+    private readonly AccessTokenRepository $accessTokenRepository;
 
-    private readonly CreateAccessTokenUseCase $createJwtUseCase;
+    private readonly CreateAccessTokenUseCase $useCase;
 
     public function setUp(): void
     {
         $this->merchantRepository = $this->createMock(MerchantRepository::class);
-        $this->jwtRepository = $this->createMock(AccessTokenRepository::class);
-        $this->createJwtUseCase = new CreateAccessTokenUseCase(
+        $this->accessTokenRepository = $this->createMock(AccessTokenRepository::class);
+        $this->useCase = new CreateAccessTokenUseCase(
             $this->merchantRepository,
-            $this->jwtRepository
+            $this->accessTokenRepository
         );
     }
 
@@ -35,10 +35,10 @@ class CreateJwtUseCaseTest extends TestCase
     {
         $this->merchantRepository->expects($this->once())
         ->method('findByMid')->willReturn(null);
-        $createJwtPresenter = new CreateJwtPresenter();
+        $presenter = new CreateAccessTokenPresenter();
         $this->expectException(Exception::class);
 
-        $this->createJwtUseCase->create($this->createJwtRequest(), $createJwtPresenter);
+        $this->useCase->create($this->createJwtRequest(), $presenter);
     }
 
     /**
@@ -49,9 +49,9 @@ class CreateJwtUseCaseTest extends TestCase
         $merchant = new Merchant('mid', 'Nick', 'Rigas');
         $this->merchantRepository->expects($this->once())
             ->method('findByMid')->willReturn($merchant);
-        $this->jwtRepository->expects($this->once())->method('save');
-        $createJwtPresenter = new CreateJwtPresenter();
-        $this->createJwtUseCase->create($this->createJwtRequest(), $createJwtPresenter);
+        $this->accessTokenRepository->expects($this->once())->method('save');
+        $presenter = new CreateAccessTokenPresenter();
+        $this->useCase->create($this->createJwtRequest(), $presenter);
     }
 
     /**
@@ -62,15 +62,15 @@ class CreateJwtUseCaseTest extends TestCase
         $merchant = new Merchant('mid', 'Nick', 'Rigas');
         $this->merchantRepository->expects($this->once())
             ->method('findByMid')->willReturn($merchant);
-        $createJwtPresenter = new CreateJwtPresenter();
-        $this->createJwtUseCase->create($this->createJwtRequest(), $createJwtPresenter);
+        $presenter = new CreateAccessTokenPresenter();
+        $this->useCase->create($this->createJwtRequest(), $presenter);
 
-        $this->assertIsString($createJwtPresenter->token);
+        $this->assertIsString($presenter->token);
     }
 
-    private function createJwtRequest(): CreateJwtRequest
+    private function createJwtRequest(): CreateAccessTokenRequest
     {
-        return new CreateJwtRequest(
+        return new CreateAccessTokenRequest(
             'mid',
             'testIssuer',
             'secretKey',

@@ -26,7 +26,7 @@ final class CreateAccessTokenUseCase
     /**
      * @throws Exception
      */
-    public function create(CreateJwtRequest $request, CreateJwtPresenter $presenter): void
+    public function create(CreateAccessTokenRequest $request, CreateAccessTokenPresenter $presenter): void
     {
         if (!$merchant = $this->merchantRepository->findByMid($request->mid)) {
             throw new Exception('Merchant cannot be found.');

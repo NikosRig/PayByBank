@@ -18,22 +18,16 @@ final class PaymentOrder
 
     private PaymentOrderStatus $status;
 
-    private readonly CreditorAccount $creditorAccount;
-
     private readonly int $amount;
 
     private DateTime $dateCreated;
 
-    private readonly string $bankName;
-
-    public function __construct(CreditorAccount $creditorAccount, int $amount, string $bankName)
+    public function __construct(int $amount)
     {
         $this->token = bin2hex(openssl_random_pseudo_bytes(24));
         $this->status = PaymentOrderStatus::PENDING;
-        $this->creditorAccount = $creditorAccount;
         $this->amount = $amount;
         $this->dateCreated = new DateTime('now');
-        $this->bankName = $bankName;
     }
 
     public function getState(): PaymentOrderState
@@ -42,19 +36,13 @@ final class PaymentOrder
             $this->dateCreated,
             $this->status,
             $this->token,
-            $this->amount,
-            $this->bankName,
-            $this->creditorAccount
+            $this->amount
         );
     }
 
     public static function fromState(PaymentOrderState $paymentOrderState): PaymentOrder
     {
-        $self = new self(
-            $paymentOrderState->creditorAccount,
-            $paymentOrderState->amount,
-            $paymentOrderState->bankName
-        );
+        $self = new self($paymentOrderState->amount);
         $self->status = $paymentOrderState->status;
         $self->token = $paymentOrderState->token;
 
@@ -64,11 +52,6 @@ final class PaymentOrder
     public function canBeAuthorized(): bool
     {
         return $this->status->isPending();
-    }
-
-    public function getBankName(): string
-    {
-        return $this->bankName;
     }
 
     public function getToken(): string

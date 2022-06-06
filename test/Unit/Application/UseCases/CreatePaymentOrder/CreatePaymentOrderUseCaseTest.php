@@ -18,7 +18,7 @@ class CreatePaymentOrderUseCaseTest extends TestCase
         $repository->expects($this->once())->method('save');
         $useCase = new CreatePaymentOrderUseCase($repository);
 
-        $request = new CreatePaymentOrderRequest('', '', 10, '');
+        $request = new CreatePaymentOrderRequest(10);
         $presenter = new CreatePaymentOrderPresenter();
         $useCase->create($request, $presenter);
     }
@@ -28,7 +28,7 @@ class CreatePaymentOrderUseCaseTest extends TestCase
         $repository = $this->createMock(PaymentOrderRepository::class);
         $useCase = new CreatePaymentOrderUseCase($repository);
 
-        $request = new CreatePaymentOrderRequest('', '', 10, '');
+        $request = new CreatePaymentOrderRequest(10);
         $presenter = new CreatePaymentOrderPresenter();
         $useCase->create($request, $presenter);
 

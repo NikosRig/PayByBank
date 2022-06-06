@@ -6,7 +6,6 @@ namespace PayByBank\Application\UseCases\CreatePaymentOrder;
 
 use PayByBank\Domain\Entity\PaymentOrder;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
-use PayByBank\Domain\ValueObjects\CreditorAccount;
 
 final class CreatePaymentOrderUseCase
 {
@@ -19,8 +18,7 @@ final class CreatePaymentOrderUseCase
 
     public function create(CreatePaymentOrderRequest $request, CreatePaymentOrderPresenter $presenter): void
     {
-        $creditorAccount = new CreditorAccount($request->creditorIban, $request->creditorName);
-        $paymentOrder = new PaymentOrder($creditorAccount, $request->amount, $request->bankName);
+        $paymentOrder = new PaymentOrder($request->amount);
         $this->paymentOrderRepository->save($paymentOrder);
 
         $presenter->present($paymentOrder->getToken());

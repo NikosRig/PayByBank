@@ -14,7 +14,7 @@ class CreateJwtTest extends IntegrationTestCase
      */
     public function testSuccessfullyJwtCreation(): void
     {
-        $body = json_encode(['mid' => $this->createMid()]);
+        $body = json_encode(['mid' => $this->createMerchant()]);
         $response = $this->sendCreateJwtRequest($body);
         $responseBody = $response->getBody()->getContents();
         $responsePayload = json_decode($responseBody);

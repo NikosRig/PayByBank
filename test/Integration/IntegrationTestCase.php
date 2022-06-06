@@ -29,7 +29,7 @@ class IntegrationTestCase extends TestCase
      */
     public function createJwt(): string
     {
-        $body = json_encode(['mid' => $this->createMid()]);
+        $body = json_encode(['mid' => $this->createMerchant()]);
         $response = $this->sendCreateJwtRequest($body);
         $responsePayload = json_decode($response->getBody()->getContents());
 
@@ -52,7 +52,7 @@ class IntegrationTestCase extends TestCase
     /**
      * @throws ClientExceptionInterface
      */
-    public function createMid(): string
+    public function createMerchant(): string
     {
         $body = json_encode([
              'firstName' => $this->faker->firstName(),

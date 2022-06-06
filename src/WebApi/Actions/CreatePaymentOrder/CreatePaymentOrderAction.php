@@ -37,12 +37,7 @@ class CreatePaymentOrderAction implements Action
             return HttpResponseFactory::createJson(['error' => $e->getMessage()]);
         }
 
-        $request = new CreatePaymentOrderRequest(
-            $requestParams['creditorIban'],
-            $requestParams['creditorName'],
-            $requestParams['amount'],
-            $requestParams['bank']
-        );
+        $request = new CreatePaymentOrderRequest($requestParams['amount']);
         $presenter = new CreatePaymentOrderPresenter();
         $this->createPaymentOrderUseCase->create($request, $presenter);
 

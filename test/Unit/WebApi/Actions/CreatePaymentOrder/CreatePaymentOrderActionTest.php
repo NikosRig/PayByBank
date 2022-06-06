@@ -15,13 +15,7 @@ class CreatePaymentOrderActionTest extends ActionTestCase
 {
     public function testAssertShouldReturnPaymentOrderToken(): void
     {
-        $requestBody = json_encode([
-           'creditorIban' => 'GR2101422757743955519929399',
-           'amount' => 10,
-           'creditorName' => 'Nikos Rigas',
-           'bank' => 'ING'
-        ]);
-
+        $requestBody = json_encode(['amount' => 10]);
         $validatorBuilder = new CreatePaymentOrderValidatorBuilder();
         $createPaymentOrderUseCase = new CreatePaymentOrderUseCase(
             $this->createMock(PaymentOrderRepository::class)
@@ -32,40 +26,6 @@ class CreatePaymentOrderActionTest extends ActionTestCase
         $responseBody = json_decode($response->getBody()->getContents());
 
         $this->assertObjectHasAttribute('token', $responseBody);
-    }
-
-    public function testAssertCreditorIbanIsRequired(): void
-    {
-        $requestBody = json_encode([
-           'amount' => 10,
-           'creditorName' => 'Test'
-        ]);
-
-        $request = $this->mockServerRequest($requestBody);
-        $validatorBuilder = new CreatePaymentOrderValidatorBuilder();
-        $createPaymentOrderUseCase = new CreatePaymentOrderUseCase(
-            $this->createMock(PaymentOrderRepository::class)
-        );
-        $action = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
-
-        $this->assertResponseIsJsonAndHasError($action($request));
-    }
-
-    public function testAssertNumericCreditorIbanIsNotAccepted(): void
-    {
-        $requestBody = json_encode([
-            'creditorIban' => 1,
-            'amount' => 10,
-            'creditorName' => 'Test'
-        ]);
-        $request = $this->mockServerRequest($requestBody);
-        $createPaymentOrderUseCase = new CreatePaymentOrderUseCase(
-            $this->createMock(PaymentOrderRepository::class)
-        );
-        $validatorBuilder = new CreatePaymentOrderValidatorBuilder();
-        $action = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
-
-        $this->assertResponseIsJsonAndHasError($action($request));
     }
 
     public function testAssertAmountIsRequired(): void
@@ -99,57 +59,6 @@ class CreatePaymentOrderActionTest extends ActionTestCase
         $action = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
 
         $this->assertResponseIsJsonAndHasError($action($request));
-    }
-
-    public function testAssertCreditorNameIsRequired(): void
-    {
-        $requestBody = json_encode([
-           'amount' => 10,
-           'creditorIban' => 'GR2101422757743955519929399',
-        ]);
-        $request = $this->mockServerRequest($requestBody);
-        $createPaymentOrderUseCase = new CreatePaymentOrderUseCase(
-            $this->createMock(PaymentOrderRepository::class)
-        );
-        $validatorBuilder = new CreatePaymentOrderValidatorBuilder();
-        $action = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
-
-        $this->assertResponseIsJsonAndHasError($action($request));
-    }
-
-    public function testAssertNumericCreditorNameIsNotAccepted(): void
-    {
-        $requestBody = json_encode([
-           'creditorIban' => 'GR2101422757743955519929399',
-           'amount' => 10,
-           'creditorName' => 1
-        ]);
-        $request = $this->mockServerRequest($requestBody);
-        $createPaymentOrderUseCase = new CreatePaymentOrderUseCase(
-            $this->createMock(PaymentOrderRepository::class)
-        );
-        $validatorBuilder = new CreatePaymentOrderValidatorBuilder();
-        $action = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
-
-        $this->assertResponseIsJsonAndHasError($action($request));
-    }
-
-    public function testAssertNumericBankIsNotAccepted(): void
-    {
-        $requestBody = json_encode([
-           'creditorIban' => 'GR2101422757743955519929399',
-           'amount' => 10,
-           'creditorName' => 'John Doe',
-           'bank' => 1
-        ]);
-        $createPaymentOrderUseCase = new CreatePaymentOrderUseCase(
-            $this->createMock(PaymentOrderRepository::class)
-        );
-        $validatorBuilder = new CreatePaymentOrderValidatorBuilder();
-        $action = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
-        $response = $action($this->mockServerRequest($requestBody));
-
-        $this->assertResponseIsJsonAndHasError($response);
     }
 
     public function testAssertErrorWithNonJsonBody(): void

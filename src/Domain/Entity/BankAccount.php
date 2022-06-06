@@ -14,11 +14,19 @@ class BankAccount
 
     private readonly string $accountHolderName;
 
-    public function __construct(string $iban, string $accountHolderName, string $merchantId)
-    {
+    private readonly string $bankCode;
+
+
+    public function __construct(
+        string $iban,
+        string $accountHolderName,
+        string $merchantId,
+        string $bankCode
+    ) {
         $this->iban = $iban;
         $this->accountHolderName = $accountHolderName;
         $this->merchantId = $merchantId;
+        $this->bankCode = $bankCode;
     }
 
     public static function fromState(BankAccountState $state): BankAccount
@@ -26,7 +34,8 @@ class BankAccount
         $self = new self(
             $state->iban,
             $state->accountHolderName,
-            $state->merchantId
+            $state->merchantId,
+            $state->bankCode
         );
         $self->id = $state->id;
 
@@ -36,6 +45,11 @@ class BankAccount
     public function getId(): ?string
     {
         return $this->id;
+    }
+
+    public function getBankCode(): string
+    {
+        return $this->bankCode;
     }
 
     public function getAccountHolderName(): string

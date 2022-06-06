@@ -10,5 +10,5 @@ interface BankAccountRepository
 {
     public function findByBankCodeAndMerchantId(string $bankCode, string $merchantId): ?BankAccount;
 
-    public function save(BankAccount $creditorAccount): void;
+    public function save(BankAccount $bankAccount): void;
 }

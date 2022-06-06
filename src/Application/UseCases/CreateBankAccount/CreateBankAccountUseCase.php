@@ -39,7 +39,8 @@ final class CreateBankAccountUseCase
         $bankAccount = new BankAccount(
             $request->iban,
             $request->accountHolderName,
-            $merchantId
+            $merchantId,
+            $bankCode
         );
         $this->accountRepository->save($bankAccount);
     }

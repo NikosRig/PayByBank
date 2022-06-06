@@ -8,7 +8,6 @@ use DateTime;
 use MongoDB\Collection;
 use PayByBank\Domain\Entity\PaymentOrder;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
-use PayByBank\Domain\ValueObjects\CreditorAccount;
 use PayByBank\Domain\ValueObjects\PaymentOrderState;
 use PayByBank\Domain\ValueObjects\PaymentOrderStatus;
 use PayByBank\Infrastructure\Persistence\Adapters\MongoAdapter;
@@ -19,7 +18,7 @@ class MongoPaymentOrderRepository implements PaymentOrderRepository
 
     public function __construct(MongoAdapter $mongoAdapter)
     {
-        $this->collection = $mongoAdapter->selectCollection('paymentOrders');
+        $this->collection = $mongoAdapter->selectCollection('payment_orders');
     }
 
     public function findByToken(string $paymentOrderToken): ?PaymentOrder
@@ -28,18 +27,11 @@ class MongoPaymentOrderRepository implements PaymentOrderRepository
             return null;
         }
 
-        $creditorAccount = new CreditorAccount(
-            $paymentOrder->creditorAccount->iban,
-            $paymentOrder->creditorAccount->creditorName
-        );
-
         $state = new PaymentOrderState(
             DateTime::createFromFormat('Y-m-d H:i:s', $paymentOrder->dateCreated),
             PaymentOrderStatus::from($paymentOrder->status),
             $paymentOrder->token,
-            $paymentOrder->amount,
-            $paymentOrder->bankName,
-            $creditorAccount
+            $paymentOrder->amount
         );
 
         return PaymentOrder::fromState($state);

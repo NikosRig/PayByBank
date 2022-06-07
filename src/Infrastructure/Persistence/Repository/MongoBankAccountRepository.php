@@ -50,4 +50,24 @@ class MongoBankAccountRepository implements BankAccountRepository
             'merchantId' => $bankAccount->getMerchantId()
         ]);
     }
+
+    public function findAllByMerchantId(string $merchantId): ?array
+    {
+        $bankAccountsCollection = $this->collection->find(['merchantId' => $merchantId]);
+        $bankAccounts = [];
+
+        foreach ($bankAccountsCollection as $bankAccount) {
+            $state = new BankAccountState(
+                $bankAccount->iban,
+                $bankAccount->accountHolderName,
+                $bankAccount->merchantId,
+                $bankAccount->_id->__toString(),
+                $bankAccount->bankCode
+            );
+            $bankAccounts[] = BankAccount::fromState($state);
+        }
+
+
+        return !empty($bankAccounts) ? $bankAccounts : null;
+    }
 }

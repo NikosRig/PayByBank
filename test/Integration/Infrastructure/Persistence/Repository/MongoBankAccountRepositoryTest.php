@@ -57,4 +57,11 @@ class MongoBankAccountRepositoryTest extends IntegrationTestCase
             $this->repository->findByBankCodeAndMerchantId('', '')
         );
     }
+
+    public function testShouldReturnNullWhenMerchantHasNoAccounts(): void
+    {
+        $this->assertNull(
+            $this->repository->findAllByMerchantId('')
+        );
+    }
 }

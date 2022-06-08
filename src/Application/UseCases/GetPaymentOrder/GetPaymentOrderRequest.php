@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\Application\UseCases\GetPaymentOrderAuth;
+namespace PayByBank\Application\UseCases\GetPaymentOrder;
 
-class GetPaymentOrderAuthRequest
+class GetPaymentOrderRequest
 {
     public readonly string $paymentOrderToken;
 

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\Application\UseCases\GetPaymentOrderAuth;
+namespace PayByBank\Application\UseCases\GetPaymentOrder;
 
 use InvalidArgumentException;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
 
-final class GetPaymentOrderAuthUseCase
+final class GetPaymentOrderUseCase
 {
     private PaymentOrderRepository $repository;
 
@@ -19,14 +19,17 @@ final class GetPaymentOrderAuthUseCase
     /**
      * @throws InvalidArgumentException
      */
-    public function get(GetPaymentOrderAuthRequest $request, GetPaymentOrderAuthPresenter $presenter): void
+    public function get(GetPaymentOrderRequest $request, GetPaymentOrderPresenter $presenter): void
     {
         $paymentOrder = $this->repository->findByToken($request->paymentOrderToken);
 
-        if (!$paymentOrder || !$paymentOrder->canBeAuthorized()) {
+        if (!$paymentOrder || !$paymentOrder->isStatusPending()) {
             throw new InvalidArgumentException('Invalid payment order token.');
         }
 
-        $presenter->present($paymentOrder->getBankName());
+        $presenter->present(
+            $paymentOrder->getToken(),
+            $paymentOrder->getAmount()
+        );
     }
 }

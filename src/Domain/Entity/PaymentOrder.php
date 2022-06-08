@@ -49,7 +49,12 @@ final class PaymentOrder
         return $self;
     }
 
-    public function canBeAuthorized(): bool
+    public function getAmount(): int
+    {
+        return $this->amount;
+    }
+
+    public function isStatusPending(): bool
     {
         return $this->status->isPending();
     }

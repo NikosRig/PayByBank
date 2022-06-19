@@ -10,5 +10,5 @@ interface AccessTokenRepository
 {
     public function findByToken(string $token): ?AccessToken;
 
-    public function save(AccessToken $jwt): void;
+    public function save(AccessToken $accessToken): void;
 }

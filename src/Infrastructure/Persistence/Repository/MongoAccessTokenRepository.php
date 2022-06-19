@@ -39,8 +39,12 @@ class MongoAccessTokenRepository implements AccessTokenRepository
 
     public function save(AccessToken $accessToken): void
     {
-        $this->collection->insertOne(
-            $accessToken->getState()->toArray()
-        );
+        $this->collection->insertOne([
+            'token' => $accessToken->getToken(),
+            'merchantId' => $accessToken->getMerchantId(),
+            'dateCreated' => $accessToken->getDateCreated()->format('Y-m-d H:i:s'),
+            'expirationDate' => $accessToken->getExpirationDate()->format('Y-m-d H:i:s'),
+            'isUsed' => $accessToken->isUsed()
+        ]);
     }
 }

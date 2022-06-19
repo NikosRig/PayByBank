@@ -10,7 +10,7 @@ class AccessTokenState
 {
     public readonly string $token;
 
-    public readonly string $mid;
+    public readonly string $merchantId;
 
     public readonly DateTime $dateCreated;
 
@@ -26,20 +26,9 @@ class AccessTokenState
         bool $isUsed
     ) {
         $this->token = $token;
-        $this->mid = $mid;
+        $this->merchantId = $mid;
         $this->dateCreated = $dateCreated;
         $this->expirationDate = $expirationDate;
         $this->isUsed = $isUsed;
-    }
-
-    public function toArray(): array
-    {
-        return [
-          'token' => $this->token,
-          'mid' => $this->mid,
-          'dateCreated' => $this->dateCreated->format('Y-m-d H:i:s'),
-          'expirationDate' => $this->dateCreated->format('Y-m-d H:i:s'),
-          'isUsed' => $this->isUsed
-        ];
     }
 }

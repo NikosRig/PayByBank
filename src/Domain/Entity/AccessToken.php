@@ -9,7 +9,7 @@ use PayByBank\Domain\ValueObjects\AccessTokenState;
 
 class AccessToken
 {
-    private readonly string $mid;
+    private readonly string $merchantId;
 
     private readonly string $token;
 
@@ -19,33 +19,42 @@ class AccessToken
 
     private bool $isUsed;
 
-    public function __construct(string $mid, string $token, DateTime $expirationDate)
-    {
-        $this->mid = $mid;
-        $this->token = $token;
-        $this->dateCreated = new DateTime('now');
-        $this->expirationDate = $expirationDate;
-        $this->isUsed = false;
-    }
-
     public static function fromState(AccessTokenState $state): AccessToken
     {
-        $self = new self($state->mid, $state->token, $state->expirationDate);
+        $self = new self($state->merchantId, $state->token, $state->expirationDate);
         $self->dateCreated = $state->dateCreated;
         $self->isUsed = $state->isUsed;
 
         return $self;
     }
 
-    public function getState(): AccessTokenState
+    public function __construct(string $merchantId, string $token, DateTime $expirationDate)
     {
-        return new AccessTokenState(
-            $this->token,
-            $this->mid,
-            $this->dateCreated,
-            $this->expirationDate,
-            $this->isUsed
-        );
+        $this->merchantId = $merchantId;
+        $this->token = $token;
+        $this->dateCreated = new DateTime('now');
+        $this->expirationDate = $expirationDate;
+        $this->isUsed = false;
+    }
+
+    public function getToken(): string
+    {
+        return $this->token;
+    }
+
+    public function getDateCreated(): DateTime
+    {
+        return $this->dateCreated;
+    }
+
+    public function getMerchantId(): string
+    {
+        return $this->merchantId;
+    }
+
+    public function getExpirationDate(): DateTime
+    {
+        return $this->expirationDate;
     }
 
     public function markUsed(): void

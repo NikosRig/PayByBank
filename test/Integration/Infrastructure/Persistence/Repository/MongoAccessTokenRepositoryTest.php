@@ -30,7 +30,7 @@ class MongoAccessTokenRepositoryTest extends TestCase
         $token = bin2hex(openssl_random_pseudo_bytes(24));
         $repository = new MongoAccessTokenRepository(self::$mongoAdapter);
         $repository->save(
-            new AccessToken('mid', $token, new DateTime('now'))
+            new AccessToken('merchantId', $token, new DateTime('now'))
         );
         $merchant = $repository->findByToken($token);
 

@@ -28,7 +28,7 @@ class MongoAccessTokenRepository implements AccessTokenRepository
 
         $state = new AccessTokenState(
             $accessToken->token,
-            $accessToken->mid,
+            $accessToken->merchantId,
             DateTime::createFromFormat('Y-m-d H:i:s', $accessToken->dateCreated),
             DateTime::createFromFormat('Y-m-d H:i:s', $accessToken->expirationDate),
             $accessToken->isUsed

@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Integration\Infrastructure\Persistence\Repository;
 
-use Dotenv\Dotenv;
 use PayByBank\Domain\Entity\PaymentOrder;
-use PayByBank\Domain\ValueObjects\CreditorAccount;
 use PayByBank\Infrastructure\Persistence\Adapters\MongoAdapter;
 use PayByBank\Infrastructure\Persistence\Repository\MongoPaymentOrderRepository;
 use PHPUnit\Framework\TestCase;
@@ -28,7 +26,7 @@ class MongoPaymentOrderRepositoryTest extends TestCase
 
     public function testAssertPaymentOrderShouldBeSaved(): void
     {
-        $paymentOrder = new PaymentOrder(7000);
+        $paymentOrder = new PaymentOrder(7000, 'merchantId');
         $repository = new MongoPaymentOrderRepository(self::$mongoAdapter);
         $repository->save($paymentOrder);
         $findResult = $repository->findByToken($paymentOrder->getToken());

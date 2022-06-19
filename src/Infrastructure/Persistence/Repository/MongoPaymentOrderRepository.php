@@ -31,7 +31,8 @@ class MongoPaymentOrderRepository implements PaymentOrderRepository
             DateTime::createFromFormat('Y-m-d H:i:s', $paymentOrder->dateCreated),
             PaymentOrderStatus::from($paymentOrder->status),
             $paymentOrder->token,
-            $paymentOrder->amount
+            $paymentOrder->amount,
+            $paymentOrder->merchantId
         );
 
         return PaymentOrder::fromState($state);
@@ -39,8 +40,12 @@ class MongoPaymentOrderRepository implements PaymentOrderRepository
 
     public function save(PaymentOrder $paymentOrder): void
     {
-        $this->collection->insertOne(
-            $paymentOrder->getState()->toArray()
-        );
+        $this->collection->insertOne([
+            'token' => $paymentOrder->getToken(),
+            'merchantId' => $paymentOrder->getMerchantId(),
+            'status' => $paymentOrder->getStatus()->value,
+            'dateCreated' => $paymentOrder->getDateCreated()->format('Y-m-d H:i:s'),
+            'amount' => $paymentOrder->getAmount()
+        ]);
     }
 }

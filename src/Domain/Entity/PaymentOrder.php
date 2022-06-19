@@ -22,31 +22,42 @@ final class PaymentOrder
 
     private DateTime $dateCreated;
 
-    public function __construct(int $amount)
+    private readonly string $merchantId;
+
+    public static function fromState(PaymentOrderState $state): PaymentOrder
+    {
+        $self = new self(
+            $state->amount,
+            $state->merchantId
+        );
+        $self->status = $state->status;
+        $self->token = $state->token;
+
+        return $self;
+    }
+
+    public function __construct(int $amount, string $merchantId)
     {
         $this->token = bin2hex(openssl_random_pseudo_bytes(24));
         $this->status = PaymentOrderStatus::PENDING;
         $this->amount = $amount;
+        $this->merchantId = $merchantId;
         $this->dateCreated = new DateTime('now');
     }
 
-    public function getState(): PaymentOrderState
+    public function getDateCreated(): DateTime
     {
-        return new PaymentOrderState(
-            $this->dateCreated,
-            $this->status,
-            $this->token,
-            $this->amount
-        );
+        return $this->dateCreated;
     }
 
-    public static function fromState(PaymentOrderState $paymentOrderState): PaymentOrder
+    public function getMerchantId(): string
     {
-        $self = new self($paymentOrderState->amount);
-        $self->status = $paymentOrderState->status;
-        $self->token = $paymentOrderState->token;
+        return $this->merchantId;
+    }
 
-        return $self;
+    public function getStatus(): PaymentOrderStatus
+    {
+        return $this->status;
     }
 
     public function getAmount(): int

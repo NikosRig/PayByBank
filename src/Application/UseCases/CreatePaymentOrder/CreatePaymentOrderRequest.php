@@ -8,8 +8,11 @@ class CreatePaymentOrderRequest
 {
     public readonly int $amount;
 
-    public function __construct(int $amount)
+    public readonly string $accessToken;
+
+    public function __construct(int $amount, string $accessToken)
     {
         $this->amount = $amount;
+        $this->accessToken = $accessToken;
     }
 }

@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Test\Unit\WebApi\Actions\CreatePaymentOrder;
 
+use DateTime;
 use PayByBank\Application\UseCases\CreatePaymentOrder\CreatePaymentOrderUseCase;
+use PayByBank\Domain\Entity\AccessToken;
+use PayByBank\Domain\Repository\AccessTokenRepository;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\WebApi\Actions\CreatePaymentOrder\CreatePaymentOrderAction;
 use PayByBank\WebApi\Actions\CreatePaymentOrder\CreatePaymentOrderValidatorBuilder;
@@ -13,16 +16,32 @@ use Test\Unit\WebApi\Actions\ActionTestCase;
 
 class CreatePaymentOrderActionTest extends ActionTestCase
 {
+    private readonly PaymentOrderRepository $paymentOrderRepository;
+
+    private readonly AccessTokenRepository $accessTokenRepository;
+
+    public function setUp(): void
+    {
+        $this->paymentOrderRepository = $this->createMock(PaymentOrderRepository::class);
+        $this->accessTokenRepository = $this->createMock(AccessTokenRepository::class);
+    }
+
     public function testAssertShouldReturnPaymentOrderToken(): void
     {
+        $accessToken = new AccessToken('merchantId', 'token', new DateTime());
+        $this->accessTokenRepository->method('findByToken')->willReturn($accessToken);
         $requestBody = json_encode(['amount' => 10]);
-        $validatorBuilder = new CreatePaymentOrderValidatorBuilder();
         $createPaymentOrderUseCase = new CreatePaymentOrderUseCase(
-            $this->createMock(PaymentOrderRepository::class)
+            $this->paymentOrderRepository,
+            $this->accessTokenRepository
         );
-        $action = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
+        $action = new CreatePaymentOrderAction($createPaymentOrderUseCase, new CreatePaymentOrderValidatorBuilder());
+        $serverRequest = $this->mockServerRequest($requestBody, [
+            'Authorization' => 'Bearer token'
+        ]);
+        $serverRequest->method('getHeader')->willReturn(['Bearer token']);
 
-        $response = $action($this->mockServerRequest($requestBody));
+        $response = $action($serverRequest);
         $responseBody = json_decode($response->getBody()->getContents());
 
         $this->assertObjectHasAttribute('token', $responseBody);
@@ -30,13 +49,10 @@ class CreatePaymentOrderActionTest extends ActionTestCase
 
     public function testAssertAmountIsRequired(): void
     {
-        $requestBody = json_encode([
-           'creditorIban' => 'GR2101422757743955519929399',
-           'creditorName' => 'Test'
-        ]);
-        $request = $this->mockServerRequest($requestBody);
+        $request = $this->mockServerRequest(json_encode([]));
         $createPaymentOrderUseCase = new CreatePaymentOrderUseCase(
-            $this->createMock(PaymentOrderRepository::class)
+            $this->paymentOrderRepository,
+            $this->accessTokenRepository
         );
         $validatorBuilder = new CreatePaymentOrderValidatorBuilder();
         $action = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
@@ -46,14 +62,11 @@ class CreatePaymentOrderActionTest extends ActionTestCase
 
     public function testAssertStringAmountIsNotAccepted(): void
     {
-        $requestBody = json_encode([
-           'creditorIban' => 1,
-           'amount' => '10',
-           'creditorName' => 'Test'
-        ]);
+        $requestBody = json_encode(['amount' => '10']);
         $request = $this->mockServerRequest($requestBody);
         $createPaymentOrderUseCase = new CreatePaymentOrderUseCase(
-            $this->createMock(PaymentOrderRepository::class)
+            $this->paymentOrderRepository,
+            $this->accessTokenRepository
         );
         $validatorBuilder = new CreatePaymentOrderValidatorBuilder();
         $action = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
@@ -64,13 +77,28 @@ class CreatePaymentOrderActionTest extends ActionTestCase
     public function testAssertErrorWithNonJsonBody(): void
     {
         $createPaymentOrderUseCase = new CreatePaymentOrderUseCase(
-            $this->createMock(PaymentOrderRepository::class)
+            $this->paymentOrderRepository,
+            $this->accessTokenRepository
         );
         $validatorBuilder = new CreatePaymentOrderValidatorBuilder();
         $action = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
         $response =  $action($this->mockServerRequest());
 
         $this->assertResponseIsJsonAndHasError($response);
+    }
+
+    public function testAssertAccessTokenIsRequired(): void
+    {
+        $requestBody = json_encode(['amount' => 10]);
+        $request = $this->mockServerRequest($requestBody);
+        $createPaymentOrderUseCase = new CreatePaymentOrderUseCase(
+            $this->paymentOrderRepository,
+            $this->accessTokenRepository
+        );
+        $validatorBuilder = new CreatePaymentOrderValidatorBuilder();
+        $action = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
+
+        $this->assertResponseIsJsonAndHasError($action($request));
     }
 
     private function assertResponseIsJsonAndHasError(ResponseInterface $response): void

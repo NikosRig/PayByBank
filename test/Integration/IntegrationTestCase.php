@@ -27,7 +27,7 @@ class IntegrationTestCase extends TestCase
     /**
      * @throws ClientExceptionInterface
      */
-    public function createJwt(): string
+    public function createAccessToken(): string
     {
         $body = json_encode(['mid' => $this->createMerchant()]);
         $response = $this->sendCreateJwtRequest($body);

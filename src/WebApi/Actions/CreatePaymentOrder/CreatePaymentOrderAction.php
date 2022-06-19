@@ -29,15 +29,18 @@ class CreatePaymentOrderAction implements Action
 
     public function __invoke(ServerRequestInterface $serverRequest): ResponseInterface
     {
+        $authHeader = $serverRequest->getHeader('Authorization') ?? null;
         $serverRequestBody = $serverRequest->getBody()->getContents();
         $requestParams = json_decode($serverRequestBody, true) ?? [];
+        $requestParams['accessToken'] = !empty($authHeader) ? str_replace(['Bearer', ' '], '', $authHeader[0]) : null;
+
         try {
             $this->validatorBuilder->build()->validate($requestParams);
         } catch (InvalidArgumentException $e) {
             return HttpResponseFactory::createJson(['error' => $e->getMessage()]);
         }
 
-        $request = new CreatePaymentOrderRequest($requestParams['amount']);
+        $request = new CreatePaymentOrderRequest($requestParams['amount'], $requestParams['accessToken']);
         $presenter = new CreatePaymentOrderPresenter();
         $this->createPaymentOrderUseCase->create($request, $presenter);
 

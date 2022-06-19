@@ -4,36 +4,24 @@ declare(strict_types=1);
 
 namespace Test\Integration\WebApi\Actions\CreatePaymentOrder;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
-use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientExceptionInterface;
+use Test\Integration\IntegrationTestCase;
 
-class CreatePaymentOrderTest extends TestCase
+class CreatePaymentOrderTest extends IntegrationTestCase
 {
-    private Client $client;
-
-    public function setUp(): void
-    {
-        $this->client = new Client();
-    }
-
     /**
      * @throws ClientExceptionInterface
      */
     public function testSuccessfullyCreatedPaymentOrder(): void
     {
-        # @ToDo retrieve bank's name from a trusted source.
-        $requestBody = json_encode([
-           'creditorIban' => 'GR2101422757743955519929399',
-           'amount' => 10,
-           'creditorName' => 'Nikos Rigas',
-           'bank' => 'ING'
-        ]);
+        $accessToken = $this->createAccessToken();
+        $requestBody = json_encode(['amount' => 10,]);
 
         $request = new Request('POST', "http://{$_ENV['WEB_API_HOST']}/payment/order", [
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
+            'Authorization' => "Bearer {$accessToken}"
         ], $requestBody);
 
         $response = $this->client->sendRequest($request);

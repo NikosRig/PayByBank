@@ -36,7 +36,6 @@ class GetPaymentOrderBankAccountsUseCaseTest extends TestCase
     public function testExpectExceptionWhenMerchantHasNoBankAccounts(): void
     {
         $this->bankAccountRepository->method('findAllByMerchantId')->willReturn(null);
-        $this->bankAccountRepository->method('findAllByMerchantId')->willReturn(null);
         $request = new GetPaymentOrderBankAccountsRequest('');
         $presenter = new GetPaymentOrderBankAccountsPresenter();
         $this->expectException(Exception::class);

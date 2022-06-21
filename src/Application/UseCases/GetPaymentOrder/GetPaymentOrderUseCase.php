@@ -23,7 +23,7 @@ final class GetPaymentOrderUseCase
     {
         $paymentOrder = $this->repository->findByToken($request->paymentOrderToken);
 
-        if (!$paymentOrder || !$paymentOrder->isStatusPending()) {
+        if (!$paymentOrder || $paymentOrder->hasExpired()) {
             throw new InvalidArgumentException('Invalid payment order token.');
         }
 

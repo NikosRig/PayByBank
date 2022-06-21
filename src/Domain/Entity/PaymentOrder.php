@@ -65,9 +65,9 @@ final class PaymentOrder
         return $this->amount;
     }
 
-    public function isStatusPending(): bool
+    public function hasExpired(): bool
     {
-        return $this->status->isPending();
+        return !$this->status->isPending();
     }
 
     public function getToken(): string

@@ -29,7 +29,7 @@ class GetPaymentOrderUseCaseTest extends TestCase
     public function testSuccessfulGetPaymentOrderResponse(): void
     {
         $repository = $this->createMock(PaymentOrderRepository::class);
-        $repository->method('findByToken')->willReturn(new PaymentOrder(10));
+        $repository->method('findByToken')->willReturn(new PaymentOrder(10, 'merchantId'));
         $useCase = new GetPaymentOrderUseCase($repository);
         $request = new GetPaymentOrderRequest('pmt_ord_success');
         $presenter = new GetPaymentOrderPresenter();

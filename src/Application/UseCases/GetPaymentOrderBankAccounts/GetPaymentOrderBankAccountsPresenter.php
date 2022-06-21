@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\Application\UseCases\GetMerchantBankAccounts;
+namespace PayByBank\Application\UseCases\GetPaymentOrderBankAccounts;
 
-class GetMerchantBankAccountsPresenter
+class GetPaymentOrderBankAccountsPresenter
 {
     public readonly ?array $bankAccounts;
 

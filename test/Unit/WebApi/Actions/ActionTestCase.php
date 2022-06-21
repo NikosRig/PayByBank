@@ -20,4 +20,12 @@ class ActionTestCase extends TestCase
 
         return $serverRequest;
     }
+
+    public function mockServerRequestWithAttribute(?string $attributeValue): ServerRequestInterface
+    {
+        $request = self::mockServerRequest();
+        $request->method('getAttribute')->willReturn($attributeValue);
+
+        return $request;
+    }
 }

@@ -23,7 +23,7 @@ use PayByBank\WebApi\Actions\CreateAccessToken\CreateAccessTokenAction;
 use PayByBank\WebApi\Actions\CreateBankAccount\CreateBankAccountAction;
 use PayByBank\WebApi\Actions\CreateMerchant\CreateMerchantAction;
 use PayByBank\WebApi\Actions\CreatePaymentOrder\CreatePaymentOrderAction;
-use PayByBank\WebApi\Actions\GetPaymentOrderAuth\GetPaymentOrderAuthAction;
+use PayByBank\WebApi\Actions\GetPaymentOrderIframe\GetPaymentOrderIframeAction;
 
 use function DI\autowire;
 use function DI\create;
@@ -52,7 +52,7 @@ return [
         $dispatcher = simpleDispatcher(function (RouteCollector $routeCollector) {
             $routeCollector->addGroup('/payment/order', function (RouteCollector $routeGroupCollector) {
                 $routeGroupCollector->post('', CreatePaymentOrderAction::class);
-                // $routeGroupCollector->get('/auth/{token}', GetPaymentOrderAuthAction::class);
+                $routeGroupCollector->get('/iframe/{token}', GetPaymentOrderIframeAction::class);
             });
 
             $routeCollector->addGroup('/merchant', function (RouteCollector $routeGroupCollector) {

@@ -39,7 +39,7 @@ final class PaymentOrder
     public function __construct(int $amount, string $merchantId)
     {
         $this->token = bin2hex(openssl_random_pseudo_bytes(24));
-        $this->status = PaymentOrderStatus::PENDING;
+        $this->status = PaymentOrderStatus::CREATED;
         $this->amount = $amount;
         $this->merchantId = $merchantId;
         $this->dateCreated = new DateTime('now');
@@ -67,7 +67,10 @@ final class PaymentOrder
 
     public function hasExpired(): bool
     {
-        return !$this->status->isPending();
+        $expirationDate = $this->dateCreated->modify('+15 minutes');
+
+        return !$this->status->isStatusCreated()
+            || $expirationDate > new DateTime('now');
     }
 
     public function getToken(): string

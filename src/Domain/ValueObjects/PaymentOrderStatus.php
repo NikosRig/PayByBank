@@ -6,10 +6,13 @@ namespace PayByBank\Domain\ValueObjects;
 
 enum PaymentOrderStatus: int
 {
-    case PENDING = 1;
+    case CREATED = 1;
+    case AUTHORIZED = 2;
+    case PAID = 3;
+    case CANCELED = 4;
 
-    public function isPending(): bool
+    public function isStatusCreated(): bool
     {
-        return $this->value === self::PENDING->value;
+        return $this->value === self::CREATED->value;
     }
 }

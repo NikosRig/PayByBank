@@ -6,17 +6,15 @@ namespace PayByBank\Domain\ValueObjects;
 
 class Psu
 {
-    public readonly ?string $ipAddress;
+    private readonly string $ipAddress;
 
-    public function __construct(?string $ipAddress)
+    public function __construct(string $ipAddress)
     {
         $this->ipAddress = $ipAddress;
     }
 
-    public function toArray(): array
+    public function getIpAddress(): string
     {
-        return [
-          'ip_address' => $this->ipAddress
-        ];
+        return $this->ipAddress;
     }
 }

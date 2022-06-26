@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace PayByBank\Domain\Entity;
 
 use DateTime;
-use PayByBank\Domain\ValueObjects\CreditorAccount;
 use PayByBank\Domain\ValueObjects\PaymentOrderState;
 use PayByBank\Domain\ValueObjects\PaymentOrderStatus;
 use PayByBank\Domain\ValueObjects\Psu;
 
 final class PaymentOrder
 {
-    private readonly int $id;
+    private readonly string $id;
 
     private string $token;
 
@@ -45,6 +44,11 @@ final class PaymentOrder
         $this->dateCreated = new DateTime('now');
     }
 
+    public function getId(): ?string
+    {
+        return $this->id;
+    }
+
     public function getDateCreated(): DateTime
     {
         return $this->dateCreated;
@@ -67,10 +71,10 @@ final class PaymentOrder
 
     public function hasExpired(): bool
     {
-        $expirationDate = $this->dateCreated->modify('+15 minutes');
+        $expirationDate = $this->dateCreated->modify('+15 min');
 
         return !$this->status->isStatusCreated()
-            || $expirationDate > new DateTime('now');
+            || $expirationDate < new DateTime('now');
     }
 
     public function getToken(): string

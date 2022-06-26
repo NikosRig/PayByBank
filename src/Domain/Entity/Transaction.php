@@ -17,11 +17,31 @@ class Transaction
 
     private readonly Psu $psu;
 
-    public function __construct(PaymentOrder $paymentOrder, Psu $psu)
+    private readonly BankAccount $bankAccount;
+
+    private ?string $scaRedirectUrl = null;
+
+    public function __construct(PaymentOrder $paymentOrder, Psu $psu, BankAccount $bankAccount)
     {
         $this->paymentOrder = $paymentOrder;
         $this->psu = $psu;
+        $this->bankAccount = $bankAccount;
         $this->dateCreated = new DateTime('now');
+    }
+
+    public function hasScaInfo(): bool
+    {
+        return is_string($this->scaRedirectUrl);
+    }
+
+    public function updateScaInfo(string $scaRedirectUrl): void
+    {
+        $this->scaRedirectUrl = $scaRedirectUrl;
+    }
+
+    public function getScaRedirectUrl(): ?string
+    {
+        return $this->scaRedirectUrl;
     }
 
     public function getDateCreated(): DateTime
@@ -29,13 +49,23 @@ class Transaction
         return $this->dateCreated;
     }
 
-    public function getPsu(): Psu
+    public function getPsuIp(): string
     {
-        return $this->psu;
+        return $this->psu->getIpAddress();
     }
 
-    public function getPaymentOrder(): PaymentOrder
+    public function getCreditorName(): string
     {
-        return $this->paymentOrder;
+        return $this->bankAccount->getAccountHolderName();
+    }
+
+    public function getCreditorIban(): string
+    {
+        return $this->bankAccount->getIban();
+    }
+
+    public function getPaymentOrderId(): string
+    {
+        return $this->paymentOrder->getId();
     }
 }

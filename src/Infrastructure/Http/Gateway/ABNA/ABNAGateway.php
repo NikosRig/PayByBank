@@ -14,7 +14,7 @@ use Psr\Http\Client\ClientInterface;
 
 class ABNAGateway
 {
-    private const SEPA_PAYMENT_SCOPE = 'psd2:payment:sepa:write';
+    public const SEPA_PAYMENT_SCOPE = 'psd2:payment:sepa:write';
 
     private readonly ClientInterface $client;
 

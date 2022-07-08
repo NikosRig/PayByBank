@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\Infrastructure\Http\PaymentMethods;
+namespace PayByBank\Infrastructure\PaymentMethods;
 
 use Exception;
 use PayByBank\Domain\Entity\Transaction;
-use PayByBank\Domain\Http\PaymentMethod;
+use PayByBank\Domain\PaymentMethod;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\ABNAGateway;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\DTO\RegisterSepaPaymentRequest;
 use Psr\Http\Client\ClientExceptionInterface;

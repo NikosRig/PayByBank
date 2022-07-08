@@ -12,9 +12,8 @@ use PayByBank\Domain\ValueObjects\Psu;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\ABNAGateway;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\DTO\RegisterSepaPaymentResponse;
 use PayByBank\Infrastructure\Http\Gateway\Exceptions\BadResponseException;
-use PayByBank\Infrastructure\Http\PaymentMethods\ABNA;
+use PayByBank\Infrastructure\PaymentMethods\ABNA;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Log\LoggerInterface;
 
 class ABNATest extends TestCase

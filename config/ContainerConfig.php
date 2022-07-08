@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Config\ABNAConfig;
 use Config\AccessTokenConfig;
 use FastRoute\RouteCollector;
 use GuzzleHttp\Client;
@@ -12,7 +11,6 @@ use Larium\Framework\Bridge\Routing\FastRouteBridge;
 use Larium\Framework\Contract\Routing\Router;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
-use PayByBank\Domain\PaymentMethodResolver;
 use PayByBank\Domain\Repository\AccessTokenRepository;
 use PayByBank\Domain\Repository\BankAccountRepository;
 use PayByBank\Domain\Repository\MerchantRepository;
@@ -20,7 +18,6 @@ use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\Domain\Repository\TransactionRepository;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\ABNACredentials;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\ABNAGateway;
-use PayByBank\Infrastructure\Http\PaymentMethodResolverByCode;
 use PayByBank\Infrastructure\Persistence\Adapters\MongoAdapter;
 use PayByBank\Infrastructure\Persistence\Repository\MongoAccessTokenRepository;
 use PayByBank\Infrastructure\Persistence\Repository\MongoBankAccountRepository;

@@ -39,6 +39,11 @@ class Transaction
         $this->scaRedirectUrl = $scaRedirectUrl;
     }
 
+    public function getBankCode(): string
+    {
+        return $this->bankAccount->getBankCode();
+    }
+
     public function getAmount(): int
     {
         return $this->paymentOrder->getAmount();

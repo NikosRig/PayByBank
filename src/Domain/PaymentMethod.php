@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\Domain\Http;
+namespace PayByBank\Domain;
 
 use Exception;
 use PayByBank\Domain\Entity\Transaction;

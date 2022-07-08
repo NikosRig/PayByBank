@@ -2,11 +2,14 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\Domain\Http;
+namespace PayByBank\Infrastructure\Http;
 
 use Exception;
+use PayByBank\Domain\Entity\Transaction;
+use PayByBank\Domain\PaymentMethod;
+use PayByBank\Domain\PaymentMethodResolver;
 
-class PaymentMethodResolver
+class PaymentMethodResolverByCode implements PaymentMethodResolver
 {
     /**
      * @var PaymentMethod[]
@@ -30,5 +33,10 @@ class PaymentMethodResolver
         }
 
         throw new Exception('Payment method cannot be found.');
+    }
+
+    public function resolve(Transaction $transaction): PaymentMethod
+    {
+        $bankCode = $transaction->getBankCode();
     }
 }

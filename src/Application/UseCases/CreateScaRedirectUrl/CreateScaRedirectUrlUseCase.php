@@ -7,7 +7,7 @@ namespace PayByBank\Application\UseCases\CreateScaRedirectUrl;
 use Exception;
 use InvalidArgumentException;
 use PayByBank\Domain\Entity\Transaction;
-use PayByBank\Domain\Http\PaymentMethodResolver;
+use PayByBank\Domain\PaymentMethodResolver;
 use PayByBank\Domain\Repository\BankAccountRepository;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\Domain\Repository\TransactionRepository;
@@ -54,15 +54,9 @@ final class CreateScaRedirectUrlUseCase
             throw new InvalidArgumentException("Bank account cannot be found");
         }
 
-        $paymentMethod = $this->paymentMethodResolver->resolveWithBankCode(
-            $bankAccount->getBankCode()
-        );
         $psu = new Psu($request->psuIp);
-        $transaction = new Transaction(
-            $paymentOrder,
-            $psu,
-            $bankAccount
-        );
+        $transaction = new Transaction($paymentOrder, $psu, $bankAccount);
+        $paymentMethod = $this->paymentMethodResolver->resolve($transaction);
         $paymentMethod->createScaRedirectUrl($transaction);
 
         if (!$transaction->hasScaInfo()) {
@@ -70,9 +64,6 @@ final class CreateScaRedirectUrlUseCase
         }
 
         $this->transactionRepository->save($transaction);
-
-        $presenter->present(
-            $transaction->getScaRedirectUrl()
-        );
+        $presenter->present($transaction->getScaRedirectUrl());
     }
 }

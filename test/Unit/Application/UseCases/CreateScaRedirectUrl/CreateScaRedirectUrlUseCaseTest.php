@@ -12,8 +12,8 @@ use PayByBank\Application\UseCases\CreateScaRedirectUrl\CreateScaRedirectUrlUseC
 use PayByBank\Domain\Entity\BankAccount;
 use PayByBank\Domain\Entity\PaymentOrder;
 use PayByBank\Domain\Entity\Transaction;
-use PayByBank\Domain\Http\PaymentMethod;
-use PayByBank\Domain\Http\PaymentMethodResolver;
+use PayByBank\Domain\PaymentMethod;
+use PayByBank\Domain\PaymentMethodResolver;
 use PayByBank\Domain\Repository\BankAccountRepository;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\Domain\Repository\TransactionRepository;
@@ -85,7 +85,7 @@ class CreateScaRedirectUrlUseCaseTest extends TestCase
         $this->bankAccountsRepository->method('findByBankCodeAndMerchantId')->willReturn(
             $this->createBankAccount()
         );
-        $this->paymentMethodResolver->method('resolveWithBankCode')->willThrowException(new InvalidArgumentException());
+        $this->paymentMethodResolver->method('resolve')->willThrowException(new InvalidArgumentException());
         $request = new CreateScaRedirectUrlRequest('token', '010', 'ip');
         $presenter = new CreateScaRedirectUrlPresenter();
         $this->expectException(InvalidArgumentException::class);
@@ -126,7 +126,7 @@ class CreateScaRedirectUrlUseCaseTest extends TestCase
         $paymentMethod->method('createScaRedirectUrl')->willReturnCallback(function (Transaction $transaction) {
             $transaction->updateScaInfo('redirect_url');
         });
-        $this->paymentMethodResolver->method('resolveWithBankCode')->willReturn($paymentMethod);
+        $this->paymentMethodResolver->method('resolve')->willReturn($paymentMethod);
         $this->transactionRepository->expects($this->once())->method('save');
         $request = new CreateScaRedirectUrlRequest('token', '010', 'ip');
         $presenter = new CreateScaRedirectUrlPresenter();

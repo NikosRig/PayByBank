@@ -42,4 +42,9 @@ class ABNA implements PaymentMethod
             throw new Exception('Sca redirect url failed to be created.');
         }
     }
+
+    public function getBankCode(): string
+    {
+        return 'ABNA';
+    }
 }

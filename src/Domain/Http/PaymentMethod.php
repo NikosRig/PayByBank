@@ -9,6 +9,8 @@ use PayByBank\Domain\Entity\Transaction;
 
 interface PaymentMethod
 {
+    public function getBankCode(): string;
+
     /**
      * @throws Exception
      */

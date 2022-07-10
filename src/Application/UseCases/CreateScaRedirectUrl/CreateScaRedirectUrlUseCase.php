@@ -54,9 +54,9 @@ final class CreateScaRedirectUrlUseCase
             throw new InvalidArgumentException("Bank account cannot be found");
         }
 
+        $paymentMethod = $this->paymentMethodResolver->resolve($bankAccount);
         $psu = new Psu($request->psuIp);
         $transaction = new Transaction($paymentOrder, $psu, $bankAccount);
-        $paymentMethod = $this->paymentMethodResolver->resolve($transaction);
         $paymentMethod->createScaRedirectUrl($transaction);
 
         if (!$transaction->hasScaInfo()) {

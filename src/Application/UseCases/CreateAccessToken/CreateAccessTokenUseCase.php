@@ -45,7 +45,7 @@ final class CreateAccessTokenUseCase
         ];
 
         $jwtToken = JWT::encode($jwtPayload, $request->jwtSecretKey, 'HS256');
-        $accessToken = new AccessToken($merchant->getMid(), $jwtToken, new DateTime($expirationDateTime));
+        $accessToken = new AccessToken($merchant->getId(), $jwtToken, new DateTime($expirationDateTime));
         $this->accessTokenRepository->save($accessToken);
         $presenter->present($jwtToken);
     }

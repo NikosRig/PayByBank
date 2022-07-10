@@ -22,13 +22,10 @@ class ABNATest extends TestCase
 
     private readonly ABNAGateway $gateway;
 
-    private readonly LoggerInterface $logger;
-
     public function setUp(): void
     {
         $this->gateway = $this->createMock(ABNAGateway::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
-        $this->paymentMethod = new ABNA($this->gateway, $this->logger);
+        $this->paymentMethod = new ABNA($this->gateway);
     }
 
     /**
@@ -51,7 +48,6 @@ class ABNATest extends TestCase
             new BadResponseException()
         );
         $transaction = $this->createTransaction();
-        $this->logger->expects($this->once())->method('error');
         $this->expectException(Exception::class);
 
         $this->paymentMethod->createScaRedirectUrl($transaction);

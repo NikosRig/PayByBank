@@ -16,12 +16,9 @@ class ABNA implements PaymentMethod
 {
     private readonly ABNAGateway $gateway;
 
-    private readonly LoggerInterface $logger;
-
-    public function __construct(ABNAGateway $gateway, LoggerInterface $logger)
+    public function __construct(ABNAGateway $gateway)
     {
         $this->gateway = $gateway;
-        $this->logger = $logger;
     }
 
     /**
@@ -38,7 +35,6 @@ class ABNA implements PaymentMethod
             $response = $this->gateway->registerSepaPayment($request);
             $transaction->updateScaInfo($response->scaRedirectUrl);
         } catch (ClientExceptionInterface $e) {
-            $this->logger->error($e->getMessage());
             throw new Exception('Sca redirect url failed to be created.');
         }
     }

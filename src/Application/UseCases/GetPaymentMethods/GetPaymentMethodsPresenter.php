@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace PayByBank\Application\UseCases\GetPaymentMethods;
 
+use PayByBank\Domain\Entity\PaymentOrder;
 use PayByBank\Domain\PaymentMethod;
 
 class GetPaymentMethodsPresenter
 {
-    /**
-     * @var PaymentMethod[]
-     */
-    public readonly array $paymentMethods;
+    public readonly array $bankCodes;
 
     public function present(array $paymentMethods): void
     {
-        $this->paymentMethods = $paymentMethods;
+        foreach ($paymentMethods as $paymentMethod) {
+            $this->bankCodes[] = $paymentMethod->getBankCode();
+        }
     }
 }

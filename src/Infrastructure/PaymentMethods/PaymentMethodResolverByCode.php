@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PayByBank\Infrastructure\PaymentMethods;
 
 use Exception;
-use PayByBank\Domain\Entity\Transaction;
+use PayByBank\Domain\Entity\BankAccount;
 use PayByBank\Domain\PaymentMethod;
 use PayByBank\Domain\PaymentMethodResolver;
 
@@ -24,19 +24,14 @@ class PaymentMethodResolverByCode implements PaymentMethodResolver
     /**
      * @throws Exception
      */
-    public function resolveWithBankCode(string $bankCode): PaymentMethod
+    public function resolve(BankAccount $bankAccount): PaymentMethod
     {
         foreach ($this->paymentMethods as $paymentMethod) {
-            if ($bankCode == $paymentMethod->getBankCode()) {
+            if ($bankAccount->getBankCode() === $paymentMethod->getBankCode()) {
                 return $paymentMethod;
             }
         }
 
         throw new Exception('Payment method cannot be found.');
-    }
-
-    public function resolve(Transaction $transaction): PaymentMethod
-    {
-        $bankCode = $transaction->getBankCode();
     }
 }

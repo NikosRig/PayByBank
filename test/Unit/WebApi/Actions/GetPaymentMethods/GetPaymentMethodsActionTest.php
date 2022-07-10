@@ -2,44 +2,48 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\WebApi\Actions\GetPaymentOrderIframe;
+namespace Test\Unit\WebApi\Actions\GetPaymentMethods;
 
 use Larium\Bridge\Template\Template;
-use Larium\Bridge\Template\TwigTemplate;
-use PayByBank\Application\UseCases\GetPaymentOrderBankAccounts\GetPaymentOrderBankAccountsUseCase;
+use PayByBank\Application\UseCases\GetPaymentMethods\GetPaymentMethodsUseCase;
 use PayByBank\Domain\Entity\BankAccount;
 use PayByBank\Domain\Entity\PaymentOrder;
+use PayByBank\Domain\PaymentMethodResolver;
 use PayByBank\Domain\Repository\BankAccountRepository;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
-use PayByBank\WebApi\Actions\GetPaymentOrderIframe\GetPaymentOrderIframeAction;
+use PayByBank\WebApi\Actions\GetPaymentMethods\GetPaymentMethodsAction;
 use Test\Unit\WebApi\Actions\ActionTestCase;
 
-class GetPaymentOrderIframeActionTest extends ActionTestCase
+class GetPaymentMethodsActionTest extends ActionTestCase
 {
     private readonly PaymentOrderRepository $paymentOrderRepository;
 
     private readonly BankAccountRepository $bankAccountRepository;
 
-    private readonly GetPaymentOrderBankAccountsUseCase $getMerchantBankAccountsUseCase;
+    private readonly GetPaymentMethodsUseCase $getMerchantBankAccountsUseCase;
 
     private readonly Template $template;
+
+    private readonly PaymentMethodResolver $paymentMethodResolver;
 
     public function setUp(): void
     {
         $this->paymentOrderRepository = $this->createMock(PaymentOrderRepository::class);
         $this->bankAccountRepository = $this->createMock(BankAccountRepository::class);
         $this->template = $this->createMock(Template::class);
+        $this->paymentMethodResolver = $this->createMock(PaymentMethodResolver::class);
 
-        $this->getMerchantBankAccountsUseCase = new GetPaymentOrderBankAccountsUseCase(
+        $this->useCase = new GetPaymentMethodsUseCase(
             $this->bankAccountRepository,
-            $this->paymentOrderRepository
+            $this->paymentOrderRepository,
+            $this->paymentMethodResolver
         );
     }
 
     public function testExpectBadRequestWhenPaymentOrderTokenMissing(): void
     {
-        $action = new GetPaymentOrderIframeAction(
-            $this->getMerchantBankAccountsUseCase,
+        $action = new GetPaymentMethodsAction(
+            $this->useCase,
             $this->template
         );
         $response = $action($this->mockServerRequest());
@@ -49,8 +53,8 @@ class GetPaymentOrderIframeActionTest extends ActionTestCase
 
     public function testExpectBadRequestWhenPaymentOrderIsInvalid(): void
     {
-        $action = new GetPaymentOrderIframeAction(
-            $this->getMerchantBankAccountsUseCase,
+        $action = new GetPaymentMethodsAction(
+            $this->useCase,
             $this->template
         );
         $serverRequest = $this->mockServerRequestWithAttribute('token');
@@ -62,8 +66,8 @@ class GetPaymentOrderIframeActionTest extends ActionTestCase
     public function testExpectBadRequestWhenMerchantHasNoAccounts(): void
     {
         $this->paymentOrderRepository->method('findByToken')->willReturn(new PaymentOrder(10, ''));
-        $action = new GetPaymentOrderIframeAction(
-            $this->getMerchantBankAccountsUseCase,
+        $action = new GetPaymentMethodsAction(
+            $this->useCase,
             $this->template
         );
         $serverRequest = $this->mockServerRequestWithAttribute('token');
@@ -78,8 +82,8 @@ class GetPaymentOrderIframeActionTest extends ActionTestCase
         $this->bankAccountRepository->method('findAllByMerchantId')->willReturn([
             new BankAccount('', '', '', '')
         ]);
-        $action = new GetPaymentOrderIframeAction(
-            $this->getMerchantBankAccountsUseCase,
+        $action = new GetPaymentMethodsAction(
+            $this->useCase,
             $this->template
         );
         $serverRequest = $this->mockServerRequestWithAttribute('token');

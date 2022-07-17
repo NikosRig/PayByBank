@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\Application\UseCases\GetPaymentMethods;
+namespace PayByBank\Application\UseCases\Checkout;
 
 use Exception;
 use InvalidArgumentException;
@@ -10,7 +10,7 @@ use PayByBank\Domain\PaymentMethodResolver;
 use PayByBank\Domain\Repository\BankAccountRepository;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
 
-final class GetPaymentMethodsUseCase
+final class CheckoutUseCase
 {
     private readonly BankAccountRepository $bankAccountRepository;
 
@@ -32,8 +32,8 @@ final class GetPaymentMethodsUseCase
      * @throws Exception
      */
     public function get(
-        GetPaymentMethodsRequest   $request,
-        GetPaymentMethodsPresenter $presenter
+        CheckoutRequest   $request,
+        CheckoutPresenter $presenter
     ): void {
         $paymentOrder = $this->paymentOrderRepository->findByToken($request->paymentOrderToken);
 
@@ -54,6 +54,9 @@ final class GetPaymentMethodsUseCase
             $paymentMethods[] = $this->paymentMethodResolver->resolve($bankAccount);
         }
 
-        $presenter->present($paymentMethods);
+        $presenter->present(
+            $paymentMethods,
+            $paymentOrder->getAmount()
+        );
     }
 }

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\Application\UseCases\GetPaymentMethods;
+namespace PayByBank\Application\UseCases\Checkout;
 
-class GetPaymentMethodsRequest
+class CheckoutRequest
 {
     public readonly string $paymentOrderToken;
 

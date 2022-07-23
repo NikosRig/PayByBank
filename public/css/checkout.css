@@ -1,0 +1,109 @@
+html, body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+}
+
+#container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#left-column {
+    display: flex;
+    align-items: center;
+    width: 40vw;
+    max-width: 40vw;
+    flex-direction: column;
+}
+
+#left-column #logo {
+    min-width: 100%;
+    display: flex;
+    justify-content: center;
+    max-width: 100%;
+}
+
+#left-column #logo img {
+    height: 100%;
+}
+
+
+#left-column #payment-order-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#left-column #payment-order-info #merchant-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 5vh;
+}
+
+#left-column #payment-order-info #merchant-info #order-description {
+    font-size: 2.5vh;
+    margin-bottom: 2vh;
+}
+
+#left-column #payment-order-info #amount {
+    font-size: 3.5vh;
+}
+
+#left-column #payment-order-info #merchant-info #merchant-name {
+    font-size: 2vh;
+    color: #777;
+}
+
+#right-column {
+    display: flex;
+    width: 60vw;
+    background-color: #f6f9ff;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#right-column #payment-methods {
+    background-color: white;
+    min-width: 45vw;
+    max-width: 45vw;
+    height: 60vh;
+    border-radius: 5px;
+    box-shadow: 0 0 20px rgb(0 0 0 / 5%), 0 20px 40px rgb(0 0 0 / 5%);
+}
+
+
+
+/* For mobile phones: */
+@media only screen and (max-width: 768px) {
+
+    #container {
+        flex-direction: column;
+    }
+
+    #left-column {
+        flex-direction: column;
+        min-width: 100vw;
+        height: 50vh;
+    }
+
+    #left-column #logo {
+        height: 15vh;
+    }
+
+    #right-column {
+        min-width: 100vw;
+        height: 50vh;
+    }
+
+    #right-column #payment-methods {
+        min-width: 95vw;
+        max-width: 95vw;
+        box-shadow: none;
+    }
+}

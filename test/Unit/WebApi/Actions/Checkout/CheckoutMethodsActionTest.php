@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\WebApi\Actions\GetPaymentMethods;
+namespace Test\Unit\WebApi\Actions\Checkout;
 
 use Larium\Bridge\Template\Template;
-use PayByBank\Application\UseCases\GetPaymentMethods\GetPaymentMethodsUseCase;
+use PayByBank\Application\UseCases\Checkout\CheckoutUseCase;
 use PayByBank\Domain\Entity\BankAccount;
 use PayByBank\Domain\Entity\PaymentOrder;
 use PayByBank\Domain\PaymentMethodResolver;
 use PayByBank\Domain\Repository\BankAccountRepository;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
-use PayByBank\WebApi\Actions\GetPaymentMethods\GetPaymentMethodsAction;
+use PayByBank\WebApi\Actions\Checkout\CheckoutAction;
 use Test\Unit\WebApi\Actions\ActionTestCase;
 
-class GetPaymentMethodsActionTest extends ActionTestCase
+class CheckoutMethodsActionTest extends ActionTestCase
 {
     private readonly PaymentOrderRepository $paymentOrderRepository;
 
     private readonly BankAccountRepository $bankAccountRepository;
 
-    private readonly GetPaymentMethodsUseCase $getMerchantBankAccountsUseCase;
+    private readonly CheckoutUseCase $getMerchantBankAccountsUseCase;
 
     private readonly Template $template;
 
@@ -33,7 +33,7 @@ class GetPaymentMethodsActionTest extends ActionTestCase
         $this->template = $this->createMock(Template::class);
         $this->paymentMethodResolver = $this->createMock(PaymentMethodResolver::class);
 
-        $this->useCase = new GetPaymentMethodsUseCase(
+        $this->useCase = new CheckoutUseCase(
             $this->bankAccountRepository,
             $this->paymentOrderRepository,
             $this->paymentMethodResolver
@@ -42,7 +42,7 @@ class GetPaymentMethodsActionTest extends ActionTestCase
 
     public function testExpectBadRequestWhenPaymentOrderTokenMissing(): void
     {
-        $action = new GetPaymentMethodsAction(
+        $action = new CheckoutAction(
             $this->useCase,
             $this->template
         );
@@ -53,7 +53,7 @@ class GetPaymentMethodsActionTest extends ActionTestCase
 
     public function testExpectBadRequestWhenPaymentOrderIsInvalid(): void
     {
-        $action = new GetPaymentMethodsAction(
+        $action = new CheckoutAction(
             $this->useCase,
             $this->template
         );
@@ -66,7 +66,7 @@ class GetPaymentMethodsActionTest extends ActionTestCase
     public function testExpectBadRequestWhenMerchantHasNoAccounts(): void
     {
         $this->paymentOrderRepository->method('findByToken')->willReturn(new PaymentOrder(10, ''));
-        $action = new GetPaymentMethodsAction(
+        $action = new CheckoutAction(
             $this->useCase,
             $this->template
         );
@@ -82,7 +82,7 @@ class GetPaymentMethodsActionTest extends ActionTestCase
         $this->bankAccountRepository->method('findAllByMerchantId')->willReturn([
             new BankAccount('', '', '', '')
         ]);
-        $action = new GetPaymentMethodsAction(
+        $action = new CheckoutAction(
             $this->useCase,
             $this->template
         );

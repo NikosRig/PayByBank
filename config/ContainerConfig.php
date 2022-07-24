@@ -31,7 +31,7 @@ use PayByBank\WebApi\Actions\CreateAccessToken\CreateAccessTokenAction;
 use PayByBank\WebApi\Actions\CreateBankAccount\CreateBankAccountAction;
 use PayByBank\WebApi\Actions\CreateMerchant\CreateMerchantAction;
 use PayByBank\WebApi\Actions\CreatePaymentOrder\CreatePaymentOrderAction;
-use PayByBank\WebApi\Actions\GetPaymentMethods\GetPaymentMethodsAction;
+use PayByBank\WebApi\Actions\Checkout\CheckoutAction;
 use Psr\Log\LoggerInterface;
 use function DI\autowire;
 use function DI\create;
@@ -64,7 +64,7 @@ return [
         $dispatcher = simpleDispatcher(function (RouteCollector $routeCollector) {
             $routeCollector->addGroup('/payment/order', function (RouteCollector $routeGroupCollector) {
                 $routeGroupCollector->post('', CreatePaymentOrderAction::class);
-                $routeGroupCollector->get('/pay/{token}', GetPaymentMethodsAction::class);
+                $routeGroupCollector->get('/checkout/{token}', CheckoutAction::class);
             });
 
             $routeCollector->addGroup('/merchant', function (RouteCollector $routeGroupCollector) {

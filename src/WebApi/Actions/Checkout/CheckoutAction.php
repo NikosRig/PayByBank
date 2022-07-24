@@ -2,10 +2,13 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\WebApi\Actions\GetPaymentMethods;
+namespace PayByBank\WebApi\Actions\Checkout;
 
 use InvalidArgumentException;
 use Larium\Bridge\Template\Template;
+use PayByBank\Application\UseCases\Checkout\CheckoutPresenter;
+use PayByBank\Application\UseCases\Checkout\CheckoutRequest;
+use PayByBank\Application\UseCases\Checkout\CheckoutUseCase;
 use PayByBank\Application\UseCases\GetPaymentMethods\GetPaymentMethodsPresenter;
 use PayByBank\Application\UseCases\GetPaymentMethods\GetPaymentMethodsRequest;
 use PayByBank\Application\UseCases\GetPaymentMethods\GetPaymentMethodsUseCase;
@@ -15,13 +18,13 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 
-class GetPaymentMethodsAction implements Action
+class CheckoutAction implements Action
 {
-    private readonly GetPaymentMethodsUseCase $useCase;
+    private readonly CheckoutUseCase $useCase;
 
     private readonly Template $template;
 
-    public function __construct(GetPaymentMethodsUseCase $useCase, Template $template)
+    public function __construct(CheckoutUseCase $useCase, Template $template)
     {
         $this->useCase = $useCase;
         $this->template = $template;
@@ -36,8 +39,8 @@ class GetPaymentMethodsAction implements Action
                 throw new InvalidArgumentException('Invalid payment order token.');
             }
 
-            $presenter = new GetPaymentMethodsPresenter();
-            $request = new GetPaymentMethodsRequest($paymentOrderToken);
+            $presenter = new CheckoutPresenter();
+            $request = new CheckoutRequest($paymentOrderToken);
             $this->useCase->get($request, $presenter);
 
             $template = $this->template->render('payment_methods.html', [

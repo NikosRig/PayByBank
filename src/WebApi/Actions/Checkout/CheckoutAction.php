@@ -47,7 +47,7 @@ class CheckoutAction implements Action
             $request = new CheckoutRequest($paymentOrderToken);
             $this->useCase->get($request, $presenter);
 
-            $template = $this->template->render('payment_methods.html', [
+            $template = $this->template->render('checkout.html', [
                 'bankCodes' => $presenter->bankCodes
             ]);
 

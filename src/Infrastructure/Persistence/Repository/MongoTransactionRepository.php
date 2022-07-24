@@ -23,6 +23,7 @@ class MongoTransactionRepository implements TransactionRepository
         $this->collection->insertOne([
             'paymentOrderToken' => $transaction->getPaymentOrderToken(),
             'scaRedirectUrl' => $transaction->getScaRedirectUrl(),
+            'transactionId' => $transaction->getTransactionId(),
             'psuIp' => $transaction->getPsuIp(),
             'dateCreated' => $transaction->getDateCreated()->format('Y-m-d H:i:s')
         ]);

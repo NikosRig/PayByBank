@@ -21,6 +21,8 @@ class Transaction
 
     private ?string $scaRedirectUrl = null;
 
+    private ?string $transactionId;
+
     public function __construct(PaymentOrder $paymentOrder, Psu $psu, BankAccount $bankAccount)
     {
         $this->paymentOrder = $paymentOrder;
@@ -29,14 +31,20 @@ class Transaction
         $this->dateCreated = new DateTime('now');
     }
 
-    public function hasScaInfo(): bool
+    public function getTransactionId(): ?string
     {
-        return is_string($this->scaRedirectUrl);
+        return $this->transactionId;
     }
 
-    public function updateScaInfo(string $scaRedirectUrl): void
+    public function hasScaInfo(): bool
+    {
+        return $this->scaRedirectUrl && $this->transactionId;
+    }
+
+    public function updateScaInfo(string $scaRedirectUrl, string $transactionId): void
     {
         $this->scaRedirectUrl = $scaRedirectUrl;
+        $this->transactionId = $transactionId;
     }
 
     public function getBankCode(): string

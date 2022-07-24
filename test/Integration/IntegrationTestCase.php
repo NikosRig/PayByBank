@@ -27,6 +27,24 @@ class IntegrationTestCase extends TestCase
     /**
      * @throws ClientExceptionInterface
      */
+    public function createPaymentOrder(): string
+    {
+        $requestBody = json_encode(['amount' => 10]);
+        $request = new Request('POST', "http://{$_ENV['WEB_API_HOST']}/payment/order", [
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => "Bearer {$this->createAccessToken()}"
+        ], $requestBody);
+
+        $response = $this->client->sendRequest($request);
+        $responseBody = json_decode($response->getBody()->getContents());
+
+        return $responseBody->token;
+    }
+
+    /**
+     * @throws ClientExceptionInterface
+     */
     public function createAccessToken(): string
     {
         $body = json_encode(['mid' => $this->createMerchant()]);

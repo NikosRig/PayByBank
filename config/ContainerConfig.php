@@ -32,6 +32,7 @@ use PayByBank\WebApi\Actions\CreateBankAccount\CreateBankAccountAction;
 use PayByBank\WebApi\Actions\CreateMerchant\CreateMerchantAction;
 use PayByBank\WebApi\Actions\CreatePaymentOrder\CreatePaymentOrderAction;
 use PayByBank\WebApi\Actions\Checkout\CheckoutAction;
+use PayByBank\WebApi\Actions\CreateScaRedirectUrl\CreateScaRedirectUrlAction;
 use Psr\Log\LoggerInterface;
 use function DI\autowire;
 use function DI\create;
@@ -75,6 +76,8 @@ return [
             $routeCollector->addGroup('/oauth2', function (RouteCollector $routeGroupCollector) {
                 $routeGroupCollector->post('/token', CreateAccessTokenAction::class);
             });
+
+            $routeCollector->post('/sca/redirect', CreateScaRedirectUrlAction::class);
         });
 
         return new FastRouteBridge($dispatcher);
@@ -108,7 +111,8 @@ return [
     Template::class => create(TwigTemplate::class)->constructor(__DIR__ . '/../resources/templates'),
     LoggerInterface::class => DI\factory(function (string $appName) {
         $logger = new Logger($appName);
-        $logger->pushHandler(new StreamHandler(__DIR__ . '/../var'));
+        $logger->pushHandler(new StreamHandler('php://stdout'));
+        return $logger;
     })->parameter('appName', env('APPLICATION_NAME')),
     PaymentMethodResolver::class => create(PaymentMethodResolverByCode::class)->constructor(
         autowire(ABNA::class)

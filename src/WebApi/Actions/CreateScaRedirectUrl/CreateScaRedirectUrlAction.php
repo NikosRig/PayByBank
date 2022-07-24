@@ -12,6 +12,7 @@ use PayByBank\WebApi\Actions\Action;
 use PayByBank\WebApi\Factory\HttpResponseFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
 use Throwable;
 
 class CreateScaRedirectUrlAction implements Action
@@ -20,12 +21,16 @@ class CreateScaRedirectUrlAction implements Action
 
     private readonly CreateScaRedirectUrlValidatorBuilder $validatorBuilder;
 
+    private readonly LoggerInterface $logger;
+
     public function __construct(
         CreateScaRedirectUrlUseCase $useCase,
-        CreateScaRedirectUrlValidatorBuilder $validatorBuilder
+        CreateScaRedirectUrlValidatorBuilder $validatorBuilder,
+        LoggerInterface $logger
     ) {
         $this->useCase = $useCase;
         $this->validatorBuilder = $validatorBuilder;
+        $this->logger = $logger;
     }
 
     public function __invoke(ServerRequestInterface $serverRequest): ResponseInterface
@@ -47,7 +52,8 @@ class CreateScaRedirectUrlAction implements Action
         } catch (InvalidArgumentException $e) {
             return HttpResponseFactory::createJson(['error' => $e->getMessage()], 400);
         } catch (Throwable $e) {
-            return HttpResponseFactory::create(null, 500);
+            $this->logger->error($e->getMessage());
+            return HttpResponseFactory::create($e->getMessage(), 500);
         }
     }
 }

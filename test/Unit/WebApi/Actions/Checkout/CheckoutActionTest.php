@@ -14,7 +14,7 @@ use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\WebApi\Actions\Checkout\CheckoutAction;
 use Test\Unit\WebApi\Actions\ActionTestCase;
 
-class CheckoutMethodsActionTest extends ActionTestCase
+class CheckoutActionTest extends ActionTestCase
 {
     private readonly PaymentOrderRepository $paymentOrderRepository;
 

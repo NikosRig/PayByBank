@@ -11,7 +11,6 @@
 <body>
 
 <div id="container">
-
     <div id="left-column">
         <div id="logo">
             <img src="/img/paybybank.png" alt="PayByBank">
@@ -21,22 +20,33 @@
                 <span id="order-description">Order#19387</span>
                 <span id="merchant-name">{{ merchantName }}</span>
             </div>
-
             <div id="amount">
                 <span>{{ amount }}</span>
             </div>
-
-        </div>
-    </div> <!--left-column-->
-
-    <div id="right-column">
-        <div id="payment-methods">
-
         </div>
     </div>
-    {% for bankCode in bankCodes %}
-    {% endfor %}
+    <div id="right-column">
+        <div id="payment-methods-container">
+            <div id="payment-methods-title">
+                <span>Choose Payment Method</span>
+            </div>
+            <form method="POST" id="sca-redirect-form">
+                <div id="payment-methods">
+                    {% for bankCode in bankCodes %}
+                    <div class="payment-method">
+                        <input type="checkbox" name="payment_method" value="{{ bankCode}}" id="{{ bankCode}}" />
+                        <label for="{{ bankCode}}">
+                            <img src="/img/{{bankCode}}.png" alt="{{bankCode}}"/>
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div id="sca-redirect-btn-container">
+                    <button type="button">Pay</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
-
 </body>
 </html>

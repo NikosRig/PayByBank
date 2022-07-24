@@ -33,7 +33,10 @@ class ABNA implements PaymentMethod
         );
         try {
             $response = $this->gateway->registerSepaPayment($request);
-            $transaction->updateScaInfo($response->scaRedirectUrl);
+            $transaction->updateScaInfo(
+                $response->scaRedirectUrl,
+                $response->transactionId
+            );
         } catch (ClientExceptionInterface $e) {
             throw new Exception('Sca redirect url failed to be created.');
         }

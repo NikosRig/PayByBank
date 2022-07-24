@@ -69,7 +69,7 @@ class CreateScaRedirectUrlUseCaseTest extends TestCase
         $this->bankAccountsRepository->method('findByBankCodeAndMerchantId')->willReturn(null);
         $request = new CreateScaRedirectUrlRequest('token', '010', 'ip');
         $presenter = new CreateScaRedirectUrlPresenter();
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(Exception::class);
 
         $this->useCase->create($request, $presenter);
     }

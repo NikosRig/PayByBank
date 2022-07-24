@@ -51,7 +51,7 @@ final class CreateScaRedirectUrlUseCase
         );
 
         if (!$bankAccount) {
-            throw new InvalidArgumentException("Bank account cannot be found");
+            throw new Exception("Bank account cannot be found");
         }
 
         $paymentMethod = $this->paymentMethodResolver->resolve($bankAccount);

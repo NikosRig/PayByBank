@@ -172,7 +172,8 @@ class ABNAGateway
             'transactionId' => $transactionId,
             'response_type' => 'code',
             'flow' => 'code',
-            'redirect_uri' => $this->credentials->tppRedirectUrl
+            'redirect_uri' => $this->credentials->tppRedirectUrl,
+            'state' => $transactionId
         ]);
 
         return "{$this->oAuthUrl}?$query";

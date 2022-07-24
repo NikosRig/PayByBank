@@ -62,7 +62,6 @@ class ABNAGateway
         $response = $this->client->sendRequest($request);
         $responseBody = $response->getBody()->getContents() ?? '';
         $responsePayload = json_decode($responseBody);
-
         if (!isset($responsePayload->access_token) || !is_string($responsePayload->access_token)) {
             throw new BadResponseException($responseBody, $response->getStatusCode());
         }

@@ -53,7 +53,7 @@ class CreateScaRedirectUrlAction implements Action
             return HttpResponseFactory::createJson(['error' => $e->getMessage()], 400);
         } catch (Throwable $e) {
             $this->logger->error($e->getMessage());
-            return HttpResponseFactory::create($e->getMessage(), 500);
+            return HttpResponseFactory::create(null, 500);
         }
     }
 }

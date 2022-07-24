@@ -74,8 +74,8 @@ class Transaction
         return $this->bankAccount->getIban();
     }
 
-    public function getPaymentOrderId(): string
+    public function getPaymentOrderToken(): string
     {
-        return $this->paymentOrder->getId();
+        return $this->paymentOrder->getToken();
     }
 }

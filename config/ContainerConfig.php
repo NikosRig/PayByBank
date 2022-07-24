@@ -157,9 +157,10 @@ return [
     |--------------------------------------------------------------------------
     */
     ABNAGateway::class => DI\factory(function (ABNACredentials $credentials) {
+
         $clientOptions = [
-            'cert' => env('ABNA_CERT_PATH'),
-            'ssl_key' => '/var/www/html/var/certs/ABNA/sandbox/tpp.key'
+            'cert' => $_ENV['ABNA_CERT_PATH'],
+            'ssl_key' => $_ENV['ABNA_SSL_KEY_PATH']
         ];
         $client = new Client($clientOptions);
 

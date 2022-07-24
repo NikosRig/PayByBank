@@ -48,9 +48,9 @@ class Transaction
         $this->transactionId = $transactionId;
     }
 
-    public function getBankCode(): string
+    public function getBankAccountId(): string
     {
-        return $this->bankAccount->getBankCode();
+        return $this->bankAccount->getId();
     }
 
     public function getAmount(): int

@@ -38,7 +38,8 @@ class Transaction
 
     public function hasScaInfo(): bool
     {
-        return $this->scaRedirectUrl && $this->transactionId;
+        return is_string($this->scaRedirectUrl)
+            && is_string($this->transactionId);
     }
 
     public function updateScaInfo(string $scaRedirectUrl, string $transactionId): void

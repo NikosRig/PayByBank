@@ -34,7 +34,7 @@ class ABNATest extends TestCase
     public function testShouldHasScaInfo(): void
     {
         $this->gateway->method('registerSepaPayment')->willReturnCallback(function () {
-            return new RegisterSepaPaymentResponse('', '', '');
+            return new RegisterSepaPaymentResponse('tid', '', '');
         });
         $transaction = $this->createTransaction();
         $this->paymentMethod->createScaRedirectUrl($transaction);

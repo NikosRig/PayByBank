@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace PayByBank\Infrastructure\PaymentMethods;
 
 use Exception;
-use PayByBank\Domain\Entity\Transaction;
 use PayByBank\Domain\PaymentMethod;
+use PayByBank\Domain\ValueObjects\ScaTransactionData;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\ABNAGateway;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\DTO\RegisterSepaPaymentRequest;
 use Psr\Http\Client\ClientExceptionInterface;
-use Psr\Log\LoggerInterface;
 
 class ABNA implements PaymentMethod
 {
@@ -24,19 +23,16 @@ class ABNA implements PaymentMethod
     /**
      * @inheritDoc
      */
-    public function createScaRedirectUrl(Transaction $transaction): void
+    public function createScaRedirectUrl(ScaTransactionData $scaTransactionData): void
     {
         $request = new RegisterSepaPaymentRequest(
-            $transaction->getCreditorIban(),
-            $transaction->getCreditorName(),
-            $transaction->getAmount(),
+            $scaTransactionData->creditorIban,
+            $scaTransactionData->creditorName,
+            $scaTransactionData->amount / 100,
         );
         try {
             $response = $this->gateway->registerSepaPayment($request);
-            $transaction->updateScaInfo(
-                $response->scaRedirectUrl,
-                $response->transactionId
-            );
+            $scaTransactionData->addScaInfo($response->scaRedirectUrl, $response->transactionId);
         } catch (ClientExceptionInterface $e) {
             throw new Exception('Sca redirect url failed to be created.');
         }

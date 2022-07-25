@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PayByBank\Domain;
 
 use Exception;
-use PayByBank\Domain\Entity\Transaction;
+use PayByBank\Domain\ValueObjects\ScaTransactionData;
 
 interface PaymentMethod
 {
@@ -14,5 +14,5 @@ interface PaymentMethod
     /**
      * @throws Exception
      */
-    public function createScaRedirectUrl(Transaction $transaction): void;
+    public function createScaRedirectUrl(ScaTransactionData $scaTransactionData): void;
 }

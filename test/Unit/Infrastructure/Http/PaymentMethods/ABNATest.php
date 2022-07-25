@@ -9,6 +9,7 @@ use PayByBank\Domain\Entity\BankAccount;
 use PayByBank\Domain\Entity\PaymentOrder;
 use PayByBank\Domain\Entity\Transaction;
 use PayByBank\Domain\ValueObjects\Psu;
+use PayByBank\Domain\ValueObjects\ScaTransactionData;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\ABNAGateway;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\DTO\RegisterSepaPaymentResponse;
 use PayByBank\Infrastructure\Http\Gateway\Exceptions\BadResponseException;
@@ -36,38 +37,10 @@ class ABNATest extends TestCase
         $this->gateway->method('registerSepaPayment')->willReturnCallback(function () {
             return new RegisterSepaPaymentResponse('tid', '', '');
         });
-        $transaction = $this->createTransaction();
-        $this->paymentMethod->createScaRedirectUrl($transaction);
+        $scaTransactionData = new ScaTransactionData('iban', 'John Doe', 100);
+        $this->paymentMethod->createScaRedirectUrl($scaTransactionData);
 
-        $this->assertTrue($transaction->hasScaInfo());
-    }
-
-    public function testShouldWriteLogsWhenGatewayThrowsException(): void
-    {
-        $this->gateway->method('registerSepaPayment')->willThrowException(
-            new BadResponseException()
-        );
-        $transaction = $this->createTransaction();
-        $this->expectException(Exception::class);
-
-        $this->paymentMethod->createScaRedirectUrl($transaction);
-    }
-
-    private function createTransaction(): Transaction
-    {
-        $paymentOrder = new PaymentOrder(10, '1');
-        $psu = new Psu('ip');
-        $bankAccount = new BankAccount(
-            'iban',
-            'Nick',
-            '1',
-            'ABNA'
-        );
-
-        return new Transaction(
-            $paymentOrder,
-            $psu,
-            $bankAccount
-        );
+        $this->assertIsString($scaTransactionData->scaRedirectUrl);
+        $this->assertIsString($scaTransactionData->transactionId);
     }
 }

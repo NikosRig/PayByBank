@@ -7,7 +7,6 @@ namespace PayByBank\Domain\Entity;
 use DateTime;
 use PayByBank\Domain\ValueObjects\PaymentOrderState;
 use PayByBank\Domain\ValueObjects\PaymentOrderStatus;
-use PayByBank\Domain\ValueObjects\Psu;
 
 final class PaymentOrder
 {
@@ -85,5 +84,10 @@ final class PaymentOrder
     public function markAuthorized(): void
     {
         $this->status = PaymentOrderStatus::AUTHORIZED;
+    }
+
+    public function isAuthorized(): bool
+    {
+        return $this->status->isStatusAuthorized();
     }
 }

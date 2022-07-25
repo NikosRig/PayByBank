@@ -5,17 +5,11 @@ declare(strict_types=1);
 namespace Test\Unit\Infrastructure\Http\PaymentMethods;
 
 use Exception;
-use PayByBank\Domain\Entity\BankAccount;
-use PayByBank\Domain\Entity\PaymentOrder;
-use PayByBank\Domain\Entity\Transaction;
-use PayByBank\Domain\ValueObjects\Psu;
 use PayByBank\Domain\ValueObjects\ScaTransactionData;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\ABNAGateway;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\DTO\RegisterSepaPaymentResponse;
-use PayByBank\Infrastructure\Http\Gateway\Exceptions\BadResponseException;
 use PayByBank\Infrastructure\PaymentMethods\ABNA;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 
 class ABNATest extends TestCase
 {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PayByBank\Infrastructure\Persistence\Repository;
 
+use InvalidArgumentException;
 use MongoDB\Collection;
 use PayByBank\Domain\Entity\BankAccount;
 use PayByBank\Domain\Repository\BankAccountRepository;
@@ -30,15 +31,7 @@ class MongoBankAccountRepository implements BankAccountRepository
             return null;
         }
 
-        $state = new BankAccountState(
-            $bankAccount->iban,
-            $bankAccount->accountHolderName,
-            $bankAccount->merchantId,
-            $bankAccount->_id->__toString(),
-            $bankAccount->bankCode
-        );
-
-        return BankAccount::fromState($state);
+        return $this->mapToBankAccount($bankAccount);
     }
 
     public function save(BankAccount $bankAccount): void
@@ -57,17 +50,31 @@ class MongoBankAccountRepository implements BankAccountRepository
         $bankAccounts = [];
 
         foreach ($bankAccountsCollection as $bankAccount) {
-            $state = new BankAccountState(
-                $bankAccount->iban,
-                $bankAccount->accountHolderName,
-                $bankAccount->merchantId,
-                $bankAccount->_id->__toString(),
-                $bankAccount->bankCode
-            );
-            $bankAccounts[] = BankAccount::fromState($state);
+            $bankAccounts[] = $this->mapToBankAccount($bankAccount);
         }
 
-
         return !empty($bankAccounts) ? $bankAccounts : null;
+    }
+
+    public function findById(string $id): BankAccount
+    {
+        if (!$bankAccount = $this->collection->findOne(['_id' => $id])) {
+            throw new InvalidArgumentException('Bank account cannot be found.');
+        }
+
+        return $this->mapToBankAccount($bankAccount);
+    }
+
+    private function mapToBankAccount(object $bankAccount): BankAccount
+    {
+        $state = new BankAccountState(
+            $bankAccount->iban,
+            $bankAccount->accountHolderName,
+            $bankAccount->merchantId,
+            $bankAccount->_id->__toString(),
+            $bankAccount->bankCode
+        );
+
+        return BankAccount::fromState($state);
     }
 }

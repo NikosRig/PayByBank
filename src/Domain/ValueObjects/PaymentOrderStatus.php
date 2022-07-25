@@ -15,4 +15,9 @@ enum PaymentOrderStatus: int
     {
         return $this->value === self::CREATED->value;
     }
+
+    public function isStatusAuthorized(): bool
+    {
+        return $this->value === self::AUTHORIZED->value;
+    }
 }

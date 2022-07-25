@@ -81,4 +81,9 @@ final class PaymentOrder
     {
         return $this->token;
     }
+
+    public function markAuthorized(): void
+    {
+        $this->status = PaymentOrderStatus::AUTHORIZED;
+    }
 }

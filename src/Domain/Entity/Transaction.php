@@ -21,17 +21,17 @@ class Transaction
 
     private readonly string $psuIp;
 
-    private readonly string $bankCode;
+    private readonly string $bankAccountId;
 
     public function __construct(
         string $paymentOrderToken,
-        string $bankCode,
+        string $bankAccountId,
         string $psuIp,
         string $transactionId,
         string $scaRedirectUrl
     ) {
         $this->paymentOrderToken = $paymentOrderToken;
-        $this->bankCode = $bankCode;
+        $this->bankAccountId = $bankAccountId;
         $this->psuIp = $psuIp;
         $this->transactionId = $transactionId;
         $this->scaRedirectUrl = $scaRedirectUrl;
@@ -43,9 +43,9 @@ class Transaction
         return $this->transactionId;
     }
 
-    public function getBankCode(): string
+    public function getBankAccountId(): string
     {
-        return $this->bankCode;
+        return $this->bankAccountId;
     }
 
     public function getScaRedirectUrl(): ?string

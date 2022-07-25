@@ -16,6 +16,7 @@ use PayByBank\Domain\PaymentMethodResolver;
 use PayByBank\Domain\Repository\BankAccountRepository;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\Domain\Repository\TransactionRepository;
+use PayByBank\Domain\ValueObjects\BankAccountState;
 use PayByBank\Domain\ValueObjects\ScaTransactionData;
 use PHPUnit\Framework\TestCase;
 
@@ -96,24 +97,6 @@ class CreateScaRedirectUrlUseCaseTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testExpectExceptionWhenTransactionHasNoScaInfo(): void
-    {
-        $this->paymentOrderRepository->method('findByToken')->willReturn(
-            $this->createPaymentOrder()
-        );
-        $this->bankAccountsRepository->method('findByBankCodeAndMerchantId')->willReturn(
-            $this->createBankAccount()
-        );
-        $request = new CreateScaRedirectUrlRequest('token', '010', 'ip');
-        $presenter = new CreateScaRedirectUrlPresenter();
-        $this->expectException(Exception::class);
-
-        $this->useCase->create($request, $presenter);
-    }
-
-    /**
-     * @throws Exception
-     */
     public function testAssertTransactionWillBeSaved(): void
     {
         $this->paymentOrderRepository->method('findByToken')->willReturn(
@@ -135,12 +118,14 @@ class CreateScaRedirectUrlUseCaseTest extends TestCase
 
     private function createBankAccount(): BankAccount
     {
-        return new BankAccount(
-            'NL93ABNA6055981262',
-            'Nikos Rigas',
-            'mid',
-            'bank-01'
+        $bankAccountState = new BankAccountState(
+            'iban',
+            'Nick Rigas',
+            '1',
+            '1',
+            'ABNA'
         );
+        return BankAccount::fromState($bankAccountState);
     }
 
     private function createPaymentOrder(): PaymentOrder

@@ -64,7 +64,7 @@ final class CreateScaRedirectUrlUseCase
 
         $transaction = new Transaction(
             $paymentOrder->getToken(),
-            $bankAccount->getBankCode(),
+            $bankAccount->getId(),
             $request->psuIp,
             $scaTransactionData->transactionId,
             $scaTransactionData->scaRedirectUrl

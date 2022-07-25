@@ -96,13 +96,12 @@ html, body {
  #payment-methods {
     display: flex;
     align-content: flex-start;
-    justify-content: flex-start;
+    justify-content: center;
     width: 80%;
     flex-direction: row;
     flex-wrap: wrap;
      margin-top: 2vh;
      margin-bottom: 4vh;
-
  }
 
 .payment-method {

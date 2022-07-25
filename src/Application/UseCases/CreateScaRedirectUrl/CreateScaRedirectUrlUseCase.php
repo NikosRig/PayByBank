@@ -11,7 +11,7 @@ use PayByBank\Domain\PaymentMethodResolver;
 use PayByBank\Domain\Repository\BankAccountRepository;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\Domain\Repository\TransactionRepository;
-use PayByBank\Domain\ValueObjects\Psu;
+use PayByBank\Domain\ValueObjects\ScaTransactionData;
 
 final class CreateScaRedirectUrlUseCase
 {
@@ -55,14 +55,20 @@ final class CreateScaRedirectUrlUseCase
         }
 
         $paymentMethod = $this->paymentMethodResolver->resolve($bankAccount);
-        $psu = new Psu($request->psuIp);
-        $transaction = new Transaction($paymentOrder, $psu, $bankAccount);
-        $paymentMethod->createScaRedirectUrl($transaction);
+        $scaTransactionData = new ScaTransactionData(
+            $bankAccount->getIban(),
+            $bankAccount->getAccountHolderName(),
+            $paymentOrder->getAmount()
+        );
+        $paymentMethod->createScaRedirectUrl($scaTransactionData);
 
-        if (!$transaction->hasScaInfo()) {
-            throw new Exception('Transaction has no ScaInfo.');
-        }
-
+        $transaction = new Transaction(
+            $paymentOrder->getToken(),
+            $bankAccount->getBankCode(),
+            $request->psuIp,
+            $scaTransactionData->transactionId,
+            $scaTransactionData->scaRedirectUrl
+        );
         $this->transactionRepository->save($transaction);
         $presenter->present($transaction->getScaRedirectUrl());
     }

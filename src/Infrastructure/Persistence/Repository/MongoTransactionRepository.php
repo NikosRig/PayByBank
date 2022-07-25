@@ -21,7 +21,7 @@ class MongoTransactionRepository implements TransactionRepository
     public function save(Transaction $transaction): void
     {
         $this->collection->insertOne([
-            'bankAccountId' => $transaction->getBankAccountId(),
+            'bankCode' => $transaction->getBankCode(),
             'paymentOrderToken' => $transaction->getPaymentOrderToken(),
             'scaRedirectUrl' => $transaction->getScaRedirectUrl(),
             'transactionId' => $transaction->getTransactionId(),

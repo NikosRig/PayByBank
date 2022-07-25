@@ -12,9 +12,9 @@ class ScaTransactionData
 
     public readonly int $amount;
 
-    public readonly ?string $transactionId;
+    public ?string $transactionId;
 
-    public readonly ?string $scaRedirectUrl;
+    public ?string $scaRedirectUrl;
 
     public function __construct(string $creditorIban, string $creditorName, int $amount)
     {

@@ -8,14 +8,13 @@ use PayByBank\Domain\ValueObjects\BankAccountState;
 
 class BankAccount
 {
-    private readonly ?string $id;
+    private ?string $id = null;
 
     private readonly string $iban;
 
     private readonly string $accountHolderName;
 
     private readonly string $bankCode;
-
 
     public function __construct(
         string $iban,

@@ -11,12 +11,12 @@ use PayByBank\Application\UseCases\CreateScaRedirectUrl\CreateScaRedirectUrlRequ
 use PayByBank\Application\UseCases\CreateScaRedirectUrl\CreateScaRedirectUrlUseCase;
 use PayByBank\Domain\Entity\BankAccount;
 use PayByBank\Domain\Entity\PaymentOrder;
-use PayByBank\Domain\Entity\Transaction;
 use PayByBank\Domain\PaymentMethod;
 use PayByBank\Domain\PaymentMethodResolver;
 use PayByBank\Domain\Repository\BankAccountRepository;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\Domain\Repository\TransactionRepository;
+use PayByBank\Domain\ValueObjects\ScaTransactionData;
 use PHPUnit\Framework\TestCase;
 
 class CreateScaRedirectUrlUseCaseTest extends TestCase
@@ -123,8 +123,8 @@ class CreateScaRedirectUrlUseCaseTest extends TestCase
             $this->createBankAccount()
         );
         $paymentMethod = $this->createMock(PaymentMethod::class);
-        $paymentMethod->method('createScaRedirectUrl')->willReturnCallback(function (Transaction $transaction) {
-            $transaction->updateScaInfo('redirect_url');
+        $paymentMethod->method('createScaRedirectUrl')->willReturnCallback(function (ScaTransactionData $scaTransactionData) {
+            $scaTransactionData->addScaInfo('redirect_url', 'transactionId');
         });
         $this->paymentMethodResolver->method('resolve')->willReturn($paymentMethod);
         $this->transactionRepository->expects($this->once())->method('save');

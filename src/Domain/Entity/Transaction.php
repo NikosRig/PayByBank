@@ -9,25 +9,32 @@ use PayByBank\Domain\ValueObjects\Psu;
 
 class Transaction
 {
-    private readonly int $id;
+    private readonly string $id;
 
-    private DateTime $dateCreated;
+    private readonly DateTime $dateCreated;
 
-    private readonly PaymentOrder $paymentOrder;
+    private readonly string $scaRedirectUrl;
 
-    private readonly Psu $psu;
+    private readonly string $transactionId;
 
-    private readonly BankAccount $bankAccount;
+    private readonly string $paymentOrderToken;
 
-    private ?string $scaRedirectUrl = null;
+    private readonly string $psuIp;
 
-    private ?string $transactionId;
+    private readonly string $bankCode;
 
-    public function __construct(PaymentOrder $paymentOrder, Psu $psu, BankAccount $bankAccount)
-    {
-        $this->paymentOrder = $paymentOrder;
-        $this->psu = $psu;
-        $this->bankAccount = $bankAccount;
+    public function __construct(
+        string $paymentOrderToken,
+        string $bankCode,
+        string $psuIp,
+        string $transactionId,
+        string $scaRedirectUrl
+    ) {
+        $this->paymentOrderToken = $paymentOrderToken;
+        $this->bankCode = $bankCode;
+        $this->psuIp = $psuIp;
+        $this->transactionId = $transactionId;
+        $this->scaRedirectUrl = $scaRedirectUrl;
         $this->dateCreated = new DateTime('now');
     }
 
@@ -36,26 +43,9 @@ class Transaction
         return $this->transactionId;
     }
 
-    public function hasScaInfo(): bool
+    public function getBankCode(): string
     {
-        return is_string($this->scaRedirectUrl)
-            && is_string($this->transactionId);
-    }
-
-    public function updateScaInfo(string $scaRedirectUrl, string $transactionId): void
-    {
-        $this->scaRedirectUrl = $scaRedirectUrl;
-        $this->transactionId = $transactionId;
-    }
-
-    public function getBankAccountId(): string
-    {
-        return $this->bankAccount->getId();
-    }
-
-    public function getAmount(): int
-    {
-        return $this->paymentOrder->getAmount();
+        return $this->bankCode;
     }
 
     public function getScaRedirectUrl(): ?string
@@ -70,21 +60,11 @@ class Transaction
 
     public function getPsuIp(): string
     {
-        return $this->psu->getIpAddress();
-    }
-
-    public function getCreditorName(): string
-    {
-        return $this->bankAccount->getAccountHolderName();
-    }
-
-    public function getCreditorIban(): string
-    {
-        return $this->bankAccount->getIban();
+        return $this->psuIp;
     }
 
     public function getPaymentOrderToken(): string
     {
-        return $this->paymentOrder->getToken();
+        return $this->paymentOrderToken;
     }
 }

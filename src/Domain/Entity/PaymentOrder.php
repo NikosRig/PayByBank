@@ -81,18 +81,8 @@ final class PaymentOrder
         return $this->token;
     }
 
-    public function markAuthorized(): void
-    {
-        $this->status = PaymentOrderStatus::AUTHORIZED;
-    }
-
     public function markPaid(): void
     {
         $this->status = PaymentOrderStatus::PAID;
-    }
-
-    public function isAuthorized(): bool
-    {
-        return $this->status->isStatusAuthorized();
     }
 }

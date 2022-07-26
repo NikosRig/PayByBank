@@ -67,7 +67,7 @@ return [
             $routeCollector->addGroup('/payment/order', function (RouteCollector $routeGroupCollector) {
                 $routeGroupCollector->post('', CreatePaymentOrderAction::class);
                 $routeGroupCollector->get('/checkout/{token}', CheckoutAction::class);
-                $routeGroupCollector->get('/execute', ExecutePaymentOrderAction::class);
+                $routeGroupCollector->post('/execute', ExecutePaymentOrderAction::class);
             });
 
             $routeCollector->addGroup('/merchant', function (RouteCollector $routeGroupCollector) {

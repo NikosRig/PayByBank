@@ -70,7 +70,6 @@ final class CreateScaRedirectUrlUseCase
             $scaTransactionData->scaRedirectUrl,
             $scaTransactionData->bankData
         );
-        $paymentOrder->markAuthorized();
 
         $this->paymentOrderRepository->save($paymentOrder);
         $this->transactionRepository->save($transaction);

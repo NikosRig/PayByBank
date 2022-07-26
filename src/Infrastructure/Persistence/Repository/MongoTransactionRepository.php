@@ -48,7 +48,7 @@ class MongoTransactionRepository implements TransactionRepository
             $transaction->scaRedirectUrl,
             $transaction->transactionId,
             $transaction->psuIp,
-            $transaction->bankData
+            $transaction->bankData->getArrayCopy()
         );
 
         return Transaction::fromState($state);

@@ -16,7 +16,7 @@ class CreatePaymentOrderTest extends IntegrationTestCase
     public function testSuccessfullyCreatedPaymentOrder(): void
     {
         $accessToken = $this->createAccessToken();
-        $requestBody = json_encode(['amount' => 10]);
+        $requestBody = json_encode(['amount' => 10, 'description' => 'test description']);
 
         $request = new Request('POST', "http://{$_ENV['WEB_API_HOST']}/payment/orders/create", [
             'Accept' => 'application/json',

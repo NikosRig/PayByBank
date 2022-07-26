@@ -7,6 +7,7 @@ namespace PayByBank\WebApi\Actions\CreatePaymentOrder;
 use PayByBank\WebApi\Modules\Validation\RequestParamValidator;
 use PayByBank\WebApi\Modules\Validation\Rules\AccessTokenRule;
 use PayByBank\WebApi\Modules\Validation\Rules\AmountRule;
+use PayByBank\WebApi\Modules\Validation\Rules\DescriptionRule;
 use PayByBank\WebApi\Modules\Validation\Validator;
 use PayByBank\WebApi\Modules\Validation\ValidatorBuilder;
 
@@ -16,6 +17,7 @@ class CreatePaymentOrderValidatorBuilder implements ValidatorBuilder
     {
         return (new RequestParamValidator())
             ->withRule(new AmountRule())
-            ->withRule(new AccessTokenRule());
+            ->withRule(new AccessTokenRule())
+            ->withRule(new DescriptionRule());
     }
 }

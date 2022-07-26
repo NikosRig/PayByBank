@@ -30,7 +30,7 @@ class CreatePaymentOrderActionTest extends ActionTestCase
     {
         $accessToken = new AccessToken('merchantId', 'token', new DateTime());
         $this->accessTokenRepository->method('findByToken')->willReturn($accessToken);
-        $requestBody = json_encode(['amount' => 10]);
+        $requestBody = json_encode(['amount' => 10, 'description' => 'Order']);
         $createPaymentOrderUseCase = new CreatePaymentOrderUseCase(
             $this->paymentOrderRepository,
             $this->accessTokenRepository
@@ -99,6 +99,25 @@ class CreatePaymentOrderActionTest extends ActionTestCase
         $action = new CreatePaymentOrderAction($createPaymentOrderUseCase, $validatorBuilder);
 
         $this->assertResponseIsJsonAndHasError($action($request));
+    }
+
+    public function testAssertPaymentOrderDescriptionIsRequired(): void
+    {
+        $accessToken = new AccessToken('merchantId', 'token', new DateTime());
+        $this->accessTokenRepository->method('findByToken')->willReturn($accessToken);
+        $requestBody = json_encode(['amount' => 10]);
+        $createPaymentOrderUseCase = new CreatePaymentOrderUseCase(
+            $this->paymentOrderRepository,
+            $this->accessTokenRepository
+        );
+        $action = new CreatePaymentOrderAction($createPaymentOrderUseCase, new CreatePaymentOrderValidatorBuilder());
+        $serverRequest = $this->mockServerRequest($requestBody, [
+            'Authorization' => 'Bearer token'
+        ]);
+        $serverRequest->method('getHeader')->willReturn(['Bearer token']);
+        $response = $action($serverRequest);
+
+        $this->assertResponseIsJsonAndHasError($response);
     }
 
     private function assertResponseIsJsonAndHasError(ResponseInterface $response): void

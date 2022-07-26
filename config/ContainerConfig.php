@@ -33,6 +33,7 @@ use PayByBank\WebApi\Actions\CreateMerchant\CreateMerchantAction;
 use PayByBank\WebApi\Actions\CreatePaymentOrder\CreatePaymentOrderAction;
 use PayByBank\WebApi\Actions\Checkout\CheckoutAction;
 use PayByBank\WebApi\Actions\CreateScaRedirectUrl\CreateScaRedirectUrlAction;
+use PayByBank\WebApi\Actions\ExecutePaymentOrder\ExecutePaymentOrderAction;
 use Psr\Log\LoggerInterface;
 use function DI\autowire;
 use function DI\create;
@@ -66,6 +67,7 @@ return [
             $routeCollector->addGroup('/payment/order', function (RouteCollector $routeGroupCollector) {
                 $routeGroupCollector->post('', CreatePaymentOrderAction::class);
                 $routeGroupCollector->get('/checkout/{token}', CheckoutAction::class);
+                $routeGroupCollector->get('/execute', ExecutePaymentOrderAction::class);
             });
 
             $routeCollector->addGroup('/merchant', function (RouteCollector $routeGroupCollector) {

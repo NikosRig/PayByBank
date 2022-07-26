@@ -23,6 +23,8 @@ class Transaction
 
     private readonly string $bankAccountId;
 
+    private readonly array $bankData;
+
     public static function fromState(TransactionState $state): Transaction
     {
         $self = new self(
@@ -30,7 +32,8 @@ class Transaction
             $state->bankAccountId,
             $state->psuIp,
             $state->transactionId,
-            $state->scaRedirectUrl
+            $state->scaRedirectUrl,
+            $state->bankData
         );
         $self->id = $state->id;
 
@@ -42,14 +45,21 @@ class Transaction
         string $bankAccountId,
         string $psuIp,
         string $transactionId,
-        string $scaRedirectUrl
+        string $scaRedirectUrl,
+        array $bankData
     ) {
         $this->paymentOrderToken = $paymentOrderToken;
         $this->bankAccountId = $bankAccountId;
         $this->psuIp = $psuIp;
         $this->transactionId = $transactionId;
         $this->scaRedirectUrl = $scaRedirectUrl;
+        $this->bankData = $bankData;
         $this->dateCreated = new DateTime('now');
+    }
+
+    public function getBankData(): array
+    {
+        return $this->bankData;
     }
 
     public function getTransactionId(): ?string

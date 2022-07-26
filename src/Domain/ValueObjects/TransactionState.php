@@ -15,7 +15,8 @@ class TransactionState
         public readonly string $paymentOrderToken,
         public readonly string $scaRedirectUrl,
         public readonly string $transactionId,
-        public readonly string $psuIp
+        public readonly string $psuIp,
+        public readonly array $bankData
     ) {
     }
 }

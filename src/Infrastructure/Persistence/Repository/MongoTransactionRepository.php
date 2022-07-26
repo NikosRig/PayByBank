@@ -29,7 +29,8 @@ class MongoTransactionRepository implements TransactionRepository
             'scaRedirectUrl' => $transaction->getScaRedirectUrl(),
             'transactionId' => $transaction->getTransactionId(),
             'psuIp' => $transaction->getPsuIp(),
-            'dateCreated' => $transaction->getDateCreated()->format('Y-m-d H:i:s')
+            'dateCreated' => $transaction->getDateCreated()->format('Y-m-d H:i:s'),
+            'bankData' => $transaction->getBankData()
         ]);
     }
 
@@ -46,7 +47,8 @@ class MongoTransactionRepository implements TransactionRepository
             $transaction->paymentOrderToken,
             $transaction->scaRedirectUrl,
             $transaction->transactionId,
-            $transaction->psuIp
+            $transaction->psuIp,
+            $transaction->bankData
         );
 
         return Transaction::fromState($state);

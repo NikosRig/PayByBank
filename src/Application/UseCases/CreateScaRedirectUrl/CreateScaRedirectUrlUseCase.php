@@ -11,7 +11,7 @@ use PayByBank\Domain\PaymentMethodResolver;
 use PayByBank\Domain\Repository\BankAccountRepository;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\Domain\Repository\TransactionRepository;
-use PayByBank\Domain\ValueObjects\ScaTransactionData;
+use PayByBank\Domain\ScaTransactionData;
 
 final class CreateScaRedirectUrlUseCase
 {
@@ -67,7 +67,8 @@ final class CreateScaRedirectUrlUseCase
             $bankAccount->getId(),
             $request->psuIp,
             $scaTransactionData->transactionId,
-            $scaTransactionData->scaRedirectUrl
+            $scaTransactionData->scaRedirectUrl,
+            $scaTransactionData->bankData
         );
         $paymentOrder->markAuthorized();
 

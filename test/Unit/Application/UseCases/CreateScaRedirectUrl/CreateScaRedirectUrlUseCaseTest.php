@@ -16,8 +16,8 @@ use PayByBank\Domain\PaymentMethodResolver;
 use PayByBank\Domain\Repository\BankAccountRepository;
 use PayByBank\Domain\Repository\PaymentOrderRepository;
 use PayByBank\Domain\Repository\TransactionRepository;
+use PayByBank\Domain\ScaTransactionData;
 use PayByBank\Domain\ValueObjects\BankAccountState;
-use PayByBank\Domain\ValueObjects\ScaTransactionData;
 use PHPUnit\Framework\TestCase;
 
 class CreateScaRedirectUrlUseCaseTest extends TestCase

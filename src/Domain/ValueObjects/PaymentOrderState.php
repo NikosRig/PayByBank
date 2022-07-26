@@ -18,17 +18,21 @@ class PaymentOrderState
 
     public readonly string $merchantId;
 
+    public readonly string $description;
+
     public function __construct(
         DateTime $dateCreated,
         PaymentOrderStatus $status,
         string $token,
         int $amount,
-        string $merchantId
+        string $merchantId,
+        string $description
     ) {
         $this->dateCreated = $dateCreated;
         $this->status = $status;
         $this->token = $token;
         $this->amount = $amount;
         $this->merchantId = $merchantId;
+        $this->description = $description;
     }
 }

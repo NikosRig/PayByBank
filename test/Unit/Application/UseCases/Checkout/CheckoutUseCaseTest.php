@@ -54,7 +54,7 @@ class CheckoutUseCaseTest extends TestCase
      */
     public function testPresenterShouldHasPaymentMethod(): void
     {
-        $this->paymentOrderRepository->method('findByToken')->willReturn(new PaymentOrder(10, ''));
+        $this->paymentOrderRepository->method('findByToken')->willReturn(new PaymentOrder(10, '', ''));
         $this->bankAccountRepository->method('findAllByMerchantId')->willReturnCallback(function () {
             $bankAccounts = [];
             $bankAccounts[] = $this->createMock(BankAccount::class);

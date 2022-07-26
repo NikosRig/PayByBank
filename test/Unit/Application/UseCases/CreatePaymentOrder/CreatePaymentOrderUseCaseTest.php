@@ -41,7 +41,7 @@ class CreatePaymentOrderUseCaseTest extends TestCase
             $this->accessTokenRepository
         );
 
-        $request = new CreatePaymentOrderRequest(10, 'access_token');
+        $request = new CreatePaymentOrderRequest(10, 'access_token', 'description');
         $presenter = new CreatePaymentOrderPresenter();
         $useCase->create($request, $presenter);
     }
@@ -59,7 +59,7 @@ class CreatePaymentOrderUseCaseTest extends TestCase
             $this->paymentOrderRepository,
             $this->accessTokenRepository
         );
-        $request = new CreatePaymentOrderRequest(10, 'access_token');
+        $request = new CreatePaymentOrderRequest(10, 'access_token', 'description');
         $presenter = new CreatePaymentOrderPresenter();
         $useCase->create($request, $presenter);
 
@@ -72,7 +72,7 @@ class CreatePaymentOrderUseCaseTest extends TestCase
             $this->paymentOrderRepository,
             $this->accessTokenRepository
         );
-        $request = new CreatePaymentOrderRequest(10, 'access_token');
+        $request = new CreatePaymentOrderRequest(10, 'access_token', 'description');
         $presenter = new CreatePaymentOrderPresenter();
         $this->expectException(InvalidArgumentException::class);
 
@@ -96,7 +96,7 @@ class CreatePaymentOrderUseCaseTest extends TestCase
             $this->paymentOrderRepository,
             $this->accessTokenRepository
         );
-        $request = new CreatePaymentOrderRequest(10, 'access_token');
+        $request = new CreatePaymentOrderRequest(10, 'access_token', 'description');
         $presenter = new CreatePaymentOrderPresenter();
         $this->expectException(InvalidArgumentException::class);
 
@@ -123,7 +123,7 @@ class CreatePaymentOrderUseCaseTest extends TestCase
             $this->paymentOrderRepository,
             $this->accessTokenRepository
         );
-        $request = new CreatePaymentOrderRequest(10, 'access_token');
+        $request = new CreatePaymentOrderRequest(10, 'access_token', 'description');
         $presenter = new CreatePaymentOrderPresenter();
 
         $useCase->create($request, $presenter);

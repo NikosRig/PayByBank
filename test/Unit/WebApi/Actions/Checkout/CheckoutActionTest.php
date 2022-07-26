@@ -63,7 +63,7 @@ class CheckoutActionTest extends ActionTestCase
 
     public function testExpectBadRequestWhenMerchantHasNoAccounts(): void
     {
-        $this->paymentOrderRepository->method('findByToken')->willReturn(new PaymentOrder(10, ''));
+        $this->paymentOrderRepository->method('findByToken')->willReturn(new PaymentOrder(10, '', 'description'));
         $action = new CheckoutAction($this->useCase, $this->template, $this->logger);
         $serverRequest = $this->mockServerRequestWithAttribute('token');
         $response = $action($serverRequest);
@@ -73,7 +73,7 @@ class CheckoutActionTest extends ActionTestCase
 
     public function testAssertSuccessfulResponse(): void
     {
-        $this->paymentOrderRepository->method('findByToken')->willReturn(new PaymentOrder(10, ''));
+        $this->paymentOrderRepository->method('findByToken')->willReturn(new PaymentOrder(10, '', 'description'));
         $this->bankAccountRepository->method('findAllByMerchantId')->willReturn([
             new BankAccount('', '', '', '')
         ]);

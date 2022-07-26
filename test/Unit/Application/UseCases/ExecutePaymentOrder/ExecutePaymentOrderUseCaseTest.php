@@ -6,8 +6,6 @@ namespace Test\Unit\Application\UseCases\ExecutePaymentOrder;
 
 use DateTime;
 use Exception;
-use InvalidArgumentException;
-use PayByBank\Application\UseCases\CreateScaRedirectUrl\CreateScaRedirectUrlUseCase;
 use PayByBank\Application\UseCases\ExecutePaymentOrder\ExecutePaymentOrderRequest;
 use PayByBank\Application\UseCases\ExecutePaymentOrder\ExecutePaymentOrderUseCase;
 use PayByBank\Domain\Entity\PaymentOrder;
@@ -53,7 +51,7 @@ class ExecutePaymentOrderUseCaseTest extends TestCase
         $this->transactionRepository->method('findByTransactionId')->willReturn(
             $this->createTransaction()
         );
-        $this->paymentOrderRepository->method('findByToken')->willReturn(new PaymentOrder(10, 'mid'));
+        $this->paymentOrderRepository->method('findByToken')->willReturn(new PaymentOrder(10, 'mid', 'description'));
         $request = new ExecutePaymentOrderRequest('transactionId', 'authCode');
         $this->expectException(Exception::class);
         $this->useCase->execute($request);

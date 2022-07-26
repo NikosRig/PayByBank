@@ -26,7 +26,7 @@ class MongoPaymentOrderRepositoryTest extends TestCase
 
     public function testAssertPaymentOrderShouldBeSaved(): void
     {
-        $paymentOrder = new PaymentOrder(7000, 'merchantId');
+        $paymentOrder = new PaymentOrder(7000, 'merchantId', 'description');
         $repository = new MongoPaymentOrderRepository(self::$mongoAdapter);
         $repository->save($paymentOrder);
         $findResult = $repository->findByToken($paymentOrder->getToken());

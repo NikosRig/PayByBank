@@ -130,6 +130,6 @@ class CreateScaRedirectUrlUseCaseTest extends TestCase
 
     private function createPaymentOrder(): PaymentOrder
     {
-        return new PaymentOrder(10, 'mid');
+        return new PaymentOrder(10, 'mid', 'description');
     }
 }

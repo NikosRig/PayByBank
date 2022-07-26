@@ -22,11 +22,14 @@ final class PaymentOrder
 
     private readonly string $merchantId;
 
+    private readonly string $description;
+
     public static function fromState(PaymentOrderState $state): PaymentOrder
     {
         $self = new self(
             $state->amount,
-            $state->merchantId
+            $state->merchantId,
+            $state->description
         );
         $self->status = $state->status;
         $self->token = $state->token;
@@ -34,18 +37,24 @@ final class PaymentOrder
         return $self;
     }
 
-    public function __construct(int $amount, string $merchantId)
+    public function __construct(int $amount, string $merchantId, string $description)
     {
         $this->token = bin2hex(openssl_random_pseudo_bytes(24));
         $this->status = PaymentOrderStatus::CREATED;
         $this->amount = $amount;
         $this->merchantId = $merchantId;
         $this->dateCreated = new DateTime('now');
+        $this->description = $description;
     }
 
     public function getId(): ?string
     {
         return $this->id;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
     }
 
     public function getDateCreated(): DateTime

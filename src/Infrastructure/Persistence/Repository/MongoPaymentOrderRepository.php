@@ -32,7 +32,8 @@ class MongoPaymentOrderRepository implements PaymentOrderRepository
             PaymentOrderStatus::from($paymentOrder->status),
             $paymentOrder->token,
             $paymentOrder->amount,
-            $paymentOrder->merchantId
+            $paymentOrder->merchantId,
+            $paymentOrder->description
         );
 
         return PaymentOrder::fromState($state);
@@ -45,7 +46,8 @@ class MongoPaymentOrderRepository implements PaymentOrderRepository
             'merchantId' => $paymentOrder->getMerchantId(),
             'status' => $paymentOrder->getStatus()->value,
             'dateCreated' => $paymentOrder->getDateCreated()->format('Y-m-d H:i:s'),
-            'amount' => $paymentOrder->getAmount()
+            'amount' => $paymentOrder->getAmount(),
+            'description' => $paymentOrder->getDescription()
         ]);
     }
 }

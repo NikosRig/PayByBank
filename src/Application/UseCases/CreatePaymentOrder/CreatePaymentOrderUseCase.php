@@ -35,7 +35,8 @@ final class CreatePaymentOrderUseCase
 
         $paymentOrder = new PaymentOrder(
             $request->amount,
-            $accessToken->getMerchantId()
+            $accessToken->getMerchantId(),
+            $request->description
         );
         $accessToken->markUsed();
         $this->accessTokenRepository->save($accessToken);

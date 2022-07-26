@@ -86,6 +86,11 @@ final class PaymentOrder
         $this->status = PaymentOrderStatus::AUTHORIZED;
     }
 
+    public function markPaid(): void
+    {
+        $this->status = PaymentOrderStatus::PAID;
+    }
+
     public function isAuthorized(): bool
     {
         return $this->status->isStatusAuthorized();

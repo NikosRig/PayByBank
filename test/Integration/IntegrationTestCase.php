@@ -90,7 +90,7 @@ class IntegrationTestCase extends TestCase
      */
     public function sendCreateMerchantRequest(string $body): ResponseInterface
     {
-        $request = new Request('POST', "http://{$_ENV['WEB_API_HOST']}/merchant", [
+        $request = new Request('POST', "http://{$_ENV['WEB_API_HOST']}/merchants/create", [
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ], $body);

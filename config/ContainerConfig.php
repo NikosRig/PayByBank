@@ -70,8 +70,8 @@ return [
                 $routeGroupCollector->post('/execute', ExecutePaymentOrderAction::class);
             });
 
-            $routeCollector->addGroup('/merchant', function (RouteCollector $routeGroupCollector) {
-                $routeGroupCollector->post('', CreateMerchantAction::class);
+            $routeCollector->addGroup('/merchants', function (RouteCollector $routeGroupCollector) {
+                $routeGroupCollector->post('/create', CreateMerchantAction::class);
                 $routeGroupCollector->put('/accounts', CreateBankAccountAction::class);
             });
 

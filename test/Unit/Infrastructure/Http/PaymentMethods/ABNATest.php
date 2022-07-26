@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Test\Unit\Infrastructure\Http\PaymentMethods;
 
 use Exception;
-use PayByBank\Domain\ValueObjects\ScaTransactionData;
+use PayByBank\Domain\ScaTransactionData;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\ABNAGateway;
 use PayByBank\Infrastructure\Http\Gateway\ABNA\DTO\RegisterSepaPaymentResponse;
 use PayByBank\Infrastructure\PaymentMethods\ABNA;

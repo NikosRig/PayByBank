@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PayByBank\Domain\ValueObjects;
+namespace PayByBank\Domain;
 
 class ScaTransactionData
 {
@@ -16,6 +16,8 @@ class ScaTransactionData
 
     public ?string $scaRedirectUrl;
 
+    public readonly array $bankData;
+
     public function __construct(string $creditorIban, string $creditorName, int $amount)
     {
         $this->creditorIban = $creditorIban;
@@ -23,9 +25,10 @@ class ScaTransactionData
         $this->amount = $amount;
     }
 
-    public function addScaInfo(string $scaRedirectUrl, string $transactionId): void
+    public function addScaInfo(string $scaRedirectUrl, string $transactionId, array $bankData = []): void
     {
         $this->scaRedirectUrl = $scaRedirectUrl;
         $this->transactionId = $transactionId;
+        $this->bankData = $bankData;
     }
 }

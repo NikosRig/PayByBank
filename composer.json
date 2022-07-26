@@ -34,6 +34,7 @@
         "twig/twig": "^3.3",
         "firebase/php-jwt": "^6.2",
         "globalcitizen/php-iban": "^4.1",
-        "monolog/monolog": "^3.1"
+        "monolog/monolog": "^3.1",
+        "ext-mongodb": "*"
     }
 }

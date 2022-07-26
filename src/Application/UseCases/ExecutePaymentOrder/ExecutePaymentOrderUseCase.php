@@ -41,7 +41,7 @@ final class ExecutePaymentOrderUseCase
         $transaction = $this->transactionRepository->findByTransactionId($request->transactionId);
         $paymentOrder = $this->paymentOrderRepository->findByToken($transaction->getPaymentOrderToken());
 
-        if (!$paymentOrder || !$paymentOrder->hasExpired()) {
+        if (!$paymentOrder || $paymentOrder->hasExpired()) {
             throw new Exception('Invalid payment order.');
         }
         $bankAccount = $this->bankAccountRepository->findById($transaction->getBankAccountId());

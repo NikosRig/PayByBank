@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PayByBank\Infrastructure\Persistence\Repository;
 
 use InvalidArgumentException;
+use MongoDB\BSON\ObjectId;
 use MongoDB\Collection;
 use PayByBank\Domain\Entity\BankAccount;
 use PayByBank\Domain\Repository\BankAccountRepository;
@@ -58,7 +59,7 @@ class MongoBankAccountRepository implements BankAccountRepository
 
     public function findById(string $id): BankAccount
     {
-        if (!$bankAccount = $this->collection->findOne(['_id' => $id])) {
+        if (!$bankAccount = $this->collection->findOne(['_id' => new ObjectId($id)])) {
             throw new InvalidArgumentException('Bank account cannot be found.');
         }
 

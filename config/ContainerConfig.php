@@ -64,8 +64,8 @@ return [
     */
     Router::class => factory(function () {
         $dispatcher = simpleDispatcher(function (RouteCollector $routeCollector) {
-            $routeCollector->addGroup('/payment/order', function (RouteCollector $routeGroupCollector) {
-                $routeGroupCollector->post('', CreatePaymentOrderAction::class);
+            $routeCollector->addGroup('/payment/orders', function (RouteCollector $routeGroupCollector) {
+                $routeGroupCollector->post('/create', CreatePaymentOrderAction::class);
                 $routeGroupCollector->get('/checkout/{token}', CheckoutAction::class);
                 $routeGroupCollector->post('/execute', ExecutePaymentOrderAction::class);
             });

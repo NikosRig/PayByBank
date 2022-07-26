@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "9e796afc-f73b-4039-bbf5-53eb726c85dc",
+		"_postman_id": "012145d7-5579-4e85-97e1-83f1da798e7b",
 		"name": "PayByBank",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "8733309"
@@ -116,7 +116,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"amount\": 10\n}"
+					"raw": "{\n    \"amount\": 10,\n    \"description\": \"order\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost/payment/orders/create",

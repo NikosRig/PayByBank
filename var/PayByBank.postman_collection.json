@@ -22,13 +22,14 @@
 					"raw": "{\n    \"firstName\": \"{{randomString}}\",\n    \"lastName\": \"{{randomString}}\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost/merchant",
+					"raw": "http://localhost/merchants/create",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"path": [
-						"merchant"
+						"merchants",
+						"create"
 					]
 				}
 			},
@@ -50,13 +51,13 @@
 					"raw": "{\n    \"mid\": \"\",\n    \"iban\": \"NL04ABNA7639905176\",\n    \"accountHolderName\": \"John Doe\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost/merchant/accounts",
+					"raw": "http://localhost/merchants/accounts",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"path": [
-						"merchant",
+						"merchants",
 						"accounts"
 					]
 				}
@@ -100,7 +101,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwYXlieWJhbmsiLCJhdWQiOiJ7e3JhbmRvbVN0cmluZ319IiwiaWF0IjoxNjU4NjU4NTMxLCJuYmYiOjE2NTg2NTg1MzEsImV4cCI6MTY1ODY1ODUzMSwibWlkIjoiMmIyOGVkOGJhMzg1MDI5Y2FjOGY0ODAyMTNmMjNkNTk4YjY4N2JiOGFkNWM5Mjk5In0.hgvgkfp2tDfTIw1Zi2xkf6_SCHQtMv1FvXCfSbBth9Q",
+							"value": "access-token",
 							"type": "string"
 						}
 					]
@@ -118,14 +119,15 @@
 					"raw": "{\n    \"amount\": 10\n}"
 				},
 				"url": {
-					"raw": "http://localhost/payment/order",
+					"raw": "http://localhost/payment/orders/create",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"payment",
-						"order"
+						"orders",
+						"create"
 					]
 				}
 			},
@@ -147,20 +149,15 @@
 					"raw": "{\n    \"bankCode\": \"ABNA\",\n    \"paymentOrderToken\": \"\",\n    \"psuIp\": \"127.0.0.1\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost/sca/redirect?XDEBUG_SESSION_START=PHPSTORM",
+					"raw": "http://localhost/sca/redirect-url/create",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"sca",
-						"redirect"
-					],
-					"query": [
-						{
-							"key": "XDEBUG_SESSION_START",
-							"value": "PHPSTORM"
-						}
+						"redirect-url",
+						"create"
 					]
 				}
 			},
@@ -182,14 +179,14 @@
 					"raw": "{\n    \"transactionId\": \"\",\n    \"authCode\": \"\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost/payment/order/execute",
+					"raw": "http://localhost/payment/orders/execute",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"payment",
-						"order",
+						"orders",
 						"execute"
 					]
 				}

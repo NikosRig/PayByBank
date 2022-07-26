@@ -79,7 +79,7 @@ return [
                 $routeGroupCollector->post('/token', CreateAccessTokenAction::class);
             });
 
-            $routeCollector->post('/sca/redirect', CreateScaRedirectUrlAction::class);
+            $routeCollector->post('/sca/redirect-url/create', CreateScaRedirectUrlAction::class);
         });
 
         return new FastRouteBridge($dispatcher);

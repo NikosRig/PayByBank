@@ -10,7 +10,7 @@ use PayByBank\Domain\ValueObjects\PaymentOrderStatus;
 
 final class PaymentOrder
 {
-    private readonly string $id;
+    private ?string $id;
 
     private string $token;
 
@@ -33,6 +33,7 @@ final class PaymentOrder
         );
         $self->status = $state->status;
         $self->token = $state->token;
+        $self->id = $state->id;
 
         return $self;
     }

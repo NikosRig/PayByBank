@@ -71,7 +71,7 @@ final class CreateScaRedirectUrlUseCase
             $scaTransactionData->bankData
         );
 
-        $this->paymentOrderRepository->save($paymentOrder);
+        $this->paymentOrderRepository->update($paymentOrder);
         $this->transactionRepository->save($transaction);
 
         $presenter->present($transaction->getScaRedirectUrl());

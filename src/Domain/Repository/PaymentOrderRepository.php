@@ -11,4 +11,6 @@ interface PaymentOrderRepository
     public function findByToken(string $paymentOrderToken): ?PaymentOrder;
 
     public function save(PaymentOrder $paymentOrder): void;
+
+    public function update(PaymentOrder $paymentOrder): void;
 }

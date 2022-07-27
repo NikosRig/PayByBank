@@ -56,7 +56,8 @@ final class CheckoutUseCase
 
         $presenter->present(
             $paymentMethods,
-            $paymentOrder->getAmount()
+            $paymentOrder->getAmount(),
+            $paymentOrder->getDescription()
         );
     }
 }

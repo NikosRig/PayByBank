@@ -48,7 +48,9 @@ class CheckoutAction implements Action
             $this->useCase->get($request, $presenter);
 
             $template = $this->template->render('checkout.html', [
-                'bankCodes' => $presenter->bankCodes
+                'bankCodes' => $presenter->bankCodes,
+                'amount' => $presenter->amount,
+                'description' => $presenter->description
             ]);
 
             return HttpResponseFactory::create($template);

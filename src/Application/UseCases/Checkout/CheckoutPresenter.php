@@ -11,12 +11,14 @@ class CheckoutPresenter
 {
     public readonly array $bankCodes;
 
-    public readonly float $amount;
+    public readonly string $amount;
 
-    public function present(array $paymentMethods, int $paymentOrderAmount): void
+    public readonly string $description;
+
+    public function present(array $paymentMethods, int $paymentOrderAmount, string $description): void
     {
-        $this->amount = (float) number_format($paymentOrderAmount / 100);
-
+        $this->amount = number_format((float) $paymentOrderAmount / 100, 2);
+        $this->description = $description;
         foreach ($paymentMethods as $paymentMethod) {
             $this->bankCodes[] = $paymentMethod->getBankCode();
         }

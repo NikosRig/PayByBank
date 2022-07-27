@@ -24,7 +24,7 @@ class CreateBankAccountTest extends IntegrationTestCase
 
         $request = new Request(
             'PUT',
-            "http://{$_ENV['WEB_API_HOST']}/merchant/accounts",
+            "http://{$_ENV['WEB_API_HOST']}/merchants/accounts",
             [],
             $body
         );

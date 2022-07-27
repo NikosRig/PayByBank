@@ -18,17 +18,21 @@ class AccessTokenState
 
     public readonly bool $isUsed;
 
+    public readonly string $id;
+
     public function __construct(
         string $token,
         string $mid,
         DateTime $dateCreated,
         DateTime $expirationDate,
-        bool $isUsed
+        bool $isUsed,
+        string $id
     ) {
         $this->token = $token;
         $this->merchantId = $mid;
         $this->dateCreated = $dateCreated;
         $this->expirationDate = $expirationDate;
         $this->isUsed = $isUsed;
+        $this->id = $id;
     }
 }

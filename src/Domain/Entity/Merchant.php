@@ -9,7 +9,7 @@ use PayByBank\Domain\ValueObjects\MerchantState;
 
 class Merchant
 {
-    private readonly ?string $id;
+    private ?string $id = null;
 
     private readonly string $mid;
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PayByBank\Infrastructure\Persistence\Repository;
 
 use DateTime;
+use MongoDB\BSON\ObjectId;
 use MongoDB\Collection;
 use PayByBank\Domain\Entity\AccessToken;
 use PayByBank\Domain\Repository\AccessTokenRepository;
@@ -31,7 +32,8 @@ class MongoAccessTokenRepository implements AccessTokenRepository
             $accessToken->merchantId,
             DateTime::createFromFormat('Y-m-d H:i:s', $accessToken->dateCreated),
             DateTime::createFromFormat('Y-m-d H:i:s', $accessToken->expirationDate),
-            $accessToken->isUsed
+            $accessToken->isUsed,
+            $accessToken->_id->__toString()
         );
 
         return AccessToken::fromState($state);
@@ -39,12 +41,27 @@ class MongoAccessTokenRepository implements AccessTokenRepository
 
     public function save(AccessToken $accessToken): void
     {
-        $this->collection->insertOne([
+        $this->collection->insertOne(
+            $this->mapToCollectionArray($accessToken)
+        );
+    }
+
+    public function update(AccessToken $accessToken): void
+    {
+        $this->collection->updateOne(
+            ['_id' => new ObjectId($accessToken->getId())],
+            ['$set' => $this->mapToCollectionArray($accessToken)]
+        );
+    }
+
+    private function mapToCollectionArray(AccessToken $accessToken): array
+    {
+        return [
             'token' => $accessToken->getToken(),
             'merchantId' => $accessToken->getMerchantId(),
             'dateCreated' => $accessToken->getDateCreated()->format('Y-m-d H:i:s'),
             'expirationDate' => $accessToken->getExpirationDate()->format('Y-m-d H:i:s'),
             'isUsed' => $accessToken->isUsed()
-        ]);
+        ];
     }
 }

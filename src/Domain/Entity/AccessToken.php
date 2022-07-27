@@ -9,6 +9,8 @@ use PayByBank\Domain\ValueObjects\AccessTokenState;
 
 class AccessToken
 {
+    private ?string $id = null;
+
     private readonly string $merchantId;
 
     private readonly string $token;
@@ -24,6 +26,7 @@ class AccessToken
         $self = new self($state->merchantId, $state->token, $state->expirationDate);
         $self->dateCreated = $state->dateCreated;
         $self->isUsed = $state->isUsed;
+        $self->id = $state->id;
 
         return $self;
     }
@@ -35,6 +38,11 @@ class AccessToken
         $this->dateCreated = new DateTime('now');
         $this->expirationDate = $expirationDate;
         $this->isUsed = false;
+    }
+
+    public function getId(): ?string
+    {
+        return $this->id;
     }
 
     public function getToken(): string

@@ -39,7 +39,7 @@ final class CreatePaymentOrderUseCase
             $request->description
         );
         $accessToken->markUsed();
-        $this->accessTokenRepository->save($accessToken);
+        $this->accessTokenRepository->update($accessToken);
         $this->paymentOrderRepository->save($paymentOrder);
 
         $presenter->present($paymentOrder->getToken());

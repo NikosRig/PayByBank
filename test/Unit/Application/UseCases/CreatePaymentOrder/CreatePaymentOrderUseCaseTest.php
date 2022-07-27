@@ -113,7 +113,7 @@ class CreatePaymentOrderUseCaseTest extends TestCase
             );
         });
 
-        $this->accessTokenRepository->method('save')->willReturnCallback(
+        $this->accessTokenRepository->method('update')->willReturnCallback(
             function (AccessToken $accessToken) {
                 $this->assertTrue($accessToken->isUsed());
             }

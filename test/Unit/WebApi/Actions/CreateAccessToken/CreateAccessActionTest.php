@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Test\Unit\WebApi\Actions\CreateAccessToken;
 
 use Config\AccessTokenConfig;
+use DateTime;
 use PayByBank\Application\UseCases\CreateAccessToken\CreateAccessTokenUseCase;
 use PayByBank\Domain\Entity\Merchant;
 use PayByBank\Domain\Repository\AccessTokenRepository;
 use PayByBank\Domain\Repository\MerchantRepository;
+use PayByBank\Domain\ValueObjects\MerchantState;
 use PayByBank\WebApi\Actions\CreateAccessToken\CreateAccessTokenAction;
 use PayByBank\WebApi\Actions\CreateAccessToken\CreateAccessTokenValidatorBuilder;
 use Test\Unit\WebApi\Actions\ActionTestCase;
@@ -63,10 +65,7 @@ class CreateAccessActionTest extends ActionTestCase
 
     public function testShouldReturnToken(): void
     {
-        $this->merchantRepository->method('findByMid')->willReturn(
-            new Merchant('mid', 'Nikos', 'Rigas')
-        );
-
+        $this->merchantRepository->method('findByMid')->willReturn($this->createMerchant());
         $useCase = new CreateAccessTokenUseCase(
             $this->merchantRepository,
             $this->accessTokenRepository
@@ -82,5 +81,11 @@ class CreateAccessActionTest extends ActionTestCase
 
         $this->assertEquals(201, $response->getStatusCode());
         $this->assertObjectHasAttribute('token', $responseBody);
+    }
+
+    private function createMerchant(): Merchant
+    {
+        $state = new MerchantState('mid', 'Nick', 'Rigas', new DateTime(), 'id');
+        return Merchant::fromState($state);
     }
 }

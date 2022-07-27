@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Application\UseCases\CreateAccessToken;
 
+use DateTime;
 use Exception;
 use PayByBank\Application\UseCases\CreateAccessToken\CreateAccessTokenPresenter;
 use PayByBank\Application\UseCases\CreateAccessToken\CreateAccessTokenRequest;
@@ -11,6 +12,7 @@ use PayByBank\Application\UseCases\CreateAccessToken\CreateAccessTokenUseCase;
 use PayByBank\Domain\Entity\Merchant;
 use PayByBank\Domain\Repository\AccessTokenRepository;
 use PayByBank\Domain\Repository\MerchantRepository;
+use PayByBank\Domain\ValueObjects\MerchantState;
 use PHPUnit\Framework\TestCase;
 
 class CreateAccessTokenUseCaseTest extends TestCase
@@ -46,9 +48,8 @@ class CreateAccessTokenUseCaseTest extends TestCase
      */
     public function testAssertJwtShouldBeSaved(): void
     {
-        $merchant = new Merchant('mid', 'Nick', 'Rigas');
         $this->merchantRepository->expects($this->once())
-            ->method('findByMid')->willReturn($merchant);
+            ->method('findByMid')->willReturn($this->createMerchant());
         $this->accessTokenRepository->expects($this->once())->method('save');
         $presenter = new CreateAccessTokenPresenter();
         $this->useCase->create($this->createJwtRequest(), $presenter);
@@ -59,13 +60,18 @@ class CreateAccessTokenUseCaseTest extends TestCase
      */
     public function testShouldReturnJwt(): void
     {
-        $merchant = new Merchant('mid', 'Nick', 'Rigas');
         $this->merchantRepository->expects($this->once())
-            ->method('findByMid')->willReturn($merchant);
+            ->method('findByMid')->willReturn($this->createMerchant());
         $presenter = new CreateAccessTokenPresenter();
         $this->useCase->create($this->createJwtRequest(), $presenter);
 
         $this->assertIsString($presenter->token);
+    }
+
+    private function createMerchant(): Merchant
+    {
+        $state = new MerchantState('mid', 'Nick', 'Rigas', new DateTime(), 'id');
+        return Merchant::fromState($state);
     }
 
     private function createJwtRequest(): CreateAccessTokenRequest

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="/css/checkout2.css" rel="stylesheet"><meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet"><meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PayByBank</title>
+</head>
+<body>
+    <div id="header" class="flex">
+        <div id="logo" class="flex">
+            <img src="/img/paybybank.png" alt="PayByBank">
+        </div>
+    </div>
+
+    <div id="grid-container">
+        <div id="left-column" class="flex justify-content-center">
+            <div id="payment-order-info" class="flex align-items-center">
+                <span id="description">{{ description }}</span>
+                <span id="merchant-name">{{ merchantName }}</span>
+                <span id="amount">{{ amount }} €</span>
+            </div>
+        </div>
+
+        <div id="right-column" class="flex justify-content-center">
+            <div id="payment-methods">
+                {% for bankCode in bankCodes %}
+                    {% include 'payment_methods/' ~ bankCode  ~ '.twig' %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div id="footer" class="flex justify-content-center align-items-center">
+        <span>Powered by Nikos Rigas</span>
+    </div>
+</body>
+</html>

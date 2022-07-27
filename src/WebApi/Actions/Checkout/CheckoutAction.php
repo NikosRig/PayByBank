@@ -47,7 +47,7 @@ class CheckoutAction implements Action
             $request = new CheckoutRequest($paymentOrderToken);
             $this->useCase->get($request, $presenter);
 
-            $template = $this->template->render('checkout.html', [
+            $template = $this->template->render('checkout.twig', [
                 'bankCodes' => $presenter->bankCodes,
                 'amount' => $presenter->amount,
                 'description' => $presenter->description

@@ -3,9 +3,6 @@
 <head>
     <link href="/css/checkout.css" rel="stylesheet">
     <meta charset="UTF-8">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet"><meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>PayByBank</title>
 </head>
@@ -26,10 +23,15 @@
         </div>
 
         <div id="right-column" class="flex justify-content-center">
-            <div id="payment-methods">
-                {% for bankCode in bankCodes %}
-                    {% include 'payment_methods/' ~ bankCode  ~ '.twig' %}
-                {% endfor %}
+            <div id="payment-methods-container" class="flex align-items-center">
+                <div id="payment-methods-container-title" class="flex align-items-center ">
+                    <span>Payment methods</span>
+                </div>
+                <div id="payment-methods">
+                    {% for bankCode in bankCodes %}
+                        {% include 'payment_methods/' ~ bankCode  ~ '.twig' %}
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>

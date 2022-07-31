@@ -95,6 +95,7 @@ html, body {
     margin-bottom: 1vh;
     border-radius: 5px;
     box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.07);
+    justify-content: center;
 }
 
 .payment-method:hover {
@@ -110,8 +111,8 @@ html, body {
 }
 
 .payment-method span {
-    margin-left: 30%;
     font-size: 1.8vh;
+    margin-left: 0.2vw;
 }
 
 /* For mobile phones: */
@@ -144,12 +145,18 @@ html, body {
         width:  100%;
         margin-top: 0;
     }
+
     #payment-methods {
         width:  95%;
     }
 
+    .payment-method {
+        justify-content: center;
+    }
+
     .payment-method img {
-        height: 3vh;
-        width: 6vw
+        height: 2.5vh;
+        width: 5vw;
+        margin-right: 1vw;
     }
 }

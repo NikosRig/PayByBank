@@ -50,7 +50,9 @@ class CheckoutAction implements Action
             $template = $this->template->render('checkout.twig', [
                 'bankCodes' => $presenter->bankCodes,
                 'amount' => $presenter->amount,
-                'description' => $presenter->description
+                'description' => $presenter->description,
+                'merchantName' => 'Merchant Name',
+                'paymentOrderToken' => $presenter->paymentOrderToken
             ]);
 
             return HttpResponseFactory::create($template);

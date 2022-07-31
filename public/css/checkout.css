@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap');
+.flex { display: flex; }
+.justify-content-center { justify-content: center }
+.align-items-center { align-items: center }
 
 html, body {
     font-family: 'Roboto', sans-serif;
     font-weight: 300;
     margin: 0;
-    background-color: #f6f9ff;
 }
-.flex { display: flex; }
-.justify-content-center { justify-content: center }
-.align-items-center { align-items: center }
+
 
 #header {
     min-width: 100%;
@@ -16,9 +16,21 @@ html, body {
     background-color: white;
 }
 
-#logo { height: 100%; width: 50%; }
-#logo img { margin-left: 5vw; }
-#footer { height: 5vh; }
+#logo {
+    height: 100%;
+    width: 50%;
+}
+
+#logo span {
+    font-weight: 500;
+    margin-left: 5vh;
+    font-size: 2vh;
+    color: #0e286a;
+}
+
+#footer {
+    height: 5vh;
+}
 
 #grid-container {
     display: grid;
@@ -41,8 +53,14 @@ html, body {
     font-size: 2.5vh;
     word-break: break-word;
 }
-#merchant-name { font-size: 2vh; color: #777; }
-#amount { font-size: 3.5vh; }
+#merchant-name {
+    font-size: 2vh;
+    color: #777;
+}
+
+#amount {
+    font-size: 3.5vh;
+}
 
 #payment-methods-container {
     width: 30vw;
@@ -87,8 +105,8 @@ html, body {
 
 .payment-method img {
     margin-left: 1vw;
-    height: 50%;
-    width: 10%;
+    height: 3vh;
+    width: 2vw;
 }
 
 .payment-method span {
@@ -104,10 +122,8 @@ html, body {
         width: 100%;
     }
 
-    #logo img {
+    #logo span {
         margin: 0;
-        max-height: 100%;
-        height: 100%;
     }
 
     #grid-container {
@@ -133,6 +149,7 @@ html, body {
     }
 
     .payment-method img {
-        height: 50%;
+        height: 3vh;
+        width: 6vw
     }
 }

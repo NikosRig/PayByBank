@@ -1,4 +1,21 @@
-<div class="payment-method flex align-items-center">
+<div class="payment-method flex align-items-center" id="abna-payment-method">
     <img src="/img/ABNA.png" alt="ABNA"/>
     <span>ABNA</span>
 </div>
+
+<script>
+    document.getElementById('abna-payment-method').onclick = () => {
+        document.getElementById('loading-container').style.display = 'flex';
+        axios.post('/sca/redirect-url/create', {
+            bankCode: '{{ bankCode }}',
+            psuIp: '127.0.0.1',
+            paymentOrderToken: '{{ paymentOrderToken }}'
+        })
+            .then(function (response) {
+                window.location.href = response.data.scaRedirectUrl
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    };
+</script>

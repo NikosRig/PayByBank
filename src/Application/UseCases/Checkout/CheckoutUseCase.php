@@ -32,7 +32,7 @@ final class CheckoutUseCase
      * @throws Exception
      */
     public function get(
-        CheckoutRequest   $request,
+        CheckoutRequest $request,
         CheckoutPresenter $presenter
     ): void {
         $paymentOrder = $this->paymentOrderRepository->findByToken($request->paymentOrderToken);
@@ -57,7 +57,8 @@ final class CheckoutUseCase
         $presenter->present(
             $paymentMethods,
             $paymentOrder->getAmount(),
-            $paymentOrder->getDescription()
+            $paymentOrder->getDescription(),
+            $paymentOrder->getToken()
         );
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PayByBank\WebApi\Actions\ExecutePaymentOrder;
 
-use InvalidArgumentException;
+use Larium\Bridge\Template\Template;
 use PayByBank\Application\UseCases\ExecutePaymentOrder\ExecutePaymentOrderRequest;
 use PayByBank\Application\UseCases\ExecutePaymentOrder\ExecutePaymentOrderUseCase;
 use PayByBank\WebApi\Factory\HttpResponseFactory;
@@ -21,34 +21,35 @@ class ExecutePaymentOrderAction implements \PayByBank\WebApi\Actions\Action
 
     private readonly ExecutePaymentOrderValidatorBuilder $validatorBuilder;
 
+    private readonly Template $template;
+
     public function __construct(
         ExecutePaymentOrderUseCase $useCase,
         LoggerInterface $logger,
-        ExecutePaymentOrderValidatorBuilder $validatorBuilder
+        ExecutePaymentOrderValidatorBuilder $validatorBuilder,
+        Template $template
     ) {
         $this->useCase = $useCase;
         $this->logger = $logger;
         $this->validatorBuilder = $validatorBuilder;
+        $this->template = $template;
     }
 
     public function __invoke(ServerRequestInterface $serverRequest): ResponseInterface
     {
-        $serverRequestBody = $serverRequest->getBody()->getContents();
-        $requestParams = json_decode($serverRequestBody, true) ?? [];
+        $requestParams = $serverRequest->getQueryParams();
         try {
             $this->validatorBuilder->build()->validate($requestParams);
             $request = new ExecutePaymentOrderRequest(
-                $requestParams['transactionId'],
-                $requestParams['authCode'] ?? null,
+                $requestParams['state'],
+                $requestParams['code'] ?? null,
             );
             $this->useCase->execute($request);
-        } catch (InvalidArgumentException $e) {
-            return HttpResponseFactory::createJson(['error' => $e->getMessage()], 400);
+            $template = $this->template->render('payment_order_succeed.twig');
+            return HttpResponseFactory::create($template);
         } catch (Throwable $e) {
             $this->logger->error($e->getMessage());
             return HttpResponseFactory::create(null, 500);
         }
-
-        return HttpResponseFactory::create(null, 200);
     }
 }

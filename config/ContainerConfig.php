@@ -67,7 +67,6 @@ return [
             $routeCollector->addGroup('/payment/orders', function (RouteCollector $routeGroupCollector) {
                 $routeGroupCollector->post('/create', CreatePaymentOrderAction::class);
                 $routeGroupCollector->get('/checkout/{token}', CheckoutAction::class);
-                $routeGroupCollector->post('/execute', ExecutePaymentOrderAction::class);
             });
 
             $routeCollector->addGroup('/merchants', function (RouteCollector $routeGroupCollector) {
@@ -79,6 +78,7 @@ return [
                 $routeGroupCollector->post('/token', CreateAccessTokenAction::class);
             });
 
+            $routeCollector->get('/auth', ExecutePaymentOrderAction::class);
             $routeCollector->post('/sca/redirect-url/create', CreateScaRedirectUrlAction::class);
         });
 

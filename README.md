@@ -5,7 +5,7 @@ PayByBank
 
 Introduction
 ------------
-Paybybank is a framework for accepting SEPA payments and can be used by PISPs. It can be extended and supports PSD2 compliant payment methods that follow Berlin group's specifications.
+PaybyBank is a framework for accepting SEPA payments and can be used by PISPs. It can be extended and supports PSD2 compliant payment methods that follow Berlin group's specifications.
 
 &nbsp;&nbsp;&nbsp;
 

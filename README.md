@@ -2,11 +2,17 @@ PayByBank
 =================================================
 
 
+
 Introduction
 ------------
 Paybybank is a framework for accepting SEPA payments and can be used by PISPs. It can be extended and supports PSD2 compliant payment methods that follow Berlin group's specifications.
 
 &nbsp;&nbsp;&nbsp;
+
+<p>
+    <img src="https://github.com/NikosRig/PayByBank/blob/master/var/paybybank.jpg" alt="flow"/>
+    <img src="https://github.com/NikosRig/PayByBank/blob/master/var/Screenshot.png" alt="screenshot" width="350"/>
+</p>
 
 
 Prerequisites
@@ -171,4 +177,18 @@ Response example
 
 ##### Checkout payment order
 
-`GET /payment/orders/checkout/:payment-order-token`
+`GET /payment/orders/checkout/:token`
+
+| **Request parameters** | **Description** |  **Type** |
+| --- | --- |  --- |
+| `:token` | Payment order's token | string | 
+
+
+
+Useful info
+------------
+ [Postman collection](https://github.com/NikosRig/PayByBank/blob/master/var/PayByBank.postman_collection.json)
+
+
+##### To-Do
+* Create a use-case that informs the merchant about payment order results

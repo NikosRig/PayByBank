@@ -49,7 +49,8 @@ class ExecutePaymentOrderAction implements \PayByBank\WebApi\Actions\Action
             return HttpResponseFactory::create($template);
         } catch (Throwable $e) {
             $this->logger->error($e->getMessage());
-            return HttpResponseFactory::create(null, 500);
+            $template = $this->template->render('payment_order_succeed.twig');
+            return HttpResponseFactory::create($template);
         }
     }
 }

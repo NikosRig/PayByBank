@@ -11,6 +11,10 @@
     color: #0e286a;
 }
 
+#loading-container span {
+    margin-top: 5vh
+}
+
 .loader  {
     animation: rotate 1s infinite;
     height: 50px;

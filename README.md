@@ -135,7 +135,7 @@ Response example
 
 &nbsp;
 
-#### Payment order endpoint
+#### Payment order endpoints
 
 ##### Create payment order
 
@@ -168,3 +168,7 @@ Response example
 ```
 201 {"token":"088f443b11caeb2ba988f2e39f6cd54712d8229ecf656ea7"}
 ```
+
+##### Checkout payment order
+
+`GET /payment/orders/checkout/:payment-order-token`

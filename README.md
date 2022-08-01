@@ -14,6 +14,11 @@ PaybyBank is a framework for accepting SEPA payments and can be used by PISPs. I
     <img src="https://github.com/NikosRig/PayByBank/blob/master/var/Screenshot.png" alt="screenshot" width="350"/>
 </p>
 
+| Supported Payment Methods                                                                                                                            |                                                                                                                   |
+| -------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://github.com/NikosRig/PayByBank/blob/master/public/img/ABNA.png" width="25" /> | ABNA |
+
+
 
 Prerequisites
 ------------

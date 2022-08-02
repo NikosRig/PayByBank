@@ -7,6 +7,7 @@ use GuzzleHttp\Psr7\ServerRequest;
 use Larium\Framework\Framework;
 use Larium\Framework\Middleware\ActionResolverMiddleware;
 use Larium\Framework\Middleware\RoutingMiddleware;
+use PayByBank\WebApi\Middleware\ExceptionMiddleware;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -18,7 +19,8 @@ $containerBuilder = new ContainerBuilder();
 $containerBuilder->addDefinitions("{$rootPath}/config/ContainerConfig.php");
 $framework = new Framework($containerBuilder->build());
 
-$framework->pipe(RoutingMiddleware::class, 1);
+$framework->pipe(RoutingMiddleware::class);
 $framework->pipe(ActionResolverMiddleware::class);
+$framework->pipe(ExceptionMiddleware::class, 1);
 
 $framework->run(ServerRequest::fromGlobals());

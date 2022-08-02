@@ -2,11 +2,22 @@ PayByBank
 =================================================
 
 
+
 Introduction
 ------------
-Paybybank is a framework for accepting SEPA payments and can be used by PISPs. It can be extended and supports PSD2 compliant payment methods that follow Berlin group's specifications.
+PaybyBank is a framework for accepting SEPA payments and can be used by PISPs. It can be extended and supports PSD2 compliant payment methods that follow Berlin group's specifications.
 
 &nbsp;&nbsp;&nbsp;
+
+<p>
+    <img src="https://github.com/NikosRig/PayByBank/blob/master/var/paybybank.jpg" alt="flow"/>
+    <img src="https://github.com/NikosRig/PayByBank/blob/master/var/Screenshot.png" alt="screenshot" width="350"/>
+</p>
+
+| Supported Payment Methods                                                                                                                            |                                                                                                                   |
+| -------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://github.com/NikosRig/PayByBank/blob/master/public/img/ABNA.png" width="25" /> | ABNA |
+
 
 
 Prerequisites
@@ -135,7 +146,7 @@ Response example
 
 &nbsp;
 
-#### Payment order endpoint
+#### Payment order endpoints
 
 ##### Create payment order
 
@@ -168,3 +179,21 @@ Response example
 ```
 201 {"token":"088f443b11caeb2ba988f2e39f6cd54712d8229ecf656ea7"}
 ```
+
+##### Checkout payment order
+
+`GET /payment/orders/checkout/:token`
+
+| **Request parameters** | **Description** |  **Type** |
+| --- | --- |  --- |
+| `:token` | Payment order's token | string | 
+
+
+
+Useful info
+------------
+ [Postman collection](https://github.com/NikosRig/PayByBank/blob/master/var/PayByBank.postman_collection.json)
+
+
+##### To-Do
+* Create a use-case that informs the merchant about payment order results

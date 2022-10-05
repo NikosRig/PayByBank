@@ -51,7 +51,9 @@ class ExecutePaymentOrderUseCaseTest extends TestCase
         $this->transactionRepository->method('findByTransactionId')->willReturn(
             $this->createTransaction()
         );
-        $this->paymentOrderRepository->method('findByToken')->willReturn(new PaymentOrder(10, 'mid', 'description'));
+        $paymentOrder = new PaymentOrder(10, 'mid', 'description');
+        $paymentOrder->markPaid();
+        $this->paymentOrderRepository->method('findByToken')->willReturn($paymentOrder);
         $request = new ExecutePaymentOrderRequest('transactionId', 'authCode');
         $this->expectException(Exception::class);
         $this->useCase->execute($request);

@@ -9,11 +9,11 @@ use PayByBank\Domain\PaymentMethod;
 
 class CheckoutPresenter
 {
-    public readonly array $bankCodes;
+    public array $bankCodes;
 
-    public readonly string $amount;
+    public string $amount;
 
-    public readonly string $description;
+    public string $description;
 
     public string $paymentOrderToken;
 
